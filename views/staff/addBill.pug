@@ -1,0 +1,103 @@
+extends ../template/layoutStaff.pug
+block css 
+    link(rel='stylesheet' href='/css/staff.css')
+    link(rel='stylesheet' href='/css/userOrder.css')
+block content 
+    .container
+        .row 
+            .col-2
+            .col-8.bg-light
+                h3.my-5 Khách hàng: #{sdt}
+                h3.mt-5 CHỌN DỊCH VỤ
+                form(action="" method='post' )
+                    div 
+                        h5 Cắt tóc
+                        each ct in catToc
+                            .DV.d-flex.align-items-center
+                                input.mx-4(type='radio' name='catTocDV' value=ct.MA id=ct.MA)
+                                label(for=ct.MA).flex-grow-1
+                                    div(class='DV__info')
+                                        .d-flex.justify-content-between
+                                            div(class='DV__info--name') #{ct.TEN}
+                                            div(class='DV__info--price') #{ct.GIA}đ
+                                        div(class='DV__info--des') #{ct.MOTA}
+                                .d-flex.flex-column.ml-5(style='width:95px')
+                                    label.form-label(for=`nvCT${ct.MA}` style='width:95px') NV thực hiện
+                                    select(name=`nvCT${ct.MA}` id=`nvCT${ct.MA}`)
+                                        each nv in nvs
+                                            option(value= `${nv.MA}${ct.MA}`) #{nv.MA}
+                                            
+                            hr
+                        
+                    div 
+                        h5 Uốn tóc
+                        each ut in uonToc
+                            .uonTocDV.d-flex.align-items-center
+                                input.mx-4(type='radio' name='uonTocDV' value=ut.MA id=ut.MA)
+                                label(for=ut.MA).flex-grow-1
+                                    div(class='DV__info')
+                                        .d-flex.justify-content-between
+                                            div(class='DV__info--name')  #{ut.TEN}
+                                            div(class='DV__info--price') #{ut.GIA}đ
+                                        div(class='DV__info--des') #{ut.MOTA}
+                                .d-flex.flex-column.ml-5(style='width:95px')
+                                    label.form-label(for=`nvUT${ut.MA}` style='width:95px') NV thực hiện
+                                    select(name=`nvUT${ut.MA}` id=`nvUT${ut.MA}`)
+                                        each nv in nvs
+                                            option(value= `${nv.MA}${ut.MA}`) #{nv.MA}
+                            hr
+                    div
+                        h5 Nhuộm tóc
+                        each nt in nhuomToc
+                            .DV.d-flex.align-items-center
+                                input.mx-4(type='radio' name='nhuomTocDV' value=nt.MA id=nt.MA)
+                                label(for=nt.MA).flex-grow-1
+                                    div(class='DV__info')
+                                        .d-flex.justify-content-between
+                                            div(class='DV__info--name')  #{nt.TEN}
+                                            div(class='DV__info--price') #{nt.GIA}đ
+                                        div(class='DV__info--des') #{nt.MOTA}
+                                .d-flex.flex-column.ml-5(style='width:95px')
+                                    label.form-label(for=`nvNT${nt.MA}` style='width:95px') NV thực hiện
+                                    select(name=`nvNT${nt.MA}` id=`nvNT${nt.MA}`)
+                                        each nv in nvs
+                                            option(value= `${nv.MA}${nt.MA}`) #{nv.MA}
+                            hr
+                        
+                    div 
+                        h5 Dịch vụ khác
+                        each kh in khac
+                            .DV.d-flex.align-items-center
+                                input.mx-4(type='checkbox' name='khacDV' value=kh.MA id=kh.MA)
+                                label(for=kh.MA).flex-grow-1
+                                    div(class='DV__info')
+                                        .d-flex.justify-content-between
+                                            div(class='DV__info--name') #{kh.TEN}
+                                            div(class='DV__info--price') #{kh.GIA}đ
+                                        div(class='DV__info--des') #{kh.MOTA}
+                                .d-flex.flex-column.ml-5(style='width:95px')
+                                    label.form-label(for=`nvK${kh.MA}` style='width:95px') NV thực hiện
+                                    select(name=`nvK${kh.MA}` id=`nvK${kh.MA}`)
+                                        each nv in nvs
+                                            option(value= `${nv.MA}${kh.MA}`) #{nv.MA}
+                            hr
+                    .d-flex.justify-content-between.mt-5  
+                        label(for='orderTime') Chọn ngày giờ cắt:
+                        input#orderTime(type='datetime-local' name='orderTime' )
+                    button.btn.btn-primary.my-5(type='submit') Thêm hóa đơn
+            .col-2 
+            
+
+
+
+  
+        
+
+                
+    
+
+
+
+      
+      
+  

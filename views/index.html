@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="../public/css/bttn.css">
+    <link rel="stylesheet" href="../public/css/style.css">
+    <link rel="stylesheet" href="../test.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+              <img src="../public/images/logoMain.png" alt="Logo" style="height: 40px;"></a><!-- Toggler/collapsibe Button-->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar"><span class="navbar-toggler-icon"></span></button><!-- Navbar links-->
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active"><a class="nav-link" href="#">Ưu đãi <span class="sr-only">(current)</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Dịch vụ <span class="sr-only">(current)</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Beauty store<span class="sr-only">(current)</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Khám phá kiểu tóc<span class="sr-only">(current)</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Blog<span class="sr-only">(current)</span></a></li>
+                    <li id="user">
+                      <a href="/user/loginAcc">
+                        <button class="bttn-unite bttn-sm bttn-primary" style="padding: 6px 18px">Đăng nhập</button>
+                      </a>
+                      
+                      <ul class="userMenu">
+                        <li class="userMenu__item">
+                          
+                          <a href="/user/userDetail"> Cá nhân</a>
+                        </li>
+                        <li class="userMenu__item">
+                          <a href="/"> Đăng xuất</a>
+                          
+                        </li>
+
+                      </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div style=" margin-top: 66px;"></div>
+    <header>
+        <div class="carousel slide" id="demo" data-ride="carousel">
+            <!-- Indicators-->
+            <ul class="carousel-indicators">
+                <li class="active" data-target="#demo" data-slide-to="0"></li>
+                <li data-target="#demo" data-slide-to="1"></li>
+                <li data-target="#demo" data-slide-to="2"></li>
+            </ul><!-- The slideshow-->
+            <div class="carousel-inner">
+                <div class="carousel-item active"><img src="../public/images/banner.jpg" alt="Los Angeles" style="width:100vw"></div>
+                <div class="carousel-item"><img src="../public/images/banner3.jpg" alt="Chicago" style="width:100vw"></div>
+                <div class="carousel-item"><img src="../public/images/banner4.jpg" alt="New York" style="width:100vw"></div>
+            </div><!-- Left and right controls--><a class="carousel-control-prev" href="#demo" data-slide="prev"><span class="carousel-control-prev-icon"></span></a><a class="carousel-control-next" href="#demo" data-slide="next"><span class="carousel-control-next-icon"></span></a>
+        </div>
+        <div class="book">
+          <p class="title">ĐẶT LỊCH GIỮ CHỖ CHỈ 30 GIÂY</p>
+          <p class="content">Cắt xong trả tiền, hủy lịch không sao</p>
+          <a href="/user/userOrder">
+            <button class="btn " >Đặt lịch ngay</button>
+          </a>
+          
+          
+        </div>
+    </header>
+    <div class="contact">
+      <div class=" phone">
+        <i class="fas fa-phone-alt"></i>
+      </div>
+      <div class="mess">
+        <i class="fab fa-facebook-messenger "></i>
+      </div>
+    </div>
+    <div class="main">
+      <div class="container">
+        <div class="content1">
+          <div class="header d-flex justify-content-between ">
+            <div class="block1">
+              <p class="headerTitle">DỊCH VỤ Beaty Salon</p>
+              <p>Thư giãn 30 phút và bạn sẽ tỏa sáng</p>
+            </div>
+            <div class="block2">
+              <a href="">Các dịch vụ khác ></a>
+            </div>
+          </div>
+          <div class="body">
+            <div class="image">
+              <img src="../public/images/dichVu.jpg" alt="">
+            </div>
+            <div class="row">
+              <div class="col-sm-12 col-md-6 col-lg-3 d-flex">
+                <img src="../public/images/dv1.jpg" alt="">
+                <div class="detail d-flex flex-column align-content-center  ">
+                  <p class="name ">Cắt gội massage</p>
+                  <span class="des ">Bảng giá 2021 (hấp dẫn)</span>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6 col-lg-3 d-flex">
+                <img src="../public/images/dv2.jpg" alt="">
+                <div class="detail d-flex flex-column align-content-around ">
+                  <p class="name">Uốn</p>
+                  <span class="des">Chỉ từ 234k</span>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6 col-lg-3 d-flex">
+                <img src="../public/images/dv3.jpg" alt="">
+                <div class="detail d-flex flex-column align-content-around ">
+                  <p class="name">Nhuộm</p>
+                  <span class="des">Chỉ từ 162k</span>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6 col-lg-3 d-flex">
+                <img src="../public/images/dv4.jpg" alt="">
+                <div class="detail d-flex flex-column align-content-around ">
+                  <p class="name">Dịch vụ khác</p>
+                  <span class="des">7 dịch vụ</span>
+                </div>
+              </div>  
+              
+              
+            </div>
+          </div>
+
+        </div>
+        <div class="content2">
+          <div class="header d-flex justify-content-between ">
+            <div class="block1">
+              <p class="headerTitle">ƯU ĐÃI - QUÀ TẶNG 30SHINE</p>
+              <p>Hàng ngàn ưu đãi hấp dẫn đang chờ              </p>
+            </div>
+            <div class="block2">
+              <a href="">Các dịch vụ khác ></a>
+            </div>
+          </div>
+          <div class="body d-flex">
+            <div class="image d-flex flex-column">
+              <img src="../public/images/uuDai1.jpg" alt="">
+              <span>Giảm giá đọc quyền SRM Acsys 2021</span>
+            </div>
+            <div class="image d-flex flex-column">
+              <img src="../public/images/uuDai2.png" alt="">
+              <span>Tigi  mua 1 tặng 1</span>
+            </div>
+            
+          </div>
+
+        </div>
+        <div class="content3">
+          <div class="header d-flex justify-content-between ">
+            <div class="block1">
+              <p class="headerTitle">Beauty Salon</p>
+              <p>Số 1 về chăm sóc tóc</p>
+            </div>
+            <div class="block2">
+              <a href="">Các dịch vụ khác ></a>
+            </div>
+          </div>
+          <div class="body">
+            <div class="image">
+              <img src="../public/images/store.jpg" alt="">
+
+            </div>
+            <div class="service d-flex justify-content-center">
+              <div class="d-flex ">
+                <div class="serviceItem mx-3 mt-2">
+                  <img src="https://30shine.com/static/media/cashBack.a763ac96.svg" alt="">
+                  <span>Đổi trả miễn phí</span>
+                </div>
+                <div class="serviceItem mx-3  mt-2">
+                  <img src="https://30shine.com/static/media/authentic.eb2c67fb.svg" alt="">
+                  <span>Chính hãng 100%</span>
+                </div>
+                <div class="serviceItem mx-3  mt-2">
+                  <img src="https://30shine.com/static/media/transport.ed73d8c2.svg" alt="">
+                  <span>Giao hàng toàn quốc</span>
+                </div>
+
+              </div>
+            </div>
+            
+          </div>
+
+        </div>
+        <div class="content4">
+          <div class="header d-flex justify-content-between ">
+            <div class="block1">
+              <p class="headerTitle">Top sản phẩm nổi bật</p>
+            </div>
+            
+            <div class="block2 d-flex">
+              <div class="navLeft">
+                <i class="fas fa-chevron-left"></i>
+              </div>
+              <div class="navRight">
+                <i class="fas fa-chevron-right"></i>
+              </div>
+            </div>
+          </div>
+          <div class="separator mt-3"></div>
+          <div class="body mt-5">
+            <ul class="productList d-flex ">
+              <li class="productItem mr-5">
+                <div class="card" >
+                  <img class="card-img-top" src="../public/images/pro/pro1.webp" alt="Card image" >
+                  <div class="card-body">
+                    <h5 class="card-title px-2">Glanzen Box tạo kiểu basic 2 </h5>
+                    <div class="cost d-flex px-2 ">
+                      <div class="costCurr">130.000đ</div>
+                      <div class="costOld ml-3">170.000đ</div>
+                    </div>
+                    <a href="#" class="btn btn-warning ">Mua ngay</a>
+                  </div>
+                </div>
+              </li>
+              <li class="productItem mr-5">
+                <div class="card" >
+                  <img class="card-img-top" src="../public/images/pro/pro1.webp" alt="Card image" >
+                  <div class="card-body">
+                    <h5 class="card-title px-2">Glanzen Box tạo kiểu basic 2 </h5>
+                    <div class="cost d-flex px-2 ">
+                      <div class="costCurr">130.000đ</div>
+                      <div class="costOld ml-3">170.000đ</div>
+                    </div>
+                    <a href="#" class="btn btn-warning ">Mua ngay</a>
+                  </div>
+                </div>
+              </li>
+              <li class="productItem mr-5">
+                <div class="card" >
+                  <img class="card-img-top" src="../public/images/pro/pro1.webp" alt="Card image" >
+                  <div class="card-body">
+                    <h5 class="card-title px-2">Glanzen Box tạo kiểu basic 2 </h5>
+                    <div class="cost d-flex px-2 ">
+                      <div class="costCurr">130.000đ</div>
+                      <div class="costOld ml-3">170.000đ</div>
+                    </div>
+                    <a href="#" class="btn btn-warning ">Mua ngay</a>
+                  </div>
+                </div>
+              </li>
+              <li class="productItem mr-5">
+                <div class="card" >
+                  <img class="card-img-top" src="../public/images/pro/pro1.webp" alt="Card image" >
+                  <div class="card-body">
+                    <h5 class="card-title px-2">Glanzen Box tạo kiểu basic 2 </h5>
+                    <div class="cost d-flex px-2 ">
+                      <div class="costCurr">130.000đ</div>
+                      <div class="costOld ml-3">170.000đ</div>
+                    </div>
+                    <a href="#" class="btn btn-warning ">Mua ngay</a>
+                  </div>
+                </div>
+              </li>
+              <li class="productItem mr-5">
+                <div class="card" >
+                  <img class="card-img-top" src="../public/images/pro/pro1.webp" alt="Card image" >
+                  <div class="card-body">
+                    <h5 class="card-title px-2">Glanzen Box tạo kiểu basic 2 </h5>
+                    <div class="cost d-flex px-2 ">
+                      <div class="costCurr">130.000đ</div>
+                      <div class="costOld ml-3">170.000đ</div>
+                    </div>
+                    <a href="#" class="btn btn-warning ">Mua ngay</a>
+                  </div>
+                </div>
+              </li>
+              <li class="productItem mr-5">
+                <div class="card" >
+                  <img class="card-img-top" src="../public/images/pro/pro1.webp" alt="Card image" >
+                  <div class="card-body">
+                    <h5 class="card-title px-2">Glanzen Box tạo kiểu basic 2 </h5>
+                    <div class="cost d-flex px-2 ">
+                      <div class="costCurr">130.000đ</div>
+                      <div class="costOld ml-3">170.000đ</div>
+                    </div>
+                    <a href="#" class="btn btn-warning ">Mua ngay</a>
+                  </div>
+                </div>
+              </li>
+              <li class="productItem mr-5">
+                <div class="card" >
+                  <img class="card-img-top" src="../public/images/pro/pro1.webp" alt="Card image" >
+                  <div class="card-body">
+                    <h5 class="card-title px-2">Glanzen Box tạo kiểu basic 2 </h5>
+                    <div class="cost d-flex px-2 ">
+                      <div class="costCurr">130.000đ</div>
+                      <div class="costOld ml-3">170.000đ</div>
+                    </div>
+                    <a href="#" class="btn btn-warning ">Mua ngay</a>
+                  </div>
+                </div>
+              </li>
+              <li class="productItem mr-5">
+                <div class="card" >
+                  <img class="card-img-top" src="../public/images/pro/pro1.webp" alt="Card image" >
+                  <div class="card-body">
+                    <h5 class="card-title px-2">Glanzen Box tạo kiểu basic 2 </h5>
+                    <div class="cost d-flex px-2 ">
+                      <div class="costCurr">130.000đ</div>
+                      <div class="costOld ml-3">170.000đ</div>
+                    </div>
+                    <a href="#" class="btn btn-warning ">Mua ngay</a>
+                  </div>
+                </div>
+              </li>
+              
+              
+              
+              <li class="productItem mr-5">
+                <div class="card" >
+                  <img class="card-img-top" src="../public/images/pro/pro1.webp" alt="Card image" >
+                  <div class="card-body">
+                    <h4 class="card-title">Glanzen Box tạo kiểu basic 2</h4>
+                    <div class="cost d-flex ">
+                      <span class="costCurr">130.000đ</span>
+                      <span class="costOld ml-3 ">170.000đ</span>
+
+                    </div>
+                    <a href="#" class="btn btn-warning ">Mua ngay</a>
+                  </div>
+                </div>
+              </li>
+              <li class="productItem mr-5">
+                <div class="card" >
+                  <img class="card-img-top" src="../public/images/pro/pro1.webp" alt="Card image" >
+                  <div class="card-body">
+                    <h4 class="card-title">Glanzen Box tạo kiểu basic 2</h4>
+                    <div class="cost d-flex ">
+                      <span class="costCurr">130.000đ</span>
+                      <span class="costOld ml-3 ">170.000đ</span>
+
+                    </div>
+                    <a href="#" class="btn btn-warning ">Mua ngay</a>
+                  </div>
+                </div>
+              </li>
+              <li class="productItem mr-5">
+                <div class="card" >
+                  <img class="card-img-top" src="../public/images/pro/pro1.webp" alt="Card image" >
+                  <div class="card-body">
+                    <h4 class="card-title">Glanzen Box tạo kiểu basic 2</h4>
+                    <div class="cost d-flex ">
+                      <span class="costCurr">130.000đ</span>
+                      <span class="costOld ml-3 ">170.000đ</span>
+
+                    </div>
+                    <a href="#" class="btn btn-warning ">Mua ngay</a>
+                  </div>
+                </div>
+              </li>
+            </ul>
+
+              
+            
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12 col-lg-4 col1">
+            <div class="tittle mt-3 " style="font-size: 20px;">CÔNG TY TMDV BEAUTY SALON</div>
+            <div>82 Trần Đại Nghĩa, Q. Hai Bà Trưng, HN</div>
+            <div>Số giấy chứng nhận kinh doanh: 010.7467.693</div>
+            <div>Ngày cấp: 08/06/2016</div>
+            <div>Nơi cấp: Sở kế hoạch đầu tư TP Hà Nội</div>
+            <div>
+              <a href="#">Chính sách bảo mật thông tin</a>
+            </div>
+            <div>
+              <a href="#">Liên hệ quảng cáo Beauty Salon</a>
+            </div>
+            <div class="logo d-flex py-2">
+              <img src="../public/images/footerLogo1.png" alt="" class="mr-3">
+              <img src="../public/images/footerLogo2.png" alt="" class="my-auto">
+
+            </div>
+            <div>
+              <span>Chấp nhận thanh toán</span>
+            </div>
+            <div class="pay d-flex ">
+              <img src="../public/images/pay1.svg" alt="" class="mr-3">
+              <img src="../public/images/pay2.svg" alt="" class="my-auto">
+            </div>
+          </div>
+          <div class="col-sm-12 col-lg-4 col2">
+            <div class="tittle mt-3 " style="font-size: 20px;">GIỜ PHỤC VỤ</div>
+            <div>Giờ phục vụ: T2 - T6 (8h30 - 20h30)
+              <br>
+              T7, CN (7h30 - 23h30)
+            </div>
+            <div style="color:#E0A800">HOTLINE GÓP Ý CHẤT LƯỢNG DỊCH VỤ</div>
+            <div class="call d-flex justify-content-center mt-3" >
+              <i class="fas fa-phone-volume pr-3 my-auto"></i>
+              HOTLINE: 1800.28.28.30 (MIỄN PHÍ)
+            </div>
+          </div>
+          <div class="col-sm-12 col-lg-4 col3">
+            <div class="tittle mt-3 " style="font-size: 20px;">ỨNG DỤNG CỦA 30SHINE</div>
+            <div>Trải nghiệm đặt lịch nhanh chóng và nhiều tiện ích khác với ứng dụng 30Shine.          </div>
+            
+            <div class="ud d-flex  mt-3" >
+              <img src="../public/images/ud1.png" alt="" class="mr-3">
+              <img src="../public/images/ud2.png" alt="">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+
+</html>

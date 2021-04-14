@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+</head>
+<body>
+    <div class="container">
+        <div class="content my-5">
+            <div class="row my-5">
+                <div class="col-3"> <a class="btn btn-primary" href="">Thêm hóa đơn</a></div>
+                <div class="col-3"> <a class="btn btn-primary" href="">Thêm khách hàng</a></div>
+                <div class="col-3"> <a class="btn btn-primary" href="">Thêm nhân viên</a></div>
+                <div class="col-3"> <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#myModal">Test</button></div>
+            </div>
+            <div class="row my-5">
+                <div class="col-3"> <a class="btn btn-primary" href="">Xóa hóa đơn</a></div>
+                <div class="col-3"> <a class="btn btn-primary" href="">Xóa khách hàng</a></div>
+                <div class="col-3"> <a class="btn btn-primary" href="">Xóa nhân viên</a></div>
+                <div class="col-3"> <a class="btn btn-primary" href="">...</a></div>
+            </div>
+            <div class="row my-5">
+                <div class="col-3"> <a class="btn btn-primary" href="">Tra cứu thông tin khách hàng</a></div>
+                <div class="col-3"> <a class="btn btn-primary" href="">Tra cứu thông tin nhân viên</a></div>
+                <div class="col-3"> <a class="btn btn-primary" href="">Thống kê doanh thu ngày</a></div>
+                <div class="col-3"> <a class="btn btn-primary" href="">...</a></div>
+            </div>
+        </div>
+    </div>
+    <a type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+        Open modal
+    </a>
+      
+      <!-- The Modal -->
+      <div class="modal" id="myModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Nhập mật khẩu</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+              <form action="" >
+                <div class="form-group">
+                    <label for="password">Mật khẩu:</label>
+                    <input type="password" class="form-control" id="password" name='password'>
+                </div>
+                <button type="submit" class="btn btn-primary">Xác nhận</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

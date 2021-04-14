@@ -1,0 +1,104 @@
+
+      .userOrder
+        .row
+          .col-3
+          .col-6.bg-light
+            h3.mt-5 CHỌN DỊCH VỤ
+            form#order(action='' method='post')
+              div
+                h5 Cắt tóc
+                form
+                  .catTocDV.d-flex.align-items-center
+                    input#DV001.mx-4(type='radio' name='catTocDV' value='DV001')
+                    label.w-100(for='DV001')
+                      div(class='catTocDV__info')
+                        .d-flex.justify-content-between
+                          div(class='catTocDV__info--name')
+                            | Cắt xả
+                          div(class='catTocDV__info--price') 70000
+                        div(class='catTocDV__info--des')
+                          | Tạo kiểu nhanh gọn, không gội đầu massage
+                  .catTocDV.d-flex.align-items-center
+                    input#DV002.mx-4(type='radio' name='catTocDV' value='DV002')
+                    label.w-100(for='DV002')
+                      div(class='catTocDV__info')
+                        .d-flex.justify-content-between
+                          div(class='catTocDV__info--name')
+                            | Cắt xả
+                          div(class='catTocDV__info--price') 70000
+                        div(class='catTocDV__info--des')
+                          | Tạo kiểu nhanh gọn, không gội đầu massage
+              div
+                h5 Uốn tóc
+                form
+                  .uonTocDV.d-flex.align-items-center
+                    input#DV004.mx-4(type='radio' name='uonTocDV' value='DV004')
+                    label.w-100(for='DV004')
+                      div(class='uonTocDV__info ')
+                        .d-flex.justify-content-between
+                          div(class='uonTocDV__info--name')
+                            | Cắt xả
+                          div(class='uonTocDV__info--price') 70000
+                        div(class='uonTocDV__info--des')
+                          | Tạo kiểu nhanh gọn, không gội đầu massage  Tạo kiểu nhanh gọn, không gội đầu massage
+                  .uonTocDV.d-flex.align-items-center
+                    input#DV005.mx-4(type='radio' name='uonTocDV' value='DV005')
+                    label.w-100(for='DV005')
+                      div(class='uonTocDV__info')
+                        .d-flex.justify-content-between
+                          div(class='uonTocDV__info--name')
+                            | Cắt xả
+                          div(class='uonTocDV__info--price') 70000
+                        div(class='uonTocDV__info--des')
+                          | Tạo kiểu nhanh gọn, không gội đầu massage
+              div
+                h5 Nhuộm tóc
+                form
+                  .nhuomTocDV.d-flex.align-items-center
+                    input#DV006.mx-4(type='radio' name='nhuomTocDV' value='DV006')
+                    label.w-100(for='DV006')
+                      div(class='nhuomTocDV__info ')
+                        .d-flex.justify-content-between
+                          div(class='nhuomTocDV__info--name')
+                            | Cắt xả
+                          div(class='nhuomTocDV__info--price') 70000
+                        div(class='nhuomTocDV__info--des')
+                          | Tạo kiểu nhanh gọn, không gội đầu massage  Tạo kiểu nhanh gọn, không gội đầu massage
+                  .nhuomTocDV.d-flex.align-items-center
+                    input#DV007.mx-4(type='radio' name='nhuomTocDV' value='DV007')
+                    label.w-100(for='DV007')
+                      div(class='nhuomTocDV__info')
+                        .d-flex.justify-content-between
+                          div(class='nhuomTocDV__info--name')
+                            | Cắt xả
+                          div(class='nhuomTocDV__info--price') 70000
+                        div(class='nhuomTocDV__info--des')
+                          | Tạo kiểu nhanh gọn, không gội đầu massage
+              div
+                h5 Dịch vụ khác
+                form
+                  .dichVuKhacDV.d-flex.align-items-center
+                    input#DV009.mx-4(type='checkbox' name='dichVuKhacDV' value='DV009')
+                    label.w-100(for='DV009')
+                      div(class='dichVuKhacDV__info ')
+                        .d-flex.justify-content-between
+                          div(class='dichVuKhacDV__info--name')
+                            | Cắt xả
+                          div(class='dichVuKhacDV__info--price') 70000
+                        div(class='dichVuKhacDV__info--des')
+                          | Tạo kiểu nhanh gọn, không gội đầu massage  Tạo kiểu nhanh gọn, không gội đầu massage
+                  .dichVuKhacDV.d-flex.align-items-center
+                    input#DV010.mx-4(type='checkbox' name='dichVuKhacDV' value='DV010')
+                    label.w-100(for='DV010')
+                      div(class='dichVuKhacDV__info')
+                        .d-flex.justify-content-between
+                          div(class='dichVuKhacDV__info--name')
+                            | Cắt xả
+                          div(class='dichVuKhacDV__info--price') 70000
+                        div(class='dichVuKhacDV__info--des')
+                          | Tạo kiểu nhanh gọn, không gội đầu massage
+              form.d-flex.justify-content-between.mt-5(action='')
+                label(for='birthdaytime') Chọn ngày giờ cắt:
+                input#birthdaytime(type='datetime-local' name='birthdaytime')
+              button.btn.btn-primary.my-5(type='submit') Đăng ký
+          .col-3

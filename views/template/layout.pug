@@ -1,0 +1,102 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(http-equiv='X-UA-Compatible' content='IE=edge')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    title Document
+    link(rel='stylesheet' href='https://use.fontawesome.com/releases/v5.15.3/css/all.css' integrity='sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk' crossorigin='anonymous')
+    link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' integrity='sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm' crossorigin='anonymous')
+    link(rel='stylesheet' href='/css/bttn.css')
+    link(rel='stylesheet' href='/css/style.css')
+    block css
+  body
+    nav.navbar.navbar-expand-lg.navbar-light.bg-light.fixed-top
+      .container
+        a.navbar-brand(href='/')
+          img(src='/images/logoMain.png' alt='Logo' style='height: 40px;' )
+        // Toggler/collapsibe Button
+        button.navbar-toggler(type='button' data-toggle='collapse' data-target='#collapsibleNavbar')
+          span.navbar-toggler-icon
+        // Navbar links
+        #collapsibleNavbar.collapse.navbar-collapse
+          ul.navbar-nav.ml-auto
+            li.nav-item.active
+              a.nav-link(href='#') Ưu đãi 
+                span.sr-only (current)
+            li.nav-item
+              a.nav-link(href='#') Dịch vụ 
+                span.sr-only (current)
+            li.nav-item
+              a.nav-link(href='#') Beauty store
+                span.sr-only (current)
+            li.nav-item
+              a.nav-link(href='#') Khám phá kiểu tóc
+                span.sr-only (current)
+            li.nav-item
+              a.nav-link(href='#') Blog
+                span.sr-only (current)
+            if userId
+              li#user
+                i.far.fa-user
+                ul.userMenu
+                  li(class='userMenu__item')
+                    a(href='/user/userDetail')  Cá nhân
+                  li(class='userMenu__item')
+                    a(href='/user/userOrderOnline')  Đặt trước  
+                  li(class='userMenu__item')
+                    a(href='/user/userOrderHistory')  Lịch sử cắt tóc
+                  li(class='userMenu__item')
+                    a(href='/user/userLogout')  Đăng xuất   
+            else  
+              li#user 
+              a(href='/user/loginAcc')
+                button.bttn-unite.bttn-sm.bttn-primary(style='padding: 6px 18px') Đăng nhập
+    div(style=' margin-top: 66px;')
+    .contact
+      .phone
+        i.fas.fa-phone-alt
+      .mess
+        i.fab.fa-facebook-messenger
+    block content
+    footer
+      .container
+        .row
+          .col-sm-12.col-lg-4.col1
+            .tittle.mt-3(style='font-size: 20px;') CÔNG TY TMDV BEAUTY SALON
+            div 82 Trần Đại Nghĩa, Q. Hai Bà Trưng, HN
+            div Số giấy chứng nhận kinh doanh: 010.7467.693
+            div Ngày cấp: 08/06/2016
+            div Nơi cấp: Sở kế hoạch đầu tư TP Hà Nội
+            div
+              a(href='#') Chính sách bảo mật thông tin
+            div
+              a(href='#') Liên hệ quảng cáo Beauty Salon
+            .logo.d-flex.py-2
+              img.mr-3(src='/images/footerLogo1.png' alt='')
+              img.my-auto(src='/images/footerLogo2.png' alt='')
+            div
+              span Chấp nhận thanh toán
+            .pay.d-flex
+              img.mr-3(src='/images/pay1.svg' alt='')
+              img.my-auto(src='/images/pay2.svg' alt='')
+          .col-sm-12.col-lg-4.col2
+            .tittle.mt-3(style='font-size: 20px;') GIỜ PHỤC VỤ
+            div
+              | Giờ phục vụ: T2 - T6 (8h30 - 20h30)
+              br
+              | T7, CN (7h30 - 23h30)
+            div(style='color:#E0A800') HOTLINE GÓP Ý CHẤT LƯỢNG DỊCH VỤ
+            .call.d-flex.justify-content-center.mt-3
+              i.fas.fa-phone-volume.pr-3.my-auto
+              | HOTLINE: 1800.28.28.30 (MIỄN PHÍ)
+          .col-sm-12.col-lg-4.col3
+            .tittle.mt-3(style='font-size: 20px;') ỨNG DỤNG CỦA 30SHINE
+            div Trải nghiệm đặt lịch nhanh chóng và nhiều tiện ích khác với ứng dụng 30Shine.          
+            .ud.d-flex.mt-3
+              img.mr-3(src='/images/ud1.png' alt='')
+              img(src='/images/ud2.png' alt='')
+
+    script(src='https://code.jquery.com/jquery-3.2.1.slim.min.js' integrity='sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN' crossorigin='anonymous')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js' integrity='sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q' crossorigin='anonymous')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js' integrity='sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl' crossorigin='anonymous')

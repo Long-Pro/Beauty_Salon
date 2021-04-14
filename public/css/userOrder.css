@@ -1,0 +1,31 @@
+body{
+    background-color: #f3f3f3;
+    box-sizing: border-box;
+}
+.userDetail{
+    margin-top: 130px;
+   
+}
+.bill{
+    padding: 8px;
+    border:1px solid #000;
+   
+}
+table{
+    width: 100%;
+
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 5px;
+  }
+  th {
+    text-align: center;
+  }
+a.close{
+  color:red !important; 
+}

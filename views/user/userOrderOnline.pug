@@ -1,0 +1,48 @@
+extends ../template/layout.pug
+block css 
+  link(rel='stylesheet' href='/css/userOrder.css')
+block content 
+    if errors   
+        each err in errors
+            .alert.alert-danger= err
+    div.mt-5
+    .container
+        .userData
+            if kq.length>0
+                h4.my-5.pt-5 Lịch đặt trước
+            else 
+                h4.mt-5 Bạn chưa đặt lịch trước
+                div(style="height:500px")
+
+            .row
+                .col-2
+                .col-8
+                    each item in kq 
+                        .bill.my-5 
+                            if item.info.TRANGTHAI==0
+                                a.close(href=`/user/deleteOrder?ma=${item.info.MA}`) X
+                            .billHeader.d-flex.justify-content-between.my-3
+                                .idBill 
+                                    span.valueIdBill MAHD: #{item.info.MA}
+                                .statusBill
+                                    if item.info.TRANGTHAI==0
+                                        h4(style='color:green') Đang đặt
+                                    if item.info.TRANGTHAI==1
+                                        h4(style='') Đã hoàn thành
+                                    if item.info.TRANGTHAI==2
+                                        h4(style='color:red') Đã hủy
+                                    
+                                .timeBill #{item.info.THOIGIAN}
+                            table.mt-3
+                                tr
+                                    th Dịch vụ
+                                    th Giá tiền 
+                                each item2 in item.data
+                                    tr
+                                        td #{item2.TEN}
+                                        td #{item2.GIA}đ
+                            .d-flex.justify-content-end.my-3
+                                | Tổng tiền:
+                                span.totalMoney #{item.sum}đ
+                .col-2
+                        

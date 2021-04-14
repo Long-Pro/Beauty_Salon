@@ -1,0 +1,32 @@
+extends ../template/layoutStaff.pug
+block css 
+  link(rel='stylesheet' href='/css/acc.css')
+block content 
+  if errors   
+    each err in errors
+      .alert.alert-danger= err
+  .main
+    form#form-2.form(action='' method='POST')
+      h3.heading Đăng nhập
+      p.desc BEAUTY SALON - Nơi vẻ đẹp bắt đầu
+      .spacer
+      .form-group
+        label.form-label(for='account') Tài khoản
+        input#account.form-control(name='account' type='text' placeholder='VD: long123' value=values?values.account:"" rules='required|min:6|max:12')
+        span.form-message
+      .form-group
+        label.form-label(for='password') Mật khẩu
+        input#password.form-control(name='password' type='password' placeholder='Nhập mật khẩu' value=values?values.password:"" rules='required|min:6|max:12')
+        span.form-message
+      button.form-submit.btn.btn-primary(type='submit') Đăng nhập
+
+      
+      
+  script(src='/js/validator.js')
+  script.
+    Validator('#form-2',{
+    onSubmit:function(data){
+    console.log('CALL API...')
+    console.log(data)
+    }
+    })

@@ -1,0 +1,108 @@
+extends ../template/layoutStaff.pug
+block css 
+    link(rel='stylesheet' href='/css/staff.css')
+    style.
+      .btn{
+      width: 100%;
+      }
+block content 
+    if errors   
+        each err in errors
+            .alert.alert-danger= err
+    .container
+        .content.my-5
+            .row.my-5 
+                .col-3 
+                    a.btn.btn-primary(type='button' data-toggle='modal' data-target='#myModalSDTHD') Thêm hóa đơn
+                .col-3 
+                    a.btn.btn-primary(type='button' data-toggle='modal' data-target='#myModalSDTKH') Thêm khách hàng
+                .col-3 
+                    a.btn.btn-primary(type='button' data-toggle='modal' data-target='#myModalMK') Thêm nhân viên
+                .col-3 
+                    a.btn.btn-primary(type='button' data-toggle='modal' data-target='#myModalMK') Test
+            .row.my-5 
+                .col-3 
+                    a.btn.btn-primary(type='button' data-toggle='modal' data-target='#myModalMK') Xóa hóa đơn
+                .col-3 
+                    a.btn.btn-primary(type='button' data-toggle='modal' data-target='#myModalMK') Xóa khách hàng
+                .col-3 
+                    a.btn.btn-primary(type='button' data-toggle='modal' data-target='#myModalMK') Xóa nhân viên
+                .col-3 
+                    a.btn.btn-primary(href='') ...
+                
+            .row.my-5 
+                .col-3 
+                    a.btn.btn-primary(type='button' data-toggle='modal' data-target='#myModalHD') Tra cứu thông tin hóa đơn
+                .col-3 
+                    a.btn.btn-primary(type='button' data-toggle='modal' data-target='#myModalSDT') Tra cứu thông tin khách hàng
+                .col-3 
+                    a.btn.btn-primary(type='button' data-toggle='modal' data-target='#myModalMK') Tra cứu thông tin nhân viên
+                .col-3 
+                    a.btn.btn-primary(href='') Thống kê doanh thu
+                
+        // The Modal
+    #myModalMK.modal
+        .modal-dialog.bg-light
+            .modal-content
+                // Modal Header
+                .modal-header
+                    h4.modal-title Nhập mật khẩu
+                    button.close(type='button' data-dismiss='modal') &times;
+                // Modal body
+                .modal-body
+                    form(action='')
+                        .form-group
+                            label(for='password') Mật khẩu:
+                            input#password.form-control(type='password' name='password')
+                        button.btn.btn-primary(type='submit') Xác nhận
+    #myModalSDTHD.modal
+        .modal-dialog.bg-light
+            .modal-content
+                // Modal Header
+                .modal-header
+                    h4.modal-title Nhập số điện thoại khách
+                    button.close(type='button' data-dismiss='modal') &times;
+                // Modal body
+                .modal-body
+                    form(action='/staff/work/sdthd' method='POST')
+                        .form-group
+                            label(for='password') Số điện thoại:
+                            input#sdt.form-control(type='text' name='sdt')
+                        button.btn.btn-primary(type='submit') Xác nhận
+    #myModalSDTKH.modal
+        .modal-dialog.bg-light
+            .modal-content
+                // Modal Header
+                .modal-header
+                    h4.modal-title Nhập số điện thoại khách
+                    button.close(type='button' data-dismiss='modal') &times;
+                // Modal body
+                .modal-body
+                    form(action='/staff/work/sdtkh' method='POST')
+                        .form-group
+                            label(for='password') Số điện thoại:
+                            input#sdt.form-control(type='text' name='sdt')
+                        button.btn.btn-primary(type='submit') Xác nhận
+    #myModalHD.modal
+        .modal-dialog.bg-light
+            .modal-content
+                // Modal Header
+                .modal-header
+                    h4.modal-title Nhập mã hóa đơn thanh toán
+                    button.close(type='button' data-dismiss='modal') &times;
+                // Modal body
+                .modal-body
+                    form(action='')
+                        .form-group
+                            label(for='password') Mã hóa đơn:
+                            input#hd.form-control(type='text' name='hd')
+                        button.btn.btn-primary(type='submit') Xác nhận
+
+                
+    
+
+
+
+      
+      
+  

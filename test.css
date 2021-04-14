@@ -1,0 +1,36 @@
+#user{
+  position: relative;
+}
+#user:hover .userMenu{
+  display: block;
+}
+.userMenu{
+  position: absolute;
+  background-color: #fff;
+  list-style: none;
+  top: 48px;
+  right: 0;
+  width: 180px;
+  box-shadow: 0 2px 5px #ccc;
+  padding-left: 8px;
+  display: none;
+  
+  
+}
+.userMenu::before{
+  content: "";
+  position:absolute;
+  border-width: 20px 27px ;
+  border-style: solid;
+  right: 12px;
+  top: -28px;
+  border-color: transparent transparent #fff transparent;
+}
+.userMenu__item{
+  padding: 3px;
+
+}
+.userMenu__item:hover{
+  background-color:#fafafa;
+
+}

@@ -1,0 +1,212 @@
+extends ./template/layout.pug
+block css 
+  link(rel='stylesheet' href='/css/userDetail.css')
+  link(rel='stylesheet' href='/css/acc.css')
+block content 
+  header
+    #demo.carousel.slide(data-ride='carousel')
+      // Indicators
+      ul.carousel-indicators
+        li.active(data-target='#demo' data-slide-to='0')
+        li(data-target='#demo' data-slide-to='1')
+        li(data-target='#demo' data-slide-to='2')
+      // The slideshow
+      .carousel-inner
+        .carousel-item.active
+          img(src='/images/banner.jpg' alt='Los Angeles' style='width:100vw')
+        .carousel-item
+          img(src='/images/banner3.jpg' alt='Chicago' style='width:100vw')
+        .carousel-item
+          img(src='/images/banner4.jpg' alt='New York' style='width:100vw')
+      // Left and right controls
+      a.carousel-control-prev(href='#demo' data-slide='prev')
+        span.carousel-control-prev-icon
+      a.carousel-control-next(href='#demo' data-slide='next')
+        span.carousel-control-next-icon
+    .book
+      p.title ĐẶT LỊCH GIỮ CHỖ CHỈ 30 GIÂY
+      p.content Cắt xong trả tiền, hủy lịch không sao
+      a(href='/user/userOrder')
+        button.btn Đặt lịch ngay
+  .contentBody
+    .container
+      .content1
+        .header.d-flex.justify-content-between
+          .block1
+            p.headerTitle DỊCH VỤ Beaty Salon
+            p Thư giãn 30 phút và bạn sẽ tỏa sáng
+          .block2
+            a(href='') Các dịch vụ khác 
+        .body
+          .image
+            img(src='/images/dichVu.jpg' alt='')
+          .row
+            .col-sm-12.col-md-6.col-lg-3.d-flex
+              img(src='/images/dv1.jpg' alt='')
+              .detail.d-flex.flex-column.align-content-center
+                p.name Cắt gội massage
+                span.des Bảng giá 2021 (hấp dẫn)
+            .col-sm-12.col-md-6.col-lg-3.d-flex
+              img(src='/images/dv2.jpg' alt='')
+              .detail.d-flex.flex-column.align-content-around
+                p.name Uốn
+                span.des Chỉ từ 234k
+            .col-sm-12.col-md-6.col-lg-3.d-flex
+              img(src='/images/dv3.jpg' alt='')
+              .detail.d-flex.flex-column.align-content-around
+                p.name Nhuộm
+                span.des Chỉ từ 162k
+            .col-sm-12.col-md-6.col-lg-3.d-flex
+              img(src='/images/dv4.jpg' alt='')
+              .detail.d-flex.flex-column.align-content-around
+                p.name Dịch vụ khác
+                span.des 7 dịch vụ
+      .content2
+        .header.d-flex.justify-content-between
+          .block1
+            p.headerTitle ƯU ĐÃI - QUÀ TẶNG 30SHINE
+            p Hàng ngàn ưu đãi hấp dẫn đang chờ              
+          .block2
+            a(href='') Các ưu đãi khác 
+        .body.d-flex
+          .image.d-flex.flex-column
+            img(src='/images/uuDai1.jpg' alt='')
+            span Giảm giá đọc quyền SRM Acsys 2021
+          .image.d-flex.flex-column
+            img(src='/images/uuDai2.png' alt='')
+            span Tigi  mua 1 tặng 1
+      .content3
+        .header.d-flex.justify-content-between
+          .block1
+            p.headerTitle Beauty Salon
+            p Số 1 về chăm sóc tóc
+          .block2
+            a(href='') Các dịch vụ khác 
+        .body
+          .image
+            img(src='/images/store.jpg' alt='')
+          .service.d-flex.justify-content-center
+            .d-flex
+              .serviceItem.mx-3.mt-2
+                img(src='https://30shine.com/static/media/cashBack.a763ac96.svg' alt='')
+                span Đổi trả miễn phí
+              .serviceItem.mx-3.mt-2
+                img(src='https://30shine.com/static/media/authentic.eb2c67fb.svg' alt='')
+                span Chính hãng 100%
+              .serviceItem.mx-3.mt-2
+                img(src='https://30shine.com/static/media/transport.ed73d8c2.svg' alt='')
+                span Giao hàng toàn quốc
+      .content4
+        .header.d-flex.justify-content-between
+          .block1
+            p.headerTitle Top sản phẩm nổi bật
+          .block2.d-flex
+            .navLeft
+              i.fas.fa-chevron-left
+            .navRight
+              i.fas.fa-chevron-right
+        .separator.mt-3
+        .body.mt-5
+          ul.productList.d-flex
+            li.productItem.mr-5
+              .card
+                img.card-img-top(src='/images/pro/pro1.webp' alt='Card image')
+                .card-body
+                  h5.card-title.px-2 Glanzen Box tạo kiểu basic 2 
+                  .cost.d-flex.px-2
+                    .costCurr 130.000đ
+                    .costOld.ml-3 170.000đ
+                  a.btn.btn-warning(href='#') Mua ngay
+            li.productItem.mr-5
+              .card
+                img.card-img-top(src='/images/pro/pro1.webp' alt='Card image')
+                .card-body
+                  h5.card-title.px-2 Glanzen Box tạo kiểu basic 2 
+                  .cost.d-flex.px-2
+                    .costCurr 130.000đ
+                    .costOld.ml-3 170.000đ
+                  a.btn.btn-warning(href='#') Mua ngay
+            li.productItem.mr-5
+              .card
+                img.card-img-top(src='/images/pro/pro1.webp' alt='Card image')
+                .card-body
+                  h5.card-title.px-2 Glanzen Box tạo kiểu basic 2 
+                  .cost.d-flex.px-2
+                    .costCurr 130.000đ
+                    .costOld.ml-3 170.000đ
+                  a.btn.btn-warning(href='#') Mua ngay
+            li.productItem.mr-5
+              .card
+                img.card-img-top(src='/images/pro/pro1.webp' alt='Card image')
+                .card-body
+                  h5.card-title.px-2 Glanzen Box tạo kiểu basic 2 
+                  .cost.d-flex.px-2
+                    .costCurr 130.000đ
+                    .costOld.ml-3 170.000đ
+                  a.btn.btn-warning(href='#') Mua ngay
+            li.productItem.mr-5
+              .card
+                img.card-img-top(src='/images/pro/pro1.webp' alt='Card image')
+                .card-body
+                  h5.card-title.px-2 Glanzen Box tạo kiểu basic 2 
+                  .cost.d-flex.px-2
+                    .costCurr 130.000đ
+                    .costOld.ml-3 170.000đ
+                  a.btn.btn-warning(href='#') Mua ngay
+            li.productItem.mr-5
+              .card
+                img.card-img-top(src='/images/pro/pro1.webp' alt='Card image')
+                .card-body
+                  h5.card-title.px-2 Glanzen Box tạo kiểu basic 2 
+                  .cost.d-flex.px-2
+                    .costCurr 130.000đ
+                    .costOld.ml-3 170.000đ
+                  a.btn.btn-warning(href='#') Mua ngay
+            li.productItem.mr-5
+              .card
+                img.card-img-top(src='/images/pro/pro1.webp' alt='Card image')
+                .card-body
+                  h5.card-title.px-2 Glanzen Box tạo kiểu basic 2 
+                  .cost.d-flex.px-2
+                    .costCurr 130.000đ
+                    .costOld.ml-3 170.000đ
+                  a.btn.btn-warning(href='#') Mua ngay
+            li.productItem.mr-5
+              .card
+                img.card-img-top(src='/images/pro/pro1.webp' alt='Card image')
+                .card-body
+                  h5.card-title.px-2 Glanzen Box tạo kiểu basic 2 
+                  .cost.d-flex.px-2
+                    .costCurr 130.000đ
+                    .costOld.ml-3 170.000đ
+                  a.btn.btn-warning(href='#') Mua ngay
+            li.productItem.mr-5
+              .card
+                img.card-img-top(src='/images/pro/pro1.webp' alt='Card image')
+                .card-body
+                  h4.card-title Glanzen Box tạo kiểu basic 2
+                  .cost.d-flex
+                    span.costCurr 130.000đ
+                    span.costOld.ml-3 170.000đ
+                  a.btn.btn-warning(href='#') Mua ngay
+            li.productItem.mr-5
+              .card
+                img.card-img-top(src='/images/pro/pro1.webp' alt='Card image')
+                .card-body
+                  h4.card-title Glanzen Box tạo kiểu basic 2
+                  .cost.d-flex
+                    span.costCurr 130.000đ
+                    span.costOld.ml-3 170.000đ
+                  a.btn.btn-warning(href='#') Mua ngay
+            li.productItem.mr-5
+              .card
+                img.card-img-top(src='/images/pro/pro1.webp' alt='Card image')
+                .card-body
+                  h4.card-title Glanzen Box tạo kiểu basic 2
+                  .cost.d-flex
+                    span.costCurr 130.000đ
+                    span.costOld.ml-3 170.000đ
+                  a.btn.btn-warning(href='#') Mua ngay
+    
+  
+  

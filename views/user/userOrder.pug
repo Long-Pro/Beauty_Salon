@@ -1,0 +1,65 @@
+extends ../template/layout.pug
+block css 
+  link(rel='stylesheet' href='/css/userOrder.css')
+block content 
+  .container
+    .row 
+      .col-3 
+      .col-6.bg-light
+        h3.mt-5 CHỌN DỊCH VỤ
+        form(action="" method='post' )
+          div 
+            h5 Cắt tóc
+            each ct in catToc
+              .DV.d-flex.align-items-center
+                input.mx-4(type='radio' name='catTocDV' value=ct.MA id=ct.MA)
+                label.w-100(for=ct.MA)
+                  div(class='DV__info')
+                    .d-flex.justify-content-between
+                      div(class='DV__info--name') #{ct.TEN}
+                      div(class='DV__info--price') #{ct.GIA}đ
+                    div(class='DV__info--des') #{ct.MOTA}
+            
+          div 
+            h5 Uốn tóc
+            each ut in uonToc
+              .uonTocDV.d-flex.align-items-center
+                input.mx-4(type='radio' name='uonTocDV' value=ut.MA id=ut.MA)
+                label.w-100(for=ut.MA)
+                  div(class='DV__info')
+                    .d-flex.justify-content-between
+                      div(class='DV__info--name')  #{ut.TEN}
+                      div(class='DV__info--price') #{ut.GIA}đ
+                    div(class='DV__info--des') #{ut.MOTA}
+            h5 Nhuộm tóc
+            each nt in nhuomToc
+              .DV.d-flex.align-items-center
+                input.mx-4(type='radio' name='nhuomTocDV' value=nt.MA id=nt.MA)
+                label.w-100(for=nt.MA)
+                  div(class='DV__info')
+                    .d-flex.justify-content-between
+                      div(class='DV__info--name')  #{nt.TEN}
+                      div(class='DV__info--price') #{nt.GIA}đ
+                    div(class='DV__info--des') #{nt.MOTA}
+            
+          div 
+            h5 Dịch vụ khác
+            each kh in khac
+              .DV.d-flex.align-items-center
+                input.mx-4(type='checkbox' name='khacDV' value=kh.MA id=kh.MA)
+                label.w-100(for=kh.MA)
+                  div(class='DV__info')
+                    .d-flex.justify-content-between
+                      div(class='DV__info--name') #{kh.TEN}
+                      div(class='DV__info--price') #{kh.GIA}đ
+                    div(class='DV__info--des') #{kh.MOTA}
+          .d-flex.justify-content-between.mt-5  
+            label(for='orderTime') Chọn ngày giờ cắt:
+            input#orderTime(type='datetime-local' name='orderTime')
+          button.btn.btn-primary.my-5(type='submit') Đặt lịch
+      .col-3 
+      
+
+
+
+  
