@@ -57,6 +57,22 @@ module.exports.insertSDDV=function(idHD,maNVK,id){
         console.log('error', err)
     }) 
 }
+module.exports.getDCTL=function(id){
+    let DIEMCONGTICHLUY
+    sql.connect(config).then(() => {
+        return sql.query`select DIEMCONGTICHLUY from dichvu where MA = ${id}`
+        
+    }).then((result) => {
+        // console.log(result)
+        DIEMCONGTICHLUY=result.recordset[0].DIEMCONGTICHLUY
+        return DIEMCONGTICHLUY
+        
+    })
+    .catch(err => {
+        console.log('error', err)
+    }) 
+    return DIEMCONGTICHLUY
+}
 
 module.exports.selectSDDT=function(item,kq){
     var t={}

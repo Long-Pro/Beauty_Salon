@@ -1,4 +1,5 @@
 function Validator(formSelector,options={}){
+
     let formElement =document.querySelector(formSelector)
     let inputsCheckbox=Array.from(document.querySelectorAll('input[type=checkbox]'))
     let inputsRadio=Array.from(document.querySelectorAll('input[type=radio]'))
@@ -55,3 +56,32 @@ function Validator(formSelector,options={}){
 
     }
 }
+
+
+let inputsCheckbox=Array.from(document.querySelectorAll('input[type=checkbox]'))
+let inputsRadio=Array.from(document.querySelectorAll('input[type=radio]'))
+let inputs=[].concat(inputsCheckbox,inputsRadio)
+let sumPrice=document.querySelector('#sumPrice')
+let currPrice=document.querySelector('#currPrice')
+let price=0;
+let tlgg=parseInt(document.querySelector('#userInfo').getAttribute('tlgg'))
+for(let item of inputs){
+    let priceEle=parseInt(item.getAttribute('price'))
+    if(item.checked) 
+    if(item.checked) price+=priceEle;
+    sumPrice.innerText='Tổng tiền: ' +price+'đ';
+    currPrice.innerText=`Tiền thah toán: ${Math.ceil(price*(100-tlgg)/100)}đ`
+}
+for(let item of inputs){
+    item.onchange=function(e){
+        let priceEle=parseInt(item.getAttribute('price'))
+        
+
+        if(item.checked) price+=priceEle;else price-=priceEle
+        sumPrice.innerText='Tổng tiền: ' +price+'đ';
+        currPrice.innerText=`Tiền thah toán: ${Math.ceil(price*(100-tlgg)/100)}đ`
+        console.log( price)
+    }
+    // console.log(item)
+}
+

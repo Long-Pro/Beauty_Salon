@@ -17,6 +17,9 @@ const config = {
 
 module.exports.work = function(req, res, next) {
     var errStaff=req.cookies.errStaff
+    res.clearCookie('guestPN', { })
+    res.clearCookie('mkh', { })
+    res.clearCookie('userId', { })
     res.render('staff/work',{ 
         errors:errStaff
     })
@@ -64,9 +67,19 @@ module.exports.addGuest2 = function(req, res, next) {
 }
 
 module.exports.addBill = function(req, res, next) {
+
     sql.connect(config).then(() => {       
+        return sql.query`select * from khachhang where SDT=${req.cookies.guestPN}`
+    })
+    .then(result=>{
+        res.locals.user=result.recordset[0]
+        return sql.query`select * from loaikhach where MA=${res.locals.user.MALK}`
+    })
+    .then(result=>{
+        res.locals.tlgg=result.recordset[0].TILE_GIAMGIA
         return sql.query` select *  from DICHVU  as dv where dv.MALDV='LD001'`  
-    }).then(result => {
+    })
+    .then(result => {
         res.locals.catToc=result.recordset
         return sql.query` select *  from DICHVU  as dv where dv.MALDV='LD002'`                                       //   validate tai khoan    
     })      
@@ -99,12 +112,17 @@ module.exports.addBill = function(req, res, next) {
 }
 module.exports.addBill2 = function(req, res, next) {
     console.log(req.body)
+    
         
 
     var{catTocDV,uonTocDV,nhuomTocDV,khacDV,orderTime}=req.body
     var sdt=req.cookies.guestPN;
-    var maxMa,maNext,ma;
+    var maxMa,maNext,ma,tlgg,score=0,currScore=0;
     sql.connect(config).then(() => {       //   get id
+        return sql.query`select lk.TILE_GIAMGIA  from khachhang kh,loaikhach lk where kh.SDT=${sdt} and kh.MALK=lk.MA` 
+    })
+    .then(result =>{
+        tlgg=result.recordset[0].TILE_GIAMGIA
         return sql.query`select MA as ma from khachhang kh where kh.SDT=${sdt}` 
     })
     .then((result)=>{
@@ -121,8 +139,7 @@ module.exports.addBill2 = function(req, res, next) {
         return maNext
     })       
     .then(maNext=>{                 //insert HOADON
-        // var time2=func.convertTime(orderTime)
-        return         sql.query` INSERT INTO hoadon VALUES(${maNext},${ma},${orderTime})`
+        return         sql.query` INSERT INTO hoadon VALUES(${maNext},${ma},${orderTime},${tlgg})`
     })
     .then(result=>{       
         var values=req.body          //insert SD_DICHVU
@@ -130,9 +147,11 @@ module.exports.addBill2 = function(req, res, next) {
             var maNVCT=func.findStaff(values,values.catTocDV)
             
             sql.connect(config).then(() => {
-                return sql.query`select GIA from dichvu where MA = ${catTocDV}`
+                return sql.query`select GIA,DIEMCONGTICHLUY  from dichvu where MA = ${catTocDV}`
             }).then(result => {
-                var {GIA}=result.recordset[0]
+                var {GIA,DIEMCONGTICHLUY}=result.recordset[0]
+                score+=parseInt(DIEMCONGTICHLUY);
+                console.log(DIEMCONGTICHLUY)
                 sql.query` INSERT INTO SD_DICHVU values(${maNext},${maNVCT},${catTocDV},${GIA})` 
             }).catch(err => {
                 
@@ -142,9 +161,11 @@ module.exports.addBill2 = function(req, res, next) {
         if(uonTocDV){
             var maNVUT=func.findStaff(values,values.uonTocDV)
             sql.connect(config).then(() => {
-                return sql.query`select GIA from dichvu where MA = ${uonTocDV}`
+                return sql.query`select GIA,DIEMCONGTICHLUY from dichvu where MA = ${uonTocDV}`
             }).then(result => {
-                var {GIA}=result.recordset[0]
+                var {GIA,DIEMCONGTICHLUY}=result.recordset[0]
+                score+=parseInt(DIEMCONGTICHLUY);
+                console.log(DIEMCONGTICHLUY)
                 sql.query` INSERT INTO SD_DICHVU VALUES(${maNext},${maNVUT},${uonTocDV},${GIA})` 
             }).catch(err => {
                 
@@ -153,9 +174,11 @@ module.exports.addBill2 = function(req, res, next) {
         if(nhuomTocDV){
             var maNVNT=func.findStaff(values,values.nhuomTocDV)
             sql.connect(config).then(() => {
-                return sql.query`select GIA from dichvu where MA = ${nhuomTocDV}`
+                return sql.query`select GIA,DIEMCONGTICHLUY from dichvu where MA = ${nhuomTocDV}`
             }).then(result => {
-                var {GIA}=result.recordset[0]
+                var {GIA,DIEMCONGTICHLUY}=result.recordset[0]
+                score+=parseInt(DIEMCONGTICHLUY);
+                console.log(DIEMCONGTICHLUY)
                 sql.query` INSERT INTO SD_DICHVU VALUES(${maNext},${maNVNT},${nhuomTocDV},${GIA})` 
             }).catch(err => {
                 
@@ -165,15 +188,27 @@ module.exports.addBill2 = function(req, res, next) {
             if(Array.isArray(khacDV) ){
                 for(var id of khacDV) {
                     var maNVK=func.findStaff(values,id)
+                    sql.connect(config).then(() => {
+                        return sql.query`select DIEMCONGTICHLUY from dichvu where MA = ${id}`
+                        
+                    }).then((result) => {
+                        var DIEMCONGTICHLUY=result.recordset[0].DIEMCONGTICHLUY
+                        score=score+parseInt(DIEMCONGTICHLUY)
+
+                        
+                    })
 
                     func.insertSDDV(maNext,maNVK,id)
                 }
             }
             else {
+                var maNVK=func.findStaff(values,values.khacDV)
                 sql.connect(config).then(() => {
-                    return sql.query`select GIA,MA from dichvu where MA = ${khacDV}`
+                    return sql.query`select GIA,MA,DIEMCONGTICHLUY from dichvu where MA = ${khacDV}`
                 }).then((result) => {
-                    var {GIA,MA}=result.recordset[0]
+                    var {GIA,MA,DIEMCONGTICHLUY}=result.recordset[0]
+                    score+=parseInt(DIEMCONGTICHLUY);
+                    console.log(DIEMCONGTICHLUY)
                     sql.query` INSERT INTO SD_DICHVU VALUES(${maNext},${maNVK},${khacDV},${GIA})` 
                 }).catch(err => {
                     
@@ -184,11 +219,34 @@ module.exports.addBill2 = function(req, res, next) {
         return maNext
     })
     .then((maNext)=>{
-        console.log('inser thanh cong ')
-        res.clearCookie('guestPN', { })
-        res.render('staff/work',{ 
+        setTimeout(()=>{
+            sql.connect(config).then(() => {
+                return sql.query`select DIEMTICHLUY from khachhang where SDT=${sdt}`
+            }).then((result) => {
+               currScore=parseInt(result.recordset[0].DIEMTICHLUY)
+               currScore+=score
+               if(currScore>=200){
+                    sql.query`UPDATE khachhang SET DIEMTICHLUY = ${currScore},MALK='LK4'  where SDT=${sdt}`
+
+               }else if(currScore>=150){
+                     sql.query`UPDATE khachhang SET DIEMTICHLUY = ${currScore},MALK='LK3'  where SDT=${sdt}`
+               }else if(currScore>=70){
+                    sql.query`UPDATE khachhang SET DIEMTICHLUY = ${currScore},MALK='LK2'  where SDT=${sdt}`
+               }else if(currScore>=0){
+                     sql.query`UPDATE khachhang SET DIEMTICHLUY = ${currScore},MALK='LK1'  where SDT=${sdt}`
+               }
+                 
+            }).catch(err => {
+                console.log(err)
+            }) 
+
+            console.log('inser thanh cong ')
+            res.clearCookie('guestPN', { })
+            res.render('staff/work',{ 
         
         })
+        },500)
+        
         
     })
     .catch(err => {
@@ -547,6 +605,9 @@ module.exports.deleteOrder=function(req, res, next) {
 module.exports.completeOrder=function(req, res, next) {
     let ma=req.query.ma,data,info,kq=[],user
 
+
+
+
     sql.connect(config).then(() => {       //   
         return sql.query`  select * from dattruoc dt where MA=${ma}`
 
@@ -558,8 +619,12 @@ module.exports.completeOrder=function(req, res, next) {
     .then(result => {
         user=result.recordset[0];
         res.cookie("mkh",user.MA)
+        return sql.query`select * from loaikhach where MA=${user.MALK}`
+    })   
+    .then(result =>{
+        res.locals.tlgg=result.recordset[0].TILE_GIAMGIA
         return sql.query`select * from sd_Dichvu_dattruoc sd where MAHD=${ma}`
-    })      
+    })  
     .then(result => {
         data=result.recordset
         // console.log(data)
@@ -612,12 +677,21 @@ module.exports.completeOrder=function(req, res, next) {
 }
 module.exports.completeOrder2=function(req, res, next){
     console.log(req.body)
-    var ma=req.cookies.mkh
+    
         
-
+    var mkh=req.cookies.mkh
     var{catTocDV,uonTocDV,nhuomTocDV,khacDV,orderTime}=req.body
-    var maxMa,maNext,ma;
+    var sdt=req.cookies.guestPN;
+    var maxMa,maNext,ma,tlgg,score=0,currScore=0;
     sql.connect(config).then(() => {       //   get id
+        return sql.query`select lk.TILE_GIAMGIA  from khachhang kh,loaikhach lk where kh.MA=${mkh} and kh.MALK=lk.MA` 
+    })
+    .then(result =>{
+        tlgg=result.recordset[0].TILE_GIAMGIA
+        return sql.query`select MA as ma from khachhang kh where kh.MA=${mkh}` 
+    })
+    .then((result)=>{
+        ma=result.recordset[0].ma
         return sql.query`select max(ma) as ma from HOADON` 
     })
     .then(result => {
@@ -630,8 +704,7 @@ module.exports.completeOrder2=function(req, res, next){
         return maNext
     })       
     .then(maNext=>{                 //insert HOADON
-        // var time2=func.convertTime(orderTime)
-        return         sql.query` INSERT INTO hoadon VALUES(${maNext},${ma},${orderTime})`
+        return         sql.query` INSERT INTO hoadon VALUES(${maNext},${ma},${orderTime},${tlgg})`
     })
     .then(result=>{       
         var values=req.body          //insert SD_DICHVU
@@ -639,9 +712,11 @@ module.exports.completeOrder2=function(req, res, next){
             var maNVCT=func.findStaff(values,values.catTocDV)
             
             sql.connect(config).then(() => {
-                return sql.query`select GIA from dichvu where MA = ${catTocDV}`
+                return sql.query`select GIA,DIEMCONGTICHLUY  from dichvu where MA = ${catTocDV}`
             }).then(result => {
-                var {GIA}=result.recordset[0]
+                var {GIA,DIEMCONGTICHLUY}=result.recordset[0]
+                score+=parseInt(DIEMCONGTICHLUY);
+                console.log(DIEMCONGTICHLUY)
                 sql.query` INSERT INTO SD_DICHVU values(${maNext},${maNVCT},${catTocDV},${GIA})` 
             }).catch(err => {
                 
@@ -651,9 +726,11 @@ module.exports.completeOrder2=function(req, res, next){
         if(uonTocDV){
             var maNVUT=func.findStaff(values,values.uonTocDV)
             sql.connect(config).then(() => {
-                return sql.query`select GIA from dichvu where MA = ${uonTocDV}`
+                return sql.query`select GIA,DIEMCONGTICHLUY from dichvu where MA = ${uonTocDV}`
             }).then(result => {
-                var {GIA}=result.recordset[0]
+                var {GIA,DIEMCONGTICHLUY}=result.recordset[0]
+                score+=parseInt(DIEMCONGTICHLUY);
+                console.log(DIEMCONGTICHLUY)
                 sql.query` INSERT INTO SD_DICHVU VALUES(${maNext},${maNVUT},${uonTocDV},${GIA})` 
             }).catch(err => {
                 
@@ -662,9 +739,11 @@ module.exports.completeOrder2=function(req, res, next){
         if(nhuomTocDV){
             var maNVNT=func.findStaff(values,values.nhuomTocDV)
             sql.connect(config).then(() => {
-                return sql.query`select GIA from dichvu where MA = ${nhuomTocDV}`
+                return sql.query`select GIA,DIEMCONGTICHLUY from dichvu where MA = ${nhuomTocDV}`
             }).then(result => {
-                var {GIA}=result.recordset[0]
+                var {GIA,DIEMCONGTICHLUY}=result.recordset[0]
+                score+=parseInt(DIEMCONGTICHLUY);
+                console.log(DIEMCONGTICHLUY)
                 sql.query` INSERT INTO SD_DICHVU VALUES(${maNext},${maNVNT},${nhuomTocDV},${GIA})` 
             }).catch(err => {
                 
@@ -674,15 +753,27 @@ module.exports.completeOrder2=function(req, res, next){
             if(Array.isArray(khacDV) ){
                 for(var id of khacDV) {
                     var maNVK=func.findStaff(values,id)
+                    sql.connect(config).then(() => {
+                        return sql.query`select DIEMCONGTICHLUY from dichvu where MA = ${id}`
+                        
+                    }).then((result) => {
+                        var DIEMCONGTICHLUY=result.recordset[0].DIEMCONGTICHLUY
+                        score=score+parseInt(DIEMCONGTICHLUY)
+
+                        
+                    })
 
                     func.insertSDDV(maNext,maNVK,id)
                 }
             }
             else {
+                var maNVK=func.findStaff(values,values.khacDV)
                 sql.connect(config).then(() => {
-                    return sql.query`select GIA,MA from dichvu where MA = ${khacDV}`
+                    return sql.query`select GIA,MA,DIEMCONGTICHLUY from dichvu where MA = ${khacDV}`
                 }).then((result) => {
-                    var {GIA,MA}=result.recordset[0]
+                    var {GIA,MA,DIEMCONGTICHLUY}=result.recordset[0]
+                    score+=parseInt(DIEMCONGTICHLUY);
+                    console.log(DIEMCONGTICHLUY)
                     sql.query` INSERT INTO SD_DICHVU VALUES(${maNext},${maNVK},${khacDV},${GIA})` 
                 }).catch(err => {
                     
@@ -693,16 +784,39 @@ module.exports.completeOrder2=function(req, res, next){
         return maNext
     })
     .then((maNext)=>{
-        console.log('inser thanh cong ')
-        res.clearCookie('mkh', { })
-        res.redirect('/staff/work')
+        setTimeout(()=>{
+            sql.connect(config).then(() => {
+                return sql.query`select DIEMTICHLUY from khachhang where MA=${mkh}`
+            }).then((result) => {
+               currScore=parseInt(result.recordset[0].DIEMTICHLUY)
+               currScore+=score
+               if(currScore>=200){
+                    sql.query`UPDATE khachhang SET DIEMTICHLUY = ${currScore},MALK='LK4'  where MA=${mkh}`
+
+               }else if(currScore>=150){
+                     sql.query`UPDATE khachhang SET DIEMTICHLUY = ${currScore},MALK='LK3'  where MA=${mkh}`
+               }else if(currScore>=70){
+                    sql.query`UPDATE khachhang SET DIEMTICHLUY = ${currScore},MALK='LK2'  where MA=${mkh}`
+               }else if(currScore>=0){
+                     sql.query`UPDATE khachhang SET DIEMTICHLUY = ${currScore},MALK='LK1'  where MA=${mkh}`
+               }
+                 
+            }).catch(err => {
+                console.log(err)
+            }) 
+
+            console.log('inser thanh cong ')
+            res.clearCookie('guestPN', { })
+            res.render('staff/work',{ 
+        
+        })
+        },500)
+        
         
     })
     .catch(err => {
         // ... error checks
         console.log(err)
     })
-
-
 
 }

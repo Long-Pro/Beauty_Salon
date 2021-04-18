@@ -7,14 +7,17 @@ block content
         .row 
             .col-2
             .col-8.bg-light
-                h3.my-5 Khách hàng: #{sdt}
-                h3.mt-5 CHỌN DỊCH VỤ
+                #userInfo.d-flex.justify-content-between(tlgg=tlgg)
+                    h5.my-5 Khách hàng: #{user.TEN}
+                    h5.my-5 Mã: #{user.MA}
+                    h5.my-5 Sdt: #{user.SDT}
+                h3.mt-5 CHỌN DỊCH VỤ KHÁCH SỬ DỤNG
                 form#form(action="" method='post' )
                     div 
                         h5 Cắt tóc
                         each ct in catToc
                             .DV.d-flex.align-items-center
-                                input.mx-4(type='radio' name='catTocDV' value=ct.MA id=ct.MA)
+                                input.mx-4(type='radio' name='catTocDV' value=ct.MA id=ct.MA price=ct.GIA)
                                 label(for=ct.MA).flex-grow-1
                                     div(class='DV__info')
                                         .d-flex.justify-content-between
@@ -33,7 +36,7 @@ block content
                         h5 Uốn tóc
                         each ut in uonToc
                             .uonTocDV.d-flex.align-items-center
-                                input.mx-4(type='radio' name='uonTocDV' value=ut.MA id=ut.MA)
+                                input.mx-4(type='radio' name='uonTocDV' value=ut.MA id=ut.MA price=ut.GIA)
                                 label(for=ut.MA).flex-grow-1
                                     div(class='DV__info')
                                         .d-flex.justify-content-between
@@ -50,7 +53,7 @@ block content
                         h5 Nhuộm tóc
                         each nt in nhuomToc
                             .DV.d-flex.align-items-center
-                                input.mx-4(type='radio' name='nhuomTocDV' value=nt.MA id=nt.MA)
+                                input.mx-4(type='radio' name='nhuomTocDV' value=nt.MA id=nt.MA price=nt.GIA)
                                 label(for=nt.MA).flex-grow-1
                                     div(class='DV__info')
                                         .d-flex.justify-content-between
@@ -68,7 +71,7 @@ block content
                         h5 Dịch vụ khác
                         each kh in khac
                             .DV.d-flex.align-items-center
-                                input.mx-4(type='checkbox' name='khacDV' value=kh.MA id=kh.MA)
+                                input.mx-4(type='checkbox' name='khacDV' value=kh.MA id=kh.MA price=kh.GIA)
                                 label(for=kh.MA).flex-grow-1
                                     div(class='DV__info')
                                         .d-flex.justify-content-between
@@ -86,6 +89,12 @@ block content
                         input#orderTime(type='datetime-local' name='orderTime' required)
                     d-flex.justify-content-center
                         p.mt-3#errMess
+                    div
+                        .d-flex.justify-content-between.my-5
+                            span#sumPrice Tổng tiền: 0đ
+                            span Tỉ lệ giảm giá: #{tlgg}%
+                        p#currPrice Tiền thah toán: 0đ
+
                     button.btn.btn-primary.my-5(type='submit') Thêm hóa đơn
             .col-2 
     script(src='/js/features.js') 
