@@ -1,0 +1,36 @@
+extends ../template/layoutStaff.pug
+block css 
+  link(rel='stylesheet' href='/css/userOrder.css')
+block content 
+  if errors   
+    each err in errors
+      .alert.alert-danger= err
+  .container 
+    .row 
+        .col-2 
+        .col-8 
+            h4.my-5.pt-5 Chi tiết hóa đơn
+            each item in kq 
+                .bill.my-5 
+                    .h5 Tên khách hàng : #{ten}
+                    .billHeader.d-flex.justify-content-between.my-3
+                        .idBill 
+                            span.valueIdBill MAHD: #{item.info.MA}
+                        .statusBill 
+                            h4(style='') Đã hoàn thành
+                        .timeBill #{item.info.THOIGIAN}
+                    table.mt-3
+                        tr
+                            th Dịch vụ
+                            th Nhân viên thực hiện
+                            th Giá tiền 
+                        each item2 in item.data
+                            tr
+                                td #{item2.TEN}
+                                td #{item2.MANV}
+                                td #{item2.GIA}đ
+                    .d-flex.justify-content-end.my-3
+                        | Tổng tiền:
+                        span.totalMoney #{item.sum}đ
+
+        .col-2

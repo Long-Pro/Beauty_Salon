@@ -1,0 +1,104 @@
+extends ../template/layoutStaff.pug
+block css 
+  link(rel='stylesheet' href='/css/userDetail.css')
+  link(rel='stylesheet' href='/css/acc.css')
+  link(rel='stylesheet' href='/css/userOrder.css')
+block content 
+  .container
+    .userDetail
+      .userInfo(style="margin-bottom:100px")
+        if errors   
+          each err in errors
+            .alert.alert-danger= err
+        .row
+          .col-3
+            .card(style='background-color: #81ecec;')
+              if GIOITINH=='Nam'
+                img.card-img-top(src='/images/avataNam.jpg' alt='Card image' style='width: 100%;')
+              else 
+                img.card-img-top(src='/images/avataNu.jpg' alt='Card image' style='width: 100%;')
+              .card-body
+                h4.card-title #{TEN}
+                .d-flex.justify-content-between
+                  p.card-text #{TENLOAI}
+                  span #{DIEMTICHLUY}điểm
+          .col-9
+            h2 THÔNG TIN CÁ NHÂN
+            form#form-1(action='/staff/work/khv2' method='post')
+              .row
+                .col-6
+                  .form-group
+                    label.form-label(for='fullname') Tên đầy đủ:
+                    input#fullname.form-control(type='text' placeholder='VD: Nguyễn Văn Long  ' name='fullname' value=TEN rules='required')
+                    span.form-message
+                .col-6 
+                  .form-group
+                    label.form-label(for='sdt') Số điện thoai:
+                    input#sdt.form-control(type='text' placeholder='VD: 0398291602' name='sdt'  rules='required|size:10' value=SDT disabled)
+                    span.form-message
+                .col-6
+                  .form-group
+                    label.form-label(for='gender') Giới tính:
+                    select#gender.form-control(name='gender')
+                      option(value='Nam'  selected=GIOITINH=='Nam') Nam
+                      option(value='Nữ' selected=GIOITINH=='Nữ') Nữ
+                      option(value='Khác' selected=GIOITINH=='Khác') Khác
+                    span.form-message
+                .col-6
+                  .form-group
+                    label.form-label(for='account') Tài khoản:
+                    input#account.form-control(type='text' placeholder='VD: LongProNo1' name='account' rules='required|min:6|max:12' disabled value=TAIKHOAN)
+                    span.form-message
+                .col-6
+                  .form-group
+                    label.form-label(for='password') Mật khẩu
+                    input#password.form-control(type='password' placeholder='VD: ******' name='password' rules='required|min:6|max:12' VALUE="")
+                    span.form-message
+                .col-6
+                  .form-group
+                    label.form-label(for='password_confirmation') Nhập lại mật khẩu
+                    input.form-control(type='password' id='password_confirmation' placeholder='VD: ******' name='password_confirmation' rules='required|min:6|max:12|equal:#password' VALUE="")
+                    span.form-message
+                .col-6
+                  button.btn.btn-primary(type='submit') Lưu thay đổi
+        hr.mt-5
+  .container
+        .userData  
+            h4 Lịch sử cắt tóc
+            .row
+              .col-2
+              .col-8            
+                  each item in kq 
+                      .bill.my-5 
+                          .billHeader.d-flex.justify-content-between.my-3
+                              .idBill 
+                                  span.valueIdBill MAHD: #{item.info.MA}
+                              .statusBill 
+                                  h4(style='') Đã hoàn thành
+                              .timeBill #{item.info.THOIGIAN}
+                          table.mt-3
+                              tr
+                                  th Dịch vụ
+                                  th Nhân viên thực hiện
+                                  th Giá tiền 
+                              each item2 in item.data
+                                  tr
+                                      td #{item2.TEN}
+                                      td #{item2.MANV}
+                                      td #{item2.GIA}đ
+                          .d-flex.justify-content-end.my-3
+                              | Tổng tiền:
+                              span.totalMoney #{item.sum}đ
+              .col-2
+      
+  script(src='/js/validator.js')
+  script.
+    Validator('#form-1',{
+    onSubmit:function(data){
+    console.log('CALL API...')
+    console.log(data)
+    }
+    })
+
+
+

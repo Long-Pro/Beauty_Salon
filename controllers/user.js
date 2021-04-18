@@ -178,13 +178,11 @@ class User{
             
         })
         .then((result) => {
-            // console.log(result.recordset[0])
+
             res.locals.user=result.recordset[0]
             return sql.query` select lk.TENLOAI  from loaikhach as lk, khachhang as kh where kh.MA=${req.cookies.userId} and lk.MA=kh.MALK` 
         })
         .then((result) => {
-            // res.send(result.recordset[0])
-            // console.log(res.locals.user)
             res.locals.loaiKhach=result.recordset[0]
             return sql.query`select tk.TAIKHOAN  from taikhoan as tk ,khachhang as kh where kh.MA=${req.cookies.userId} and tk.MAKH=kh.MA ` 
         })
@@ -223,18 +221,38 @@ class User{
         }) 
         .then(()=>{
             console.log("update thanh cong")
-            res.render('index',{
-                userId: req.body.userId
+            return sql.query` select *  from khachhang as kh where kh.MA=${req.cookies.userId}`
+        })
+        .then((result) => {
+
+            res.locals.user=result.recordset[0]
+            return sql.query` select lk.TENLOAI  from loaikhach as lk, khachhang as kh where kh.MA=${req.cookies.userId} and lk.MA=kh.MALK` 
+        })
+        .then((result) => {
+            res.locals.loaiKhach=result.recordset[0]
+            return sql.query`select tk.TAIKHOAN  from taikhoan as tk ,khachhang as kh where kh.MA=${req.cookies.userId} and tk.MAKH=kh.MA ` 
+        })
+        .then((result)=>{
+            res.locals.taiKhoan=result.recordset[0]
+            res.render('user/userDetail',{
+                    userId:req.cookies.userId,
+                    ...res.locals.user,
+                    ...res.locals.loaiKhach,
+                    ...res.locals.taiKhoan
+                
             })
+            console.log({
+                userId:req.cookies.userId,
+                    ...res.locals.user,
+                    ...res.locals.loaiKhach,
+                    ...res.locals.taiKhoan
+            })
+            
         })
         .catch(err => {
             console.log("err "+err)
         })
-
-
-
-
-        
+       
     }
     userOrder(req,res){
         sql.connect(config).then(() => {       
@@ -273,7 +291,7 @@ class User{
         var{catTocDV,uonTocDV,nhuomTocDV,khacDV,orderTime}=req.body
         var maxMa,maNext;
         sql.connect(config).then(() => {       //   get id
-            return sql.query`select max(ma) as ma from DATTRUOC` 
+            return sql.query`select max(ma) as ma from DATTRUOC ` 
         }).then(result => {
             if(result.recordset[0].ma){
                 maxMa=result.recordset[0].ma;
@@ -355,7 +373,7 @@ class User{
     userOrderOnline(req, res){
         var kq=[]
         sql.connect(config).then(() => {       //   get id
-            return sql.query`select * from DATTRUOC where MAKHACH=${req.cookies.userId}` 
+            return sql.query`select * from DATTRUOC where MAKHACH=${req.cookies.userId} ORDER BY MA DESC` 
         })
         .then(result => {
             // console.log(result)
@@ -412,7 +430,7 @@ class User{
                 userId:req.cookies.userId,
                 kq
             })
-        },2000)
+        },500)
 
     }
     deleteOrder(req, res){

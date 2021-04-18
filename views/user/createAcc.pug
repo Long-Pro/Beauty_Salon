@@ -38,7 +38,7 @@ block content
         input.form-control(id='password_confirmation' name='password_confirmation' placeholder='Nhập lại mật khẩu' type='password' rules='required|min:6|max:12|equal:#password' value=values?values.password_confirmation:"")
         span.form-message
       button.form-submit.btn.btn-primary(type='submit') Đăng ký
-  script(src='/js/validator.js')
+  script(src='/js/validator2.js')
   script.
     Validator('#form-1',{
     onSubmit:function(data){

@@ -27,14 +27,14 @@ module.exports.convertTime =function(time){
     return time;
 
 }
-module.exports.insertSVDV=function(idHD,maNVK,id){
+module.exports.insertSVDV=function(idHD,id){
     sql.connect(config).then(() => {
         return sql.query`select GIA,MA from dichvu where MA = ${id}`
         
     }).then((result) => {
         // console.log(result)
         var {GIA,MA}=result.recordset[0]
-        return sql.query`INSERT INTO SD_DICHVU VALUES(${maNext},${maNVK},${khacDV},${GIA})` 
+        return sql.query`INSERT INTO SD_DICHVU_DATTRUOC VALUES(${idHD},${MA},${GIA})` 
     }).then(result=>{
        console.log('insert success')
     })
@@ -78,6 +78,53 @@ module.exports.selectSDDT=function(item,kq){
             info:item,
             sum:t.sum.SUM,
             data:t.data
+        }
+    })
+    .catch(err => {
+        console.log('error', err)
+    }) 
+}
+module.exports.selectInfoDV=function(item,kq){
+    var data
+    sql.connect(config).then(() => {
+        return sql.query`select * from  dichvu dv where  dv.MA=${item.MADV}`
+    })
+    .then(result =>{
+        data=result.recordset[0]
+        kq.push(data)
+        return data
+    })
+
+}
+
+module.exports.selectSDDT2=function(item,kq){
+    var t={}
+    var ten
+    sql.connect(config).then(() => {
+        return sql.query`select TEN from khachhang where MA=${item.MAKHACH}`
+        
+    })
+    .then((result)=>{
+        ten=result.recordset[0].TEN
+        return sql.query`select dv.TEN,dv.GIA from sd_Dichvu_dattruoc sd,dichvu dv where sd.MAHD=${item.MA} and dv.MA=sd.MADV`
+    })
+    .then((result) => {
+        t.data=result.recordset
+        return sql.query`select SUM(GIA) as SUM from sd_Dichvu_dattruoc where MAHD=${item.MA} `
+    }).then(result=>{
+        t.sum=result.recordset[0]
+        var x={
+            info:item,
+            sum:t.sum.SUM,
+            data:t.data,
+            ten:ten
+        }
+        kq.push(x)
+        return {
+            info:item,
+            sum:t.sum.SUM,
+            data:t.data,
+            
         }
     })
     .catch(err => {

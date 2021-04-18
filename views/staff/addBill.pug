@@ -9,7 +9,7 @@ block content
             .col-8.bg-light
                 h3.my-5 Khách hàng: #{sdt}
                 h3.mt-5 CHỌN DỊCH VỤ
-                form(action="" method='post' )
+                form#form(action="" method='post' )
                     div 
                         h5 Cắt tóc
                         each ct in catToc
@@ -83,10 +83,21 @@ block content
                             hr
                     .d-flex.justify-content-between.mt-5  
                         label(for='orderTime') Chọn ngày giờ cắt:
-                        input#orderTime(type='datetime-local' name='orderTime' )
+                        input#orderTime(type='datetime-local' name='orderTime' required)
+                    d-flex.justify-content-center
+                        p.mt-3#errMess
                     button.btn.btn-primary.my-5(type='submit') Thêm hóa đơn
             .col-2 
-            
+    script(src='/js/features.js') 
+    script(src='/js/validator2.js')
+    script.
+        Validator('#form',{
+        onSubmit:function(data){
+        console.log('CALL API...')
+        console.log(data)
+        }
+        })       
+    
 
 
 
