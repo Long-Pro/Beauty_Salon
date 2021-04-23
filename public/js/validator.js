@@ -22,7 +22,15 @@ function Validator(formSelector,options={}){
         },
         email:function(value){
             var regex=/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-            return regex.test(value)?undefined:'Vui lòng nhập email';
+            return regex.test(value)?undefined:'Email không đúng';
+        },
+        phone:function(value){
+            var regex=/(84|0[3|5|7|8|9])+([0-9]{8})\b/
+            return regex.test(value)?undefined:'Số điện thoại không đúng ';
+        },
+        digits9:function(value){
+            var regex=/^\d{9}$/
+            return regex.test(value)?undefined:'Nhập sai định dạng';
         },
         size:function(max){
             return function(value){

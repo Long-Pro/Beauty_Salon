@@ -5,19 +5,16 @@ block css
 block content 
   .container
     .userDetail
-      .userInfo(style="margin-bottom:250px")
-        if errors   
-          each err in errors
-            .alert.alert-danger= err
+      .userInfo(style="margin-bottom:200px")
         .row
           .col-3
             .card(style='background-color: #81ecec;')
               img.card-img-top(src='/images/avataNam.jpg' alt='Card image' style='width: 100%;')
               .card-body
-                h4.card-title #{TEN}
+                h4.card-title #{user.TEN}
                 .d-flex.justify-content-between
-                  p.card-text #{TENLOAI}
-                  span #{DIEMTICHLUY}đ
+                  p.card-text #{loaiKhach}
+                  span #{user.DIEMTICHLUY}đ
           .col-9
             h2 THÔNG TIN CÁ NHÂN
             form#form-1(action='/user/userDetail' method='post')
@@ -25,25 +22,25 @@ block content
                 .col-6
                   .form-group
                     label.form-label(for='fullname') Tên đầy đủ:
-                    input#fullname.form-control(type='text' placeholder='VD: Nguyễn Văn Long  ' name='fullname' value=TEN rules='required')
+                    input#fullname.form-control(type='text' placeholder='VD: Nguyễn Văn Long  ' name='fullname' value=user.TEN rules='required')
                     span.form-message
                 .col-6 
                   .form-group
                     label.form-label(for='sdt') Số điện thoai:
-                    input#sdt.form-control(type='text' placeholder='VD: 0398291602' name='sdt'  rules='required|size:10' value=SDT disabled)
+                    input#sdt.form-control(type='text' placeholder='VD: 0398291602' name='sdt'  rules='required|size:10' value=user.SDT )
                     span.form-message
                 .col-6
                   .form-group
                     label.form-label(for='gender') Giới tính:
                     select#gender.form-control(name='gender')
-                      option(value='Nam'  selected=GIOITINH=='Nam') Nam
-                      option(value='Nữ' selected=GIOITINH=='Nữ') Nữ
-                      option(value='Khác' selected=GIOITINH=='Khác') Khác
+                      option(value='Nam'  selected=user.GIOITINH=='Nam') Nam
+                      option(value='Nữ'   selected=user.GIOITINH=='Nữ') Nữ
+                      option(value='Khác' selected=user.GIOITINH=='Khác') Khác
                     span.form-message
                 .col-6
                   .form-group
                     label.form-label(for='account') Tài khoản:
-                    input#account.form-control(type='text' placeholder='VD: LongProNo1' name='account' rules='required|min:6|max:12' disabled value=TAIKHOAN)
+                    input#account.form-control(type='text' placeholder='VD: LongProNo1' name='account' rules='required|min:6|max:12' disabled value=taiKhoan)
                     span.form-message
                 .col-6
                   .form-group

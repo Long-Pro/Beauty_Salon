@@ -1,4 +1,4 @@
-extends ../template/layoutStaff.pug
+extends ../template/layoutStaffOrigin.pug
 block css 
     link(rel='stylesheet' href='/css/staff.css')
     style.
@@ -7,89 +7,79 @@ block css
       }
 block content 
     if errors   
-        #tb
+        .tb
             each err in errors
-                #tbC
+                .tbC
                     .alert.alert-danger= err
+    if success   
+        .tb
+            each succ in success
+                .tbC
+                    .alert.alert-success= succ
+    
     .container
         .content.my-5
             .row.h3 Chức năng chung
             .row.my-5 
                 .col-3 
-                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalSDTHD') Thêm hóa đơn
+                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalTHD') Thêm hóa đơn
                 .col-3 
-                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalSDTKH') Thêm khách hàng
-                
+                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalTKH') Thêm khách hàng
                 .col-3 
-                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalMHD') Tra cứu thông tin hóa đơn
+                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalTCHD') Tra cứu thông tin hóa đơn
                 .col-3 
-                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalSDTKHV') Tra cứu thông tin khách hàng
+                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalTCKH') Tra cứu thông tin khách hàng
                 .col-3 
                     a.btn.btn-primary.my-3( href='/staff/work/dt' ) Khách đặt trước
+                .col-3 
+                    a.btn.btn-primary.my-3(href='') Thống kê doanh thu
             .row.h3 Chức năng quản trị
             .row.my-5 
                 .col-3 
-                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalMK') Xóa hóa đơn
+                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalXHD') Xóa hóa đơn
                 .col-3 
-                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalMK') Xóa khách hàng
+                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalTNV') Thêm nhân viên
                 .col-3 
-                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalMKTNV') Thêm nhân viên
-                .col-3 
-                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalMK') Xóa nhân viên
-                .col-3 
-                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalMK') Tra cứu thông tin nhân viên
-                .col-3 
-                    a.btn.btn-primary.my-3(href='') Thống kê doanh thu
+                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalCSNV') Chỉnh sửa nhân viên
                 .col-3 
                     a.btn.btn-primary.my-3(href='') Đổi mật khẩu
                 
                 
-        // The Modal
-    
-    #myModalSDTHD.modal
+    // The Modal 
+    #myModalTHD.modal
         .modal-dialog.bg-light
             .modal-content
                 // Modal Header
                 .modal-header
-                    h4.modal-title Nhập số điện thoại khách
+                    h4.modal-title Thêm hóa đơn cho khách hàng:
                     button.close(type='button' data-dismiss='modal') &times;
                 // Modal body
                 .modal-body
-                    form(action='/staff/work/sdthd' method='POST')
+                    form(action='/staff/work/thd' method='POST')
                         .form-group
-                            label(for='password') Số điện thoại:
-                            input#sdt.form-control(type='text' name='sdt')
-                        button.btn.btn-primary(type='submit') Xác nhận
-    #myModalSDTKH.modal
-        .modal-dialog.bg-light
-            .modal-content
-                // Modal Header
-                .modal-header
-                    h4.modal-title Nhập số điện thoại khách
-                    button.close(type='button' data-dismiss='modal') &times;
-                // Modal body
-                .modal-body
-                    form(action='/staff/work/sdtkh' method='POST')
+                            label(for='value') Thông tin khách hàng:
+                            input#value.form-control(name='value' type='text' placeholder='' rules='required') 
                         .form-group
-                            label(for='password') Số điện thoại:
-                            input#sdt.form-control(type='text' name='sdt')
+                            label.form-label(for='filter') Tìm kiếm theo :
+                            select#filter.form-control(name='filter')
+                                option(value='MKH' selected) MKH
+                                option(value='SDT' ) SDT   
                         button.btn.btn-primary(type='submit') Xác nhận
-    #myModalSDTKHV.modal
+    #myModalTKH.modal
         .modal-dialog.bg-light
             .modal-content
                 // Modal Header
                 .modal-header
-                    h4.modal-title Nhập số điện thoại khách
+                    h4.modal-title Nhập số điện thoại khách:
                     button.close(type='button' data-dismiss='modal') &times;
                 // Modal body
                 .modal-body
-                    form(action='/staff/work/khv' method='post')
+                    form(action='/staff/work/tkh' method='POST')
                         .form-group
                             label(for='sdt') Số điện thoại:
                             input#sdt.form-control(type='text' name='sdt')
                         button.btn.btn-primary(type='submit') Xác nhận
-   
-    #myModalMHD.modal
+    #myModalTCHD.modal
         .modal-dialog.bg-light
             .modal-content
                 // Modal Header
@@ -98,12 +88,50 @@ block content
                     button.close(type='button' data-dismiss='modal') &times;
                 // Modal body
                 .modal-body
-                    form(action='/staff/work/mhd' method='post')
+                    form(action='/staff/work/tchd' method='post')
                         .form-group
                             label(for='mhd') Mã hóa đơn:
                             input#mhd.form-control(type='text' name='mhd')
                         button.btn.btn-primary(type='submit') Xác nhận
-    #myModalMKTNV.modal
+    #myModalTCKH.modal
+        .modal-dialog.bg-light
+            .modal-content
+                // Modal Header
+                .modal-header
+                    h4.modal-title Nhập thông tin khách hàng cần tra cứu:
+                    button.close(type='button' data-dismiss='modal') &times;
+                // Modal body
+                .modal-body
+                    form(action='/staff/work/tckh' method='POST')
+                        .form-group
+                            label(for='value') Thông tin khách hàng:
+                            input#value.form-control(name='value' type='text' placeholder='' rules='required') 
+                        .form-group
+                            label.form-label(for='filter') Tìm kiếm theo :
+                            select#filter.form-control(name='filter')
+                                option(value='MKH' selected) MKH
+                                option(value='SDT' ) SDT   
+                        button.btn.btn-primary(type='submit') Xác nhận
+   
+    // The Modal addmin
+    #myModalXHD.modal
+        .modal-dialog.bg-light
+            .modal-content
+                // Modal Header
+                .modal-header
+                    h4.modal-title Nhập mã hóa đơn cần xóa
+                    button.close(type='button' data-dismiss='modal') &times;
+                // Modal body
+                .modal-body
+                    form(action='/staff/work/xhd' method='post')
+                        .form-group
+                            label(for='mhd') Mã hóa đơn:
+                            input#mhd.form-control(type='text' name='mhd')
+                        .form-group
+                            label(for='password') Mật khẩu:
+                            input#password.form-control(type='password' name='password')
+                        button.btn.btn-primary(type='submit') Xác nhận
+    #myModalTNV.modal
         .modal-dialog.bg-light
             .modal-content
                 // Modal Header
@@ -112,15 +140,37 @@ block content
                     button.close(type='button' data-dismiss='modal') &times;
                 // Modal body
                 .modal-body
-                    form(action='/staff/work/mknv' method='post')
+                    form(action='/staff/work/tnv' method='post')
                         .form-group
                             label(for='password') Mật khẩu:
                             input#password.form-control(type='password' name='password')
                         button.btn.btn-primary(type='submit') Xác nhận
+    #myModalCSNV.modal
+        .modal-dialog.bg-light
+            .modal-content
+                // Modal Header
+                .modal-header
+                    h4.modal-title Nhập thông tin nhân viên cần xóa
+                    button.close(type='button' data-dismiss='modal') &times;
+                // Modal body
+                .modal-body
+                    form(action='/staff/work/csnv' method='POST')
+                        .form-group
+                            label(for='value') Thông tin nhân viên:
+                            input#value.form-control(name='value' type='text' placeholder='' rules='required') 
+                        .form-group
+                            label.form-label(for='filter') Tìm kiếm theo :
+                            select#filter.form-control(name='filter')
+                                option(value='MNV' selected) MNV
+                                option(value='SDT' ) SDT   
+                                option(value='CMND' ) CMND  
+                        button.btn.btn-primary(type='submit') Xác nhận
+        
     
+
     script.
-      let toast=document.getElementById("tb");
-      let toastChild=document.getElementById("tbC");
+      let toast=document.querySelector(".tb");
+      let toastChild=document.querySelector(".tbC");
       setTimeout(function() {
       toast.removeChild(toastChild)
       },3000);

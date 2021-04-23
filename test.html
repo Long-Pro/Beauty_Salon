@@ -35,7 +35,20 @@
     <input id='aaa'type="datetime-local" id="birthdaytime" name="birthdaytime">
     <input type="submit" value="Submit">
   </form>
+  <label for="cars">Choose a car:</label>
+<select id="cars" name="cars">
+  <option value="volvo">Volvo</option>
+  <option value="saab">Saab</option>
+  <option value="fiat">Fiat</option>
+  <option value="audi">Audi</option>
+</select>
   
   <script src='./test.js'></script>
+  <script>
+    let cars=document.querySelector('#cars')
+    cars.onchange=function(e){
+        console.log(cars.value)
+    }
+  </script>
 </body>
 </html>

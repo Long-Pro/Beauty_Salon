@@ -7,30 +7,35 @@ const auth=require('../middleWare/auth')
 
 router.get('/work', staffController.work)
 
-router.get('/addGuest', staffController.addGuest)
-router.post('/addGuest', staffController.addGuest2)
+router.get('/work/addGuest', staffController.addGuest)
+router.post('/work/addGuest', staffController.addGuest2)
 
-router.get('/addBill', staffController.addBill)
-router.post('/addBill', staffController.addBill2)
+router.get('/work/addBill', staffController.addBill)
+router.post('/work/addBill', staffController.addBill2)
 
-router.get('/addStaff', staffController.addStaff)
-router.post('/addStaff', staffController.addStaff2)
-
-
+router.get('/work/addStaff', staffController.addStaff)
+router.post('/work/addStaff', staffController.addStaff2)
 
 
 
 
-router.post('/work/sdthd',staffController.sdthd)
-router.post('/work/sdtkh',staffController.sdtkh)
-router.post('/work/mknv',staffController.mknv)
-router.post('/work/mhd',staffController.mhd)
-router.post('/work/khv',staffController.khv)
-router.post('/work/khv2',staffController.khv2)
+
+
+router.post('/work/thd',staffController.thd)
+router.post('/work/tkh',staffController.tkh)
+router.post('/work/tchd',staffController.tchd)
+router.post('/work/tckh',staffController.tckh)
+router.post('/work/tckh2',staffController.tckh2)
 router.get('/work/dt',staffController.dt)
-router.get('/deleteOrder',staffController.deleteOrder)
-router.get('/completeOrder',staffController.completeOrder)
-router.post('/completeOrder',staffController.completeOrder2)
+router.get('/work/deleteOrder',staffController.deleteOrder)
+router.get('/work/completeOrder',staffController.completeOrder)
+router.post('/work/completeOrder',staffController.completeOrder2)
+
+
+router.post('/work/xhd',staffController.xhd)
+router.post('/work/tnv',staffController.tnv)
+router.post('/work/csnv',staffController.csnv)
+
 
 
 

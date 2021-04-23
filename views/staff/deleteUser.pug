@@ -1,0 +1,30 @@
+extends ../template/layoutStaff.pug
+block css 
+  link(rel='stylesheet' href='/css/acc.css')
+block content 
+  if errors  
+    each err in errors
+        .alert.alert-danger= err  
+    
+  .main(style='min-height: 70vh;')
+    form#form-1.form(action='/staff/work/xkh2' method='POST')
+      h3.heading Nhập thông tin khách hàng cần xóa
+      .form-group
+        label.form-label(for='value') Thông tin khách hàng:
+        input#value.form-control(name='value' type='text' placeholder='' rules='required' )
+        span.form-message
+      
+      .form-group
+        label.form-label(for='filter') Tìm kiếm theo :
+        select#filter(name='filter')
+          option(value='SDT' selected) SDT
+          option(value='MA') MA KH
+      button.form-submit.btn.btn-primary(type='submit') Xóa
+  script(src='/js/validator.js')
+  script.
+    Validator('#form-1',{
+    onSubmit:function(data){
+    console.log('CALL API...')
+    console.log(data)
+    }
+    })

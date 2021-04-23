@@ -17,12 +17,12 @@ block content
         span.form-message
       .form-group
         label.form-label(for='sdt') Số điện thoại
-        input#sdt.form-control(name='sdt' type='text' placeholder='VD: 0398.291.602' rules='required|size:10' value=values?values.sdt:"" )
+        input#sdt.form-control(name='sdt' type='text' placeholder='VD: 0398.291.602' rules='required|phone' value=values?values.sdt:"" )
         span.form-message
       .form-group
         label.form-label(for='gender') Giới tính:
         select#gender(name='gender')
-          option(value='Nam' selected) Nam
+          option(value='Nam' ) Nam
           option(value='Nữ') Nữ
           option(value='Khác') Khác
       .form-group
@@ -38,7 +38,7 @@ block content
         input.form-control(id='password_confirmation' name='password_confirmation' placeholder='Nhập lại mật khẩu' type='password' rules='required|min:6|max:12|equal:#password' value=values?values.password_confirmation:"")
         span.form-message
       button.form-submit.btn.btn-primary(type='submit') Đăng ký
-  script(src='/js/validator2.js')
+  script(src='/js/validator.js')
   script.
     Validator('#form-1',{
     onSubmit:function(data){

@@ -26,6 +26,6 @@ table, th, td {
   th {
     text-align: center;
   }
-a.close{
+.close{
   color:red !important; 
 }

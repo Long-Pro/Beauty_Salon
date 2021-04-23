@@ -1,0 +1,91 @@
+extends ../template/layoutStaff.pug
+block css 
+  link(rel='stylesheet' href='/css/userDetail.css')
+  link(rel='stylesheet' href='/css/acc.css')
+  link(rel='stylesheet' href='/css/userOrder.css')
+block content 
+  .container
+    .userDetail.mt-0
+      .userInfo(style="margin-bottom:100px")
+        if errors   
+          each err in errors
+            .alert.alert-danger= err
+        .text-center
+            h2.my-5 THÔNG TIN CÁ NHÂN
+        .row
+         
+          .col-3
+            .card(style='background-color: #81ecec;')
+              if staff. GIOITINH=='Nam'
+                img.card-img-top(src='/images/avataNam.jpg' alt='Card image' style='width: 100%;')
+              else 
+                img.card-img-top(src='/images/avataNu.jpg' alt='Card image' style='width: 100%;')
+              .card-body
+                h4.card-title #{staff.TEN}
+          .col-9
+            
+            form#form-1(action='/staff/work/tckh2' method='post')
+              .row
+                .col-6
+                  .form-group
+                    label.form-label(for='fullname') Tên đầy đủ:
+                    input#fullname.form-control(type='text' placeholder='VD: Nguyễn Văn Long  ' name='fullname' value=staff.TEN rules='required')
+                    span.form-message
+                .col-6 
+                  .form-group
+                    label.form-label(for='sdt') Số điện thoai:
+                    input#sdt.form-control(type='text' placeholder='VD: 0398291602' name='sdt'  rules='required|size:10' value=staff.SDT disabled)
+                    span.form-message
+                .col-6
+                  .form-group
+                    label.form-label(for='gender') Giới tính:
+                    select#gender.form-control(name='gender')
+                      option(value='Nam'  selected=staff.GIOITINH=='Nam') Nam
+                      option(value='Nữ' selected=staff.GIOITINH=='Nữ') Nữ
+                      option(value='Khác' selected=staff.GIOITINH=='Khác') Khác
+                    span.form-message
+                .col-6
+                    .form-group
+                        label.form-label(for='email') Email:
+                        input#email.form-control(name='email' type='text' placeholder='VD: Long@gmail.com'  value=staff.EMAIL rules='required|email'   )
+                        span.form-message
+                .col-6
+                    .form-group
+                        label.form-label(for='cmnd') Chứng minh thư:
+                        input#cmnd.form-control(name='cmnd' type='text' placeholder='VD: 197401456' value=staff.CMND rules='required|digits9'   )
+                        span.form-message
+                .col-6
+                    .form-group
+                        label.form-label(for='address') Địa chỉ:
+                        input#address.form-control(name='address' type='text' placeholder='VD: 97 Man thiện' value=staff.DIACHI  rules='required'   )
+                        span.form-message
+                .col-6
+                    .form-group
+                        label.form-label(for='tt') Trạng thái:
+                        input#tt.form-control(name='address' type='text' placeholder='VD: 97 Man thiện' value=staff.TRANGTHAI==1?'Đang làm việc':'Đã nghĩ việc'  rules='required' disabled  )
+                        span.form-message
+              .row
+                if staff.TRANGTHAI==1
+                    .col-6
+                        button.btn.btn-primary(type='submit') Lưu thay đổi
+                    .col-6
+                        button.btn.btn-danger(type='submit') Xóa nhân viên
+                else 
+                    .col-6
+                        button.btn.btn-primary.disabled(type='submit') Lưu thay đổi
+                    .col-6
+                        button.btn.btn-danger.disabled(type='submit') Xóa nhân viên
+
+        hr.mt-5
+ 
+  script(src='/js/validator.js')
+  script.
+    Validator('#form-1',{
+    onSubmit:function(data){
+    console.log('CALL API...')
+    console.log(data)
+    }
+    })
+
+
+

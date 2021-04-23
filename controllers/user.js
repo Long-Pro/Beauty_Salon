@@ -102,7 +102,7 @@ class User{
 
     loginAcc(req, res) {
         res.render('user/loginAcc',{
-            userId:req.cookies.userId
+            
           })
     }
     loginAcc2(req, res){
@@ -183,25 +183,16 @@ class User{
             return sql.query` select lk.TENLOAI  from loaikhach as lk, khachhang as kh where kh.MA=${req.cookies.userId} and lk.MA=kh.MALK` 
         })
         .then((result) => {
-            res.locals.loaiKhach=result.recordset[0]
+            res.locals.loaiKhach=result.recordset[0].TENLOAI
             return sql.query`select tk.TAIKHOAN  from taikhoan as tk ,khachhang as kh where kh.MA=${req.cookies.userId} and tk.MAKH=kh.MA ` 
         })
         .then((result)=>{
-            res.locals.taiKhoan=result.recordset[0]
+            res.locals.taiKhoan=result.recordset[0].TAIKHOAN
             res.render('user/userDetail',{
                     userId:req.cookies.userId,
-                    ...res.locals.user,
-                    ...res.locals.loaiKhach,
-                    ...res.locals.taiKhoan
                 
             })
-            console.log({
-                userId:req.cookies.userId,
-                    ...res.locals.user,
-                    ...res.locals.loaiKhach,
-                    ...res.locals.taiKhoan
-            })
-            
+            console.log(res.locals)
         })
 
     }
@@ -210,48 +201,71 @@ class User{
         var{fullname,sdt,gender,account,password}=req.body;
         var errors=[];
 
-
-
         sql.connect(config).then(() => {      
-            return sql.query` UPDATE KHACHHANG  SET TEN=${fullname}, GIOITINH=${gender} WHERE MA=${req.cookies.userId}`  
-        }).then(result => {
-            
-                                               
-            return sql.query`  UPDATE TAIKHOAN  SET MATKHAU=${md5(password)} WHERE MAKH=${req.cookies.userId}`
-        }) 
-        .then(()=>{
-            console.log("update thanh cong")
-            return sql.query` select *  from khachhang as kh where kh.MA=${req.cookies.userId}`
+            return sql.query` select SDT from khachhang WHERE MA!=${req.cookies.userId} and SDT=${sdt}`
         })
-        .then((result) => {
+        .then(result=>{
+            if(result.recordset.length==0){// sdt moi hợp lệ
+                sql.connect(config).then(() => {      
+                    return sql.query` UPDATE KHACHHANG  SET TEN=${fullname}, GIOITINH=${gender},SDT=${sdt} WHERE MA=${req.cookies.userId}`
+                })
+                .then(result => {                           
+                    return sql.query`  UPDATE TAIKHOAN  SET MATKHAU=${md5(password)} WHERE MAKH=${req.cookies.userId}`
+                }) 
+                .then(()=>{
+                    console.log("update thanh cong")
+                    return sql.query` select *  from khachhang as kh where kh.MA=${req.cookies.userId}`
+                })
+                .then((result) => {
 
-            res.locals.user=result.recordset[0]
-            return sql.query` select lk.TENLOAI  from loaikhach as lk, khachhang as kh where kh.MA=${req.cookies.userId} and lk.MA=kh.MALK` 
-        })
-        .then((result) => {
-            res.locals.loaiKhach=result.recordset[0]
-            return sql.query`select tk.TAIKHOAN  from taikhoan as tk ,khachhang as kh where kh.MA=${req.cookies.userId} and tk.MAKH=kh.MA ` 
-        })
-        .then((result)=>{
-            res.locals.taiKhoan=result.recordset[0]
-            res.render('user/userDetail',{
-                    userId:req.cookies.userId,
-                    ...res.locals.user,
-                    ...res.locals.loaiKhach,
-                    ...res.locals.taiKhoan
-                
-            })
-            console.log({
-                userId:req.cookies.userId,
-                    ...res.locals.user,
-                    ...res.locals.loaiKhach,
-                    ...res.locals.taiKhoan
-            })
+                    res.locals.user=result.recordset[0]
+                    return sql.query` select lk.TENLOAI  from loaikhach as lk, khachhang as kh where kh.MA=${req.cookies.userId} and lk.MA=kh.MALK` 
+                })
+                .then((result) => {
+                    res.locals.loaiKhach=result.recordset[0].TENLOAI
+                    return sql.query`select tk.TAIKHOAN  from taikhoan as tk ,khachhang as kh where kh.MA=${req.cookies.userId} and tk.MAKH=kh.MA ` 
+                })
+                .then((result)=>{
+                    res.locals.taiKhoan=result.recordset[0].TAIKHOAN
+                    res.render('user/userDetail',{
+                            userId:req.cookies.userId, 
+                            success:[`Chỉnh sửa thông tin thành công`]
+                    })
+                    
+                })
+                .catch(err => {
+                    console.log("err "+err)
+                })
+
+            }else{// sdt mới k hợp lệ
+                sql.connect(config).then(() => {       //   validate sdt
+                    return sql.query` select *  from khachhang as kh where kh.MA=${req.cookies.userId}`  
+                    
+                })
+                .then((result) => {
+        
+                    res.locals.user=result.recordset[0]
+                    res.locals.user.SDT=sdt
+                    return sql.query` select lk.TENLOAI  from loaikhach as lk, khachhang as kh where kh.MA=${req.cookies.userId} and lk.MA=kh.MALK` 
+                })
+                .then((result) => {
+                    res.locals.loaiKhach=result.recordset[0].TENLOAI
+                    return sql.query`select tk.TAIKHOAN  from taikhoan as tk ,khachhang as kh where kh.MA=${req.cookies.userId} and tk.MAKH=kh.MA ` 
+                })
+                .then((result)=>{
+                    res.locals.taiKhoan=result.recordset[0].TAIKHOAN
+                    res.render('user/userDetail',{
+                            userId:req.cookies.userId,
+                            errors:[`Số điện thoại ${sdt} đã tồn tại`]
+                        
+                    })
+                    console.log(res.locals)
+                })
+
+            }
             
         })
-        .catch(err => {
-            console.log("err "+err)
-        })
+        
        
     }
     userOrder(req,res){
@@ -271,12 +285,16 @@ class User{
         }) 
         .then(result=>{
             res.locals.khac=result.recordset
-            return res.locals
+            return sql.query` select * from khachhang   where MA=${req.cookies.userId}`
         }) 
         .then(result=>{
+            res.locals.user=result.recordset[0]
+            return sql.query` select TILE_GIAMGIA from loaikhach lk,khachhang kh  where kh.MA=${req.cookies.userId} and kh.MALK=lk.MA`
+        })
+        .then(result=>{
+            res.locals.tlgg=result.recordset[0].TILE_GIAMGIA
             res.render('user/userOrder',{
                 userId:req.cookies.userId,
-                ...result
               })
         })
         .catch(err => {
@@ -285,14 +303,21 @@ class User{
        
     }
     userOrder2(req,res){
-        console.log(req.body)
-        
-
         var{catTocDV,uonTocDV,nhuomTocDV,khacDV,orderTime}=req.body
-        var maxMa,maNext;
+        console.log(req.body)
+        var values=req.body   
+        var mkh=req.cookies.userId;
+        var maxMa,maNext,tlgg
+        console.log(mkh)
+
         sql.connect(config).then(() => {       //   get id
-            return sql.query`select max(ma) as ma from DATTRUOC ` 
-        }).then(result => {
+            return sql.query`select lk.TILE_GIAMGIA  from khachhang kh,loaikhach lk where kh.MA=${mkh} and kh.MALK=lk.MA` 
+        })
+        .then(result =>{
+            tlgg=result.recordset[0].TILE_GIAMGIA
+            return sql.query`select max(ma) as ma from DATTRUOC` 
+        })
+        .then(result => {
             if(result.recordset[0].ma){
                 maxMa=result.recordset[0].ma;
                 maNext =maxMa.slice(0,2) +(parseInt(maxMa.slice(2)) +1).toString().padStart(8,0);
@@ -301,151 +326,247 @@ class User{
             }
             return maNext
         })       
-        .then(maNext=>{                 //insert DATTRUOC
-            // var time2=func.convertTime(orderTime)
-            sql.query` INSERT INTO DATTRUOC VALUES(${maNext},${req.cookies.userId},${orderTime},0)`
-            return maNext
+        .then(maNext=>{                 //insert HOADON
+            return   sql.query` INSERT INTO DATTRUOC VALUES(${maNext},${mkh},${orderTime},0,${tlgg})`
         })
-        .then(maNext=>{                 //insert SD_DICHVU_DATTRUOC
-            if(catTocDV){
-                sql.connect(config).then(() => {
-                    return sql.query`select GIA from dichvu where MA = ${catTocDV}`
-                }).then(result => {
-                    var {GIA}=result.recordset[0]
-                    sql.query` INSERT INTO SD_DICHVU_DATTRUOC VALUES(${maNext},${catTocDV},${GIA})` 
-                }).catch(err => {
-                    
-                })
-                      
-            }
-            if(uonTocDV){
-                sql.connect(config).then(() => {
-                    return sql.query`select GIA from dichvu where MA = ${uonTocDV}`
-                }).then(result => {
-                    var {GIA}=result.recordset[0]
-                    sql.query` INSERT INTO SD_DICHVU_DATTRUOC VALUES(${maNext},${uonTocDV},${GIA})` 
-                }).catch(err => {
-                    
-                })      
-            }
-            if(nhuomTocDV){
-                sql.connect(config).then(() => {
-                    return sql.query`select GIA from dichvu where MA = ${nhuomTocDV}`
-                }).then(result => {
-                    var {GIA}=result.recordset[0]
-                    sql.query` INSERT INTO SD_DICHVU_DATTRUOC VALUES(${maNext},${nhuomTocDV},${GIA})` 
-                }).catch(err => {
-                    
-                }) 
-            }
-            if(khacDV){
-                // console.log(khacDV)
-                if(Array.isArray(khacDV) ){
-                    for(var id of khacDV) {
-                        func.insertSVDV(maNext,id)
-                    }
-                }
-                else {
+        .then(result=>{                 //insert SD_DICHVU_datTruoc             
+            async function myPromiseAdd() {
+                let myPromiseCT = new Promise(function(myResolve, myReject) {
                     sql.connect(config).then(() => {
-                        return sql.query`select GIA,MA from dichvu where MA = ${khacDV}`
-                    }).then((result) => {
-                        var {GIA,MA}=result.recordset[0]
-                        sql.query` INSERT INTO SD_DICHVU_DATTRUOC VALUES(${maNext},${MA},${GIA})` 
-                    }).catch(err => {
+                        return sql.query`select GIA,DIEMCONGTICHLUY  from dichvu where MA = ${catTocDV}`
+                    }).then(result => {
+                        var {
+                            GIA,
+                            DIEMCONGTICHLUY
+                        } = result.recordset[0]
                         
-                    }) 
-                    
-                }         
+                        return sql.query` INSERT INTO SD_DICHVU_DATTRUOC values(${maNext},${catTocDV},${GIA})`
+                    })
+                    .then(result => {
+                        myResolve()
+                    })
+                    .catch(err => {
+
+                    })
+        
+                });
+                let myPromiseUT = new Promise(function(myResolve, myReject) {
+                    sql.connect(config).then(() => {
+                        return sql.query`select GIA,DIEMCONGTICHLUY from dichvu where MA = ${uonTocDV}`
+                    }).then(result => {
+                        var {GIA,DIEMCONGTICHLUY}=result.recordset[0]
+                        return sql.query` INSERT INTO SD_DICHVU_DATTRUOC VALUES(${maNext},${uonTocDV},${GIA})` 
+                    })
+                    .then((result)=>{
+                        myResolve()
+                    })
+                    .catch(err => {
+                        
+                    })  
+        
+                });
+                let myPromiseNT = new Promise(function(myResolve, myReject) {
+                    sql.connect(config).then(() => {
+                        return sql.query`select GIA,DIEMCONGTICHLUY from dichvu where MA = ${nhuomTocDV}`
+                    }).then(result => {
+                        var {GIA,DIEMCONGTICHLUY}=result.recordset[0]
+                        return sql.query` INSERT INTO SD_DICHVU_DATTRUOC VALUES(${maNext},${nhuomTocDV},${GIA})` 
+                    })
+                    .then((result) =>{
+                        myResolve()
+                    })
+                    .catch(err => {
+                        
+                    })    
+                
+                });
+                let myPromiseK = new Promise(function(myResolve, myReject) {
+                    if(Array.isArray(khacDV) ){
+                        async function myPromiseK1(){
+                            for(let id of khacDV) {
+                                let myPromise = new Promise(function(myResolve, myReject) {
+                                    sql.connect(config).then(() => {
+                                        return sql.query`select DIEMCONGTICHLUY,GIA from dichvu where MA = ${id}`
+                                    }).then((result) => {
+                                        var {GIA,DIEMCONGTICHLUY}=result.recordset[0]
+                                        return sql.query` INSERT INTO SD_DICHVU_DATTRUOC VALUES(${maNext},${id},${GIA})` 
+                                    })
+                                    .then((result) =>{
+                                        myResolve()
+                                    })
+                                });
+                                await myPromise; 
+                            }
+                        }
+                        myPromiseK1()
+                        
+                    }
+                    else {
+                        async function myPromiseK2(){
+                            let myPromise = new Promise(function(myResolve, myReject) {
+                                sql.connect(config).then(() => {
+                                    return sql.query`select GIA,MA,DIEMCONGTICHLUY from dichvu where MA = ${khacDV}`
+                                }).then((result) => {
+                                    var {GIA,MA,DIEMCONGTICHLUY}=result.recordset[0]
+                                    sql.query` INSERT INTO SD_DICHVU_DATTRUOC VALUES(${maNext},${khacDV},${GIA})` 
+                                })
+                                .then((result) =>{
+                                    myResolve()
+                                })
+                                .catch(err => {
+                                    
+                                })    
+                            
+                            });
+                            await myPromise; 
+                        }
+                        myPromiseK2()
+                        
+                    }         
+                });
+                if(catTocDV){
+                    await myPromiseCT;
+                }
+                if(nhuomTocDV){
+                    await myPromiseNT;
+                }
+                if(uonTocDV){
+                    await myPromiseUT;
+                }
+                if(khacDV){
+                    await myPromiseK
+                }
             }
-            return maNext
+            myPromiseAdd()  
         })
-        .then((maNext)=>{
+        .then(result=>{
             console.log('inser thanh cong ')
+
             res.redirect('/')
-            
         })
         .catch(err => {
-            // ... error checks
             console.log(err)
         })
-
     }
     userOrderOnline(req, res){
         var kq=[]
+        let mkh=req.cookies.userId
         sql.connect(config).then(() => {       //   get id
             return sql.query`select * from DATTRUOC where MAKHACH=${req.cookies.userId} ORDER BY MA DESC` 
         })
-        .then(result => {
-            // console.log(result)
-            res.locals.mangHD=result.recordset
-            return result.recordset  
-        })
         .then( result=> {
-            
-            for(var item of result){
-                func.selectSDDT(item,kq)
+            res.locals.hddt=result.recordset
+            async function datTruoc(){
+                for(let item of res.locals.hddt){//Dd
+                    let myPromise = new Promise(function(myResolve, myReject) {
+                        let t={}
+                        sql.connect(config).then(() => {
+                            return sql.query`select dv.TEN,dv.GIA from sd_Dichvu_dattruoc sd,dichvu dv where sd.MAHD=${item.MA} and dv.MA=sd.MADV` 
+                        }).then((result) => {
+                            t.data=result.recordset
+                            return sql.query`select SUM(GIA) as SUM from sd_Dichvu_dattruoc where MAHD=${item.MA} `
+                        }).then(result=>{
+                            t.sum=result.recordset[0]
+                            t.tlgg=item.TILE_GIAMGIA
+                            var x={
+                                info:item,
+                                sum:t.sum.SUM,
+                                data:t.data,
+                                tlgg:t.tlgg
+                            }
+                            kq.push(x)
+                            myResolve()
+                        })     
+
+                    });
+                    await myPromise;
+                }
+                res.render('user/userOrderOnline',{
+                    userId:req.cookies.userId,
+                    kq:kq
+                }) 
             }
+            datTruoc()
         })
         .catch((err)=>{
             console.log(err)
-        })
-
-        setTimeout(()=>{
-            console.log('#3333333333',kq)
-            res.render('user/userOrderOnline',{
-                userId:req.cookies.userId,
-                kq
-            })
-        },1000)
-
-
-
-        
+        })  
     }
     userOrderHistory(req, res){
+        let mkh=req.cookies.userId
         var kq=[]
         sql.connect(config).then(() => {       //   get id
-            return sql.query`select * from hoadon where MAKHACH=${req.cookies.userId} ORDER BY MA DESC;` 
+            return sql.query`select * from hoadon where MAKHACH=${mkh} ORDER BY MA DESC;` 
         })
         .then(result => {
             // console.log(result)
-            res.locals.mangHD=result.recordset
+            res.locals.hd=result.recordset
             
-            return result.recordset  
-        })
-        .then( result=> {
-            
-            for(var item of result){
-                
-                func.selectSDHD(item,kq)
+            async function myDisplay(){
+                for(let item of res.locals.hd){
+                    var t={}
+                    let myPromise = new Promise(function(myResolve, myReject) {
+                        sql.connect(config).then(() => {
+                            return sql.query`select dv.TEN,dv.GIA,sd.MANV from sd_dichvu  sd,dichvu dv where sd.MAHD=${item.MA} and dv.MA=sd.MADV`
+                        }).then((result) => {
+                            t.data=result.recordset
+                            return sql.query`select SUM(GIA) as SUM from sd_dichvu where MAHD=${item.MA} `
+                        }).then(result=>{
+                            t.sum=result.recordset[0].SUM
+                            return sql.query`select TILE_GIAMGIA from hoadon where MA=${item.MA} `
+                        })
+                        .then(result=>{
+                            t.tlgg=result.recordset[0].TILE_GIAMGIA
+                            t.price=parseInt( t.sum*(100-t.tlgg)/100)
+                            var x={
+                                info:item,
+                                value:t
+                            }
+                            kq.push(x)
+                            myResolve()
+                        })
+                        .catch(err => {
+                            console.log('error', err)
+                        }) 
+    
+                    });
+                    await myPromise;
+                }
+                console.log(kq)
+                console.log({
+                    user:res.locals.user,
+                    loaiKhach:res.locals.loaiKhach,
+                    hd:res.locals.hd,
+                    taiKhoan:res.locals.taiKhoan,
+
+
+                })
+
+                res.render('user/userOrderHistory',{
+                    userId:req.cookies.userId,
+                    kq:kq
+                })
             }
+            myDisplay()
         })
         .catch((err)=>{
             console.log(err)
         })
-
-        setTimeout(()=>{
-            console.log(kq)
-            res.render('user/userOrderHistory',{
-                userId:req.cookies.userId,
-                kq
-            })
-        },500)
 
     }
     deleteOrder(req, res){
         let ma=req.query.ma
         sql.connect(config).then(() => {       //   validate tai khoan
-            return sql.query`  UPDATE DATTRUOC SET TRANGTHAI=2 WHERE MA=${ma}`
+            return sql.query`  UPDATE DATTRUOC SET TRANGTHAI=1 WHERE MA=${ma}`
  
         }).then(result => {
             console.log(`Hủy đặt trước đơn hàng mã ${ma} thành công`)
-            
+            res.redirect('/user/userOrderOnline')
         })        
         .catch(err => {
             console.log("err "+err)
         })
-        res.redirect('/user/userOrderOnline')
+        
         
     }
     

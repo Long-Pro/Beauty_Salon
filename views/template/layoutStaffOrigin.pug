@@ -9,18 +9,7 @@ html(lang='en')
     link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css')
     block css
   body
-    if errors   
-        .tb
-            each err in errors
-                .tbC
-                    .alert.alert-danger= err
-    if success   
-        .tb
-            each succ in success
-                .tbC
-                    .alert.alert-success= succ
-    .container 
-      a.btn.btn-primary.my-5(href='/staff/work') Trở lại trang chủ
+
     block content
     // jQuery library
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
@@ -28,9 +17,3 @@ html(lang='en')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js')
     // Latest compiled JavaScript
     script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js')
-    script.
-      let toast=document.querySelector(".tb");
-      let toastChild=document.querySelector(".tbC");
-      setTimeout(function() {
-      toast.removeChild(toastChild)
-      },3000);

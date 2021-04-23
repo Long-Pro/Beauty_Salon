@@ -52,7 +52,18 @@ html(lang='en')
               li#user 
               a(href='/user/loginAcc')
                 button.bttn-unite.bttn-sm.bttn-primary(style='padding: 6px 18px') Đăng nhập
-    div(style=' margin-top: 66px;')
+    div(style=' height: 66px;')
+    .container
+      if errors   
+        .tb
+            each err in errors
+              .tbC
+                .alert.alert-danger= err
+      if success   
+          .tb
+            each succ in success
+              .tbC
+                .alert.alert-success= succ
     .contact
       .phone
         i.fas.fa-phone-alt
@@ -100,3 +111,9 @@ html(lang='en')
     script(src='https://code.jquery.com/jquery-3.2.1.slim.min.js' integrity='sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN' crossorigin='anonymous')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js' integrity='sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q' crossorigin='anonymous')
     script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js' integrity='sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl' crossorigin='anonymous')
+    script.
+      let toast=document.querySelector(".tb");
+      let toastChild=document.querySelector(".tbC");
+      setTimeout(function() {
+      toast.removeChild(toastChild)
+      },3000);
