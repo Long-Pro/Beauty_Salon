@@ -91,7 +91,7 @@ function Validator(formSelector,options={}){
             var rules=formRules[e.target.name];
             var errorMessage
             for(var rule of rules){
-                errorMessage= rule(e.target.value)
+                errorMessage= rule(e.target.value.trim())
                 if(errorMessage) break;
             }
             

@@ -18,91 +18,138 @@ const config = {
 
 class User{
     createAcc(req, res){
-        res.render('user/createAcc',{
-            userId:req.cookies.userId
-          })
-    }
-    createAcc2(req, res){      
-        var{fullname,sdt,gender,account,password}=req.body;
-        var errors=[];
-        var maxMa,maNext;
-
-
+        res.clearCookie('sdtDK', { })
+        let sdt=req.query.sdt
+        console.log(req.query.sdt)
         sql.connect(config).then(() => {       //   validate sdt
-            return sql.query` select kh.SDT as sdt from khachhang as kh where kh.SDT=${sdt}`  
-        }).then(result => {
-            var isSdt=result.recordset.length;       
-            if(isSdt){//sdt dax ton tai
-                errors.push("Số điện thoại đã tồn tại") 
-                console.log("sdt "+errors) 
-            }else{
-                
-            } 
-                                                //   validate tai khoan 
-            return sql.query`  select tk.TAIKHOAN as acc from taikhoan as tk where tk.TAIKHOAN=${account}`
-        })        
-        .then(result => {
-            var isAcc=result.recordset.length;   
-            if(isAcc){
-                errors.push("Tài khoản đã tồn tại")   
-                console.log("taikhoan "+errors)            
-            }else{
-
-            }
-            return errors;
+            return sql.query` select * from khachhang as kh where kh.SDT=${sdt}`  
         })
-        .then(errors =>{
-            if(errors.length){//neu co loi
-                res.render('user/createAcc',{ 
-                    errors:errors,
-                    values:req.body,
+        .then(result=>{
+            if(result.recordset.length==0){//sdt chua tont tai
+                // console.log(sdt+' k ton tai'),
+                
+                res.locals.values={}
+                res.locals.values.sdt=sdt
+                res.cookie('sdtDK',sdt)
+                res.render('user/createAcc',{
                     userId:req.cookies.userId
                 })
+            }else{//sdt da ton tai
+                let user=result.recordset[0]
+                
+                res.locals.values={}
+                res.locals.values.ma=user.MA
+                res.locals.values={}
+                res.locals.values.fullname=user.TEN
+                res.locals.values.sdt=user.SDT
+                res.locals.values.gender=user.GIOITINH
 
-            }else{
-                sql.connect(config).then(() => {       //   get id
-                    return sql.query`select max(ma) as ma from khachhang` 
-                }).then(result => {
-                    if(result.recordset[0].ma){
-                        maxMa=result.recordset[0].ma;
-                        maNext =maxMa.slice(0,2) +(parseInt(maxMa.slice(2)) +1).toString().padStart(8,0);
-                    }else{
-                        maNext='KH00000001'
+                sql.connect(config).then(() => {       //   validate sdt
+                    return sql.query` select tk.* from taikhoan tk, khachhang kh where kh.SDT=${sdt} and kh.MA=tk.MAKH`  
+                })
+                .then(result =>{
+                    if(result.recordset.length==0){// co sdt, k co tk
+                        res.cookie('idDK',user.MA)
+                        res.cookie('sdtDK',sdt)
+
+                        
+                        res.render('user/createAcc',{
+                            userId:req.cookies.userId,
+                        })
+                    }else{//co sdt, co tk
+                        res.cookie('sdtDK',sdt,
+                            {
+                                maxAge:1000
+                            }
+                        )
+                        res.redirect('/user/loginAcc')
+
                     }
-                    return maNext
-                })       
-                .then(maNext=>{                 //insert khach hang
-            
-                    sql.query` INSERT INTO KHACHHANG VALUES(${maNext},${fullname},${sdt},${gender},'LK1',0)`
-                    return maNext
-                })
-                .then(maNext=>{                 //insert tai khoan
-                    password=md5(password)
-                    sql.query` INSERT INTO taikhoan VALUES(${maNext},${account},${password})`
-                    return maNext
-                })
-                .then((maNext)=>{
-                    res.cookie("userId",maNext)
-                    console.log('inser thanh cong ')
-                    res.redirect('/')
-                    
-                })
-                .catch(err => {
-                    // ... error checks
-                    console.log(err)
                 })
             }
         })
-        .catch(err => {
-            console.log("err "+err)
-        })
+
+        
+    }
+    createAcc2(req, res){      
+        var{fullname,gender,account,password}=req.body;
+        let sdt=req.cookies.sdtDK
+        let mkh=req.cookies.idDK
+        var errors=[];
+        var maxMa,maNext;
+        if(mkh){//co sdt,k tk
+            sql.connect(config).then(() => {       //   validate sdt
+                return sql.query` select * from taikhoan where TAIKHOAN=${account}`  
+            })
+            .then(result=>{
+                if(result.recordset.length==0){//tk hop le
+                    sql.connect(config).then(() => {       //   validate sdt
+                        let newPass=md5(password)
+                        sql.query` INSERT INTO taikhoan VALUES(${mkh},${account},${newPass})` 
+                    })
+                    .then(result=>{
+                        sql.query` update khachhang set TEN=${fullname}, GIOITINH=${gender} where MA=${mkh}`
+                    })
+                    .then(result=>{
+                        res.cookie("userId",mkh)
+                        res.clearCookie('sdtDK', { })
+                        res.clearCookie('idDK', { })
+
+                        console.log('inser thanh cong ')
+                        res.redirect('/')
+                    })
+                    
+                }else{//tk k hop le
+                    errors.push(`Tài khoản ${account} đã tồn tại`)
+                    let values=req.body
+                    values.sdt=sdt 
+                    res.render('user/createAcc',{ 
+                        errors:errors,
+                        values,
+                        userId:req.cookies.userId
+                    })
+                }
+            })
+
+        }else{//k co sdt,k co tk
+            let maxMa,maNext
+            sql.connect(config).then(() => {       //   get id
+                return sql.query`select max(ma) as ma from khachhang` 
+            }).then(result => {
+                if(result.recordset[0].ma){
+                    maxMa=result.recordset[0].ma;
+                    maNext =maxMa.slice(0,2) +(parseInt(maxMa.slice(2)) +1).toString().padStart(8,0);
+                }else{
+                    maNext='KH00000001'
+                }
+                return sql.query` INSERT INTO KHACHHANG VALUES(${maNext},${fullname},${sdt},${gender},'LK1',0)`
+            })       
+            .then(result=>{                 //insert tai khoan
+                let newPassword=md5(password)
+                return sql.query` INSERT INTO taikhoan VALUES(${maNext},${account},${newPassword})`
+            })
+            .then((result)=>{
+                res.cookie("userId",maNext)
+                res.clearCookie('sdtDK', { })
+                res.clearCookie('idDK', { })
+
+                console.log('inser thanh cong ')
+                res.redirect('/')
+                
+            })
+        }
+
+
+        
 
   
     }
 
     loginAcc(req, res) {
+        let errors=[]
+        if(req.cookies.sdtDK) errors.push(`Số điện thoại ${req.cookies.sdtDK} thuộc khách hàng khác` )
         res.render('user/loginAcc',{
-            
+            errors
           })
     }
     loginAcc2(req, res){
@@ -168,17 +215,14 @@ class User{
     }
     userLogout(req,res){
         res.clearCookie('userId', { })
+
         res.redirect('/')
     }
     userDetail(req,res){
-
-
         sql.connect(config).then(() => {       //   validate sdt
             return sql.query` select *  from khachhang as kh where kh.MA=${req.cookies.userId}`  
-            
         })
         .then((result) => {
-
             res.locals.user=result.recordset[0]
             return sql.query` select lk.TENLOAI  from loaikhach as lk, khachhang as kh where kh.MA=${req.cookies.userId} and lk.MA=kh.MALK` 
         })
@@ -190,7 +234,6 @@ class User{
             res.locals.taiKhoan=result.recordset[0].TAIKHOAN
             res.render('user/userDetail',{
                     userId:req.cookies.userId,
-                
             })
             console.log(res.locals)
         })
@@ -212,12 +255,11 @@ class User{
                 .then(result => {                           
                     return sql.query`  UPDATE TAIKHOAN  SET MATKHAU=${md5(password)} WHERE MAKH=${req.cookies.userId}`
                 }) 
-                .then(()=>{
+                .then((result)=>{
                     console.log("update thanh cong")
                     return sql.query` select *  from khachhang as kh where kh.MA=${req.cookies.userId}`
                 })
                 .then((result) => {
-
                     res.locals.user=result.recordset[0]
                     return sql.query` select lk.TENLOAI  from loaikhach as lk, khachhang as kh where kh.MA=${req.cookies.userId} and lk.MA=kh.MALK` 
                 })
@@ -231,19 +273,12 @@ class User{
                             userId:req.cookies.userId, 
                             success:[`Chỉnh sửa thông tin thành công`]
                     })
-                    
                 })
-                .catch(err => {
-                    console.log("err "+err)
-                })
-
             }else{// sdt mới k hợp lệ
                 sql.connect(config).then(() => {       //   validate sdt
                     return sql.query` select *  from khachhang as kh where kh.MA=${req.cookies.userId}`  
-                    
                 })
                 .then((result) => {
-        
                     res.locals.user=result.recordset[0]
                     res.locals.user.SDT=sdt
                     return sql.query` select lk.TENLOAI  from loaikhach as lk, khachhang as kh where kh.MA=${req.cookies.userId} and lk.MA=kh.MALK` 
@@ -257,9 +292,7 @@ class User{
                     res.render('user/userDetail',{
                             userId:req.cookies.userId,
                             errors:[`Số điện thoại ${sdt} đã tồn tại`]
-                        
                     })
-                    console.log(res.locals)
                 })
 
             }
@@ -311,10 +344,6 @@ class User{
         console.log(mkh)
 
         sql.connect(config).then(() => {       //   get id
-            return sql.query`select lk.TILE_GIAMGIA  from khachhang kh,loaikhach lk where kh.MA=${mkh} and kh.MALK=lk.MA` 
-        })
-        .then(result =>{
-            tlgg=result.recordset[0].TILE_GIAMGIA
             return sql.query`select max(ma) as ma from DATTRUOC` 
         })
         .then(result => {
@@ -327,7 +356,7 @@ class User{
             return maNext
         })       
         .then(maNext=>{                 //insert HOADON
-            return   sql.query` INSERT INTO DATTRUOC VALUES(${maNext},${mkh},${orderTime},0,${tlgg})`
+            return   sql.query` INSERT INTO DATTRUOC VALUES(${maNext},${mkh},${orderTime},0)`
         })
         .then(result=>{                 //insert SD_DICHVU_datTruoc             
             async function myPromiseAdd() {
@@ -452,7 +481,7 @@ class User{
         var kq=[]
         let mkh=req.cookies.userId
         sql.connect(config).then(() => {       //   get id
-            return sql.query`select * from DATTRUOC where MAKHACH=${req.cookies.userId} ORDER BY MA DESC` 
+            return sql.query`select * from DATTRUOC where MAKHACH=${req.cookies.userId} ORDER BY MA DESC`
         })
         .then( result=> {
             res.locals.hddt=result.recordset
@@ -467,7 +496,12 @@ class User{
                             return sql.query`select SUM(GIA) as SUM from sd_Dichvu_dattruoc where MAHD=${item.MA} `
                         }).then(result=>{
                             t.sum=result.recordset[0]
-                            t.tlgg=item.TILE_GIAMGIA
+                            return sql.query`select TILE_GIAMGIA from loaikhach lk,khachhang kh where kh.MA=${req.cookies.userId} and kh.MALK=lk.MA`
+                            
+                            
+                        })    
+                        .then(result=>{
+                            t.tlgg=result.recordset[0].TILE_GIAMGIA
                             var x={
                                 info:item,
                                 sum:t.sum.SUM,
@@ -476,7 +510,7 @@ class User{
                             }
                             kq.push(x)
                             myResolve()
-                        })     
+                        }) 
 
                     });
                     await myPromise;

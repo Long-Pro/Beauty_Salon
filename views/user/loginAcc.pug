@@ -3,8 +3,15 @@ block css
   link(rel='stylesheet' href='/css/acc.css')
 block content 
   if errors   
-    each err in errors
-      .alert.alert-danger= err
+    .tb
+      each err in errors
+        .tbC
+          .alert.alert-danger= err
+  else if success   
+    .tb
+      each succ in success
+        .tbC
+          .alert.alert-success= succ
   .main
     form#form-2.form(action='/user/loginAcc' method='POST')
       h3.heading Đăng nhập
@@ -21,7 +28,22 @@ block content
       button.form-submit.btn.btn-primary(type='submit') Đăng nhập
       a(href='#' style='margin: 13px;display: block;text-decoration: none;font-size:13px;')  Quên mật khẩu ?
       hr
-      a.form-submit(href='/user/createAcc' style='text-decoration: none;width: 55%;background-color: #42b72a;display: inline-block; margin-top: 16px;') Tạo tài khoản mới
+      //- a.form-submit(href='/user/createAcc' style='text-decoration: none;width: 55%;background-color: #42b72a;display: inline-block; margin-top: 16px;') Tạo tài khoản mới
+      button.form-submit.btn.btn-primary.my-3.w-100(type='button' data-toggle='modal' data-target='#myModalTKH' style='height: 44px;background-color: #42b72a' ) Đăng kí
+  #myModalTKH.modal
+    .modal-dialog.bg-light
+      .modal-content
+        // Modal Header
+        .modal-header
+          h4.modal-title Nhập số điện thoại đăng kí:
+          button.close(type='button' data-dismiss='modal') &times;
+        // Modal body
+        .modal-body
+          form(action='/user/createAcc' method='get')
+            .form-group
+              label(for='sdt') Số điện thoại:
+              input#sdt.form-control(type='text' name='sdt' rules='required|phone')
+            button.btn.btn-primary.w-100(type='submit') Xác nhận
   script(src='/js/validator.js')
   script.
     Validator('#form-2',{

@@ -2,9 +2,6 @@ extends ../template/layoutStaff.pug
 block css 
   link(rel='stylesheet' href='/css/acc.css')
 block content 
-  if errors   
-    each err in errors
-      .alert.alert-danger= err
   .main
     form#form-2.form(action='' method='POST')
       h3.heading Đăng nhập

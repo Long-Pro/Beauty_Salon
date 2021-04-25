@@ -2,20 +2,80 @@ extends ../template/layoutStaffOrigin.pug
 block css 
     link(rel='stylesheet' href='/css/staff.css')
     style.
-      .btn{
-      width: 100%;
-      }
+        .btn{
+            width: 100%;
+        }
+        .tabs {
+            font-family: "Poppins", sans-serif;
+            display: flex;
+            position: relative;
+            
+        }
+        .tabs .line {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 6px;
+            border-radius: 15px;
+            background-color: #c23564;
+            transition: all 0.2s ease;
+        }
+        .tab-item {
+            min-width: 80px;
+            padding: 16px 20px 11px 20px;
+            font-size: 20px;
+            text-align: center;
+            color: #c23564;
+            background-color: #fff;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            border-bottom: 5px solid transparent;
+            opacity: 0.6;
+            cursor: pointer;
+            transition: all 0.5s ease;
+        }
+        .tab-icon {
+            font-size: 24px;
+            width: 32px;
+            position: relative;
+            top: 2px;
+        }
+        .tab-item:hover {
+            opacity: 1;
+            background-color: rgba(194, 53, 100, 0.05);
+            border-color: rgba(194, 53, 100, 0.1);
+        }
+        .tab-item.active {
+            opacity: 1;
+        }
+        .tab-content {
+            padding: 28px 0;
+        }
+        .tab-pane {
+            color: #333;
+            display: none;
+        }
+        .tab-pane.active {
+            display: block;
+        }
+        .tab-pane h2 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+      
 block content 
-    if errors   
-        .tb
-            each err in errors
-                .tbC
-                    .alert.alert-danger= err
-    if success   
-        .tb
-            each succ in success
-                .tbC
-                    .alert.alert-success= succ
+    .container 
+        if errors   
+            .tb
+                each err in errors
+                    .tbC
+                        .alert.alert-danger= err
+        if success   
+            .tb
+                each succ in success
+                    .tbC
+                        .alert.alert-success= succ
     
     .container
         .content.my-5
@@ -32,7 +92,7 @@ block content
                 .col-3 
                     a.btn.btn-primary.my-3( href='/staff/work/dt' ) Khách đặt trước
                 .col-3 
-                    a.btn.btn-primary.my-3(href='') Thống kê doanh thu
+                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalTKDT2') Thống kê doanh thu
             .row.h3 Chức năng quản trị
             .row.my-5 
                 .col-3 
@@ -42,7 +102,7 @@ block content
                 .col-3 
                     a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalCSNV') Chỉnh sửa nhân viên
                 .col-3 
-                    a.btn.btn-primary.my-3(href='') Đổi mật khẩu
+                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalDMK') Đổi mật khẩu admin
                 
                 
     // The Modal 
@@ -102,7 +162,7 @@ block content
                     button.close(type='button' data-dismiss='modal') &times;
                 // Modal body
                 .modal-body
-                    form(action='/staff/work/tckh' method='POST')
+                    form(action='/staff/work/tckh' method='get')
                         .form-group
                             label(for='value') Thông tin khách hàng:
                             input#value.form-control(name='value' type='text' placeholder='' rules='required') 
@@ -112,7 +172,122 @@ block content
                                 option(value='MKH' selected) MKH
                                 option(value='SDT' ) SDT   
                         button.btn.btn-primary(type='submit') Xác nhận
-   
+    #myModalTKDT.modal
+        .modal-dialog.bg-light
+            .modal-content
+                // Modal Header
+                .modal-header
+                    
+                    h4.modal-title THỐNG KÊ DOANH THU
+                    button.close(type='button' data-dismiss='modal') &times;
+                // Modal body
+                .modal-body
+                    .row 
+                        .col-6 
+                            form(action='/staff/work/tkNgay' method='get')
+                                .form-group
+                                    label.font-weight-bold(for='day')  Ngày 
+                                    input.w-100#day(type='date' name='day')
+                                button.btn.btn-primary(type='submit') Thống kê
+                        .col-6 
+                            form(action='/staff/work/tkThang' method='get')
+                                .form-group
+                                    label.font-weight-bold(for='month')  Tháng 
+                                    input#month.w-100(type='month' name='month')
+                                button.btn.btn-primary(type='submit') Thống kê
+                    hr
+                    .row
+                        .col-6 
+                            form(action='/staff/work/tkTuan' method='get')
+                                .form-group
+                                    label.font-weight-bold(for='week')  Tuần 
+                                    input#week.w-100(type='week' name='week')
+                                button.btn.btn-primary(type='submit') Thống kê
+                        .col-6 
+                            form(action='/staff/work/tkNam' method='get')
+                                .form-group
+                                    label.font-weight-bold(for='year')  Năm 
+                                    input#year.w-100(type='text' name='year')
+                                button.btn.btn-primary(type='submit') Thống kê
+                    hr
+                    .row  
+                        .col-12 
+                            
+                            p.text-center.font-weight-bold  Giữa hai ngày
+                            form(action='/staff/work/tkGiua' method='get')
+                                .row 
+                                    .col-6
+                                        .form-group
+                                            label.font-weight-bold(for='day') Từ ngày
+                                            input.w-100#day1(type='date' name='day')
+                                    .col-6
+                                        .form-group
+                                            label.font-weight-bold(for='day') Đến ngày
+                                            input.w-100#day2(type='date' name='day')
+                                button.btn.btn-primary(type='submit') Thống kê
+    #myModalTKDT2.modal
+        .modal-dialog.bg-light
+            .modal-content
+                // Modal Header
+                .modal-header
+                    h4.modal-title(style='color:#C23564') THỐNG KÊ DOANH THU
+                    button.close(type='button' data-dismiss='modal') &times;
+                // Modal body
+                .modal-body
+                    div
+                        // Tab items
+                        .tabs
+                            .tab-item.active Ngày
+                            .tab-item Tuần
+                            .tab-item Tháng
+                            .tab-item Năm
+                            .tab-item Giữa
+                            .line
+                        // Tab content
+                        .tab-content
+                            .tab-pane.active
+                                form(action='/staff/work/tkNgay' method='get')
+                                    .form-group
+                                        input.w-100#day(type='date' name='day' required)
+                                    button.btn.btn-primary(type='submit') Thống kê
+                            .tab-pane
+                                form(action='/staff/work/tkTuan' method='get')
+                                    .form-group
+                                        
+                                        input#week.w-100(type='week' name='week' required)
+                                    button.btn.btn-primary(type='submit') Thống kê
+                            .tab-pane
+                                form(action='/staff/work/tkThang' method='get')
+                                    .form-group
+                                        
+                                        input#month.w-100(type='month' name='month' required)
+                                    button.btn.btn-primary(type='submit') Thống kê
+                            .tab-pane
+                                form(action='/staff/work/tkNam' method='get' required)
+                                    .form-group
+                                        
+                                        input#year.w-100(type='text' name='year' required)
+                                    button.btn.btn-primary(type='submit') Thống kê
+
+                            .tab-pane
+                                form(action='/staff/work/tkGiua' method='get')
+                                    .row 
+                                        .col-6
+                                            .form-group
+                                                label.font-weight-bold(for='day') Từ ngày
+                                                input.w-100#day1(type='date' name='day1' required)
+                                        .col-6
+                                            .form-group
+                                                label.font-weight-bold(for='day') Đến ngày
+                                                input.w-100#day2(type='date' name='day2' required)
+                                    button.btn.btn-primary(type='submit') Thống kê
+
+                                
+                           
+                        script(src='/js/app.js')
+                   
+  
+    // The Modal addmin
     // The Modal addmin
     #myModalXHD.modal
         .modal-dialog.bg-light
@@ -150,11 +325,11 @@ block content
             .modal-content
                 // Modal Header
                 .modal-header
-                    h4.modal-title Nhập thông tin nhân viên cần xóa
+                    h4.modal-title Nhập thông tin nhân viên cần chỉnh sửa
                     button.close(type='button' data-dismiss='modal') &times;
                 // Modal body
                 .modal-body
-                    form(action='/staff/work/csnv' method='POST')
+                    form(action='/staff/work/csnv' method='post')
                         .form-group
                             label(for='value') Thông tin nhân viên:
                             input#value.form-control(name='value' type='text' placeholder='' rules='required') 
@@ -163,9 +338,30 @@ block content
                             select#filter.form-control(name='filter')
                                 option(value='MNV' selected) MNV
                                 option(value='SDT' ) SDT   
-                                option(value='CMND' ) CMND  
+                        .form-group
+                            label(for='password') Mật khẩu:
+                            input#password.form-control(type='password' name='password')
                         button.btn.btn-primary(type='submit') Xác nhận
-        
+    #myModalDMK.modal
+        .modal-dialog.bg-light
+            .modal-content
+                // Modal Header
+                .modal-header
+                    h4.modal-title Đổi mật khẩu Admin
+                    button.close(type='button' data-dismiss='modal') &times;
+                // Modal body
+                .modal-body
+                    form#dmk(action='/staff/work/dmk' method='post')
+                        .form-group
+                            label(for='newPassword') Mật khẩu mới:
+                            input#newPassword.form-control(type='password' name='newPassword')
+                        .form-group
+                            label(for='confirm_newPassword') Nhập lại mật khẩu mới:
+                            input#confirm_newPassword.form-control(type='password' name='confirm_newPassword')
+                        .form-group
+                            label(for='password') Mật khẩu:
+                            input#password.form-control(type='password' name='password')
+                        button.btn.btn-primary(type='submit') Xác nhận     
     
 
     script.

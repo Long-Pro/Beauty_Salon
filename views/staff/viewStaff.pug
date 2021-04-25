@@ -4,16 +4,13 @@ block css
   link(rel='stylesheet' href='/css/acc.css')
   link(rel='stylesheet' href='/css/userOrder.css')
 block content 
-  .container
+ 
+  .container(style='margin-top: 100px;')
     .userDetail.mt-0
       .userInfo(style="margin-bottom:100px")
-        if errors   
-          each err in errors
-            .alert.alert-danger= err
-        .text-center
-            h2.my-5 THÔNG TIN CÁ NHÂN
         .row
-         
+          .col-12 
+            h1.mb-5.text-center Thông tin nhân viên
           .col-3
             .card(style='background-color: #81ecec;')
               if staff. GIOITINH=='Nam'
@@ -22,9 +19,10 @@ block content
                 img.card-img-top(src='/images/avataNu.jpg' alt='Card image' style='width: 100%;')
               .card-body
                 h4.card-title #{staff.TEN}
+                p MNV: #{staff.MA}
           .col-9
             
-            form#form-1(action='/staff/work/tckh2' method='post')
+            form#form-1(action='/staff/work/csnv2' method='post')
               .row
                 .col-6
                   .form-group
@@ -56,6 +54,11 @@ block content
                         span.form-message
                 .col-6
                     .form-group
+                      label.form-label(for='birth') Ngày sinh:
+                      input#birth.form-control(name='birth' type='date' placeholder='' rules='required' value=staff.NGAYSINH.trim() )
+                      span.form-message
+                .col-6
+                    .form-group
                         label.form-label(for='address') Địa chỉ:
                         input#address.form-control(name='address' type='text' placeholder='VD: 97 Man thiện' value=staff.DIACHI  rules='required'   )
                         span.form-message
@@ -69,12 +72,12 @@ block content
                     .col-6
                         button.btn.btn-primary(type='submit') Lưu thay đổi
                     .col-6
-                        button.btn.btn-danger(type='submit') Xóa nhân viên
+                        a.btn.btn-danger(href=`/staff/work/deleteStaff?id=${staff.MA}`) Xóa nhân viên
                 else 
                     .col-6
-                        button.btn.btn-primary.disabled(type='submit') Lưu thay đổi
+                        a.btn.btn-primary.disabled(type='submit') Lưu thay đổi
                     .col-6
-                        button.btn.btn-danger.disabled(type='submit') Xóa nhân viên
+                        a.btn.btn-danger.disabled(type='submit') Xóa nhân viên
 
         hr.mt-5
  

@@ -7,9 +7,6 @@ block content
   .container
     .userDetail
       .userInfo(style="margin-bottom:100px")
-        if errors   
-          each err in errors
-            .alert.alert-danger= err
         .row
           .col-3
             .card(style='background-color: #81ecec;')
@@ -24,7 +21,7 @@ block content
                   span #{user.DIEMTICHLUY}điểm
           .col-9
             h2 THÔNG TIN CÁ NHÂN
-            form#form-1(action='/staff/work/tckh2' method='post')
+            form#form-1(action='/staff/work/tckh' method='post')
               .row
                 .col-6
                   .form-group
@@ -34,7 +31,7 @@ block content
                 .col-6 
                   .form-group
                     label.form-label(for='sdt') Số điện thoai:
-                    input#sdt.form-control(type='text' placeholder='VD: 0398291602' name='sdt'  rules='required|size:10' value=user.SDT disabled)
+                    input#sdt.form-control(type='text' placeholder='VD: 0398291602' name='sdt'  rules='required|phone' value=user.SDT )
                     span.form-message
                 .col-6
                   .form-group

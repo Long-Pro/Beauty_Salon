@@ -21,6 +21,7 @@ module.exports.work = function(req, res, next) {
     res.clearCookie('guestPN', { })
     res.clearCookie('mkh', { })
     res.clearCookie('guestId', { })
+    res.clearCookie('idStaff', { })
 
     
     res.render('staff/work',{ 
@@ -56,8 +57,9 @@ module.exports.addGuest2 = function(req, res, next) {
     .then((result)=>{
         res.clearCookie('errStaff', { })
         res.clearCookie('guestPN', { })
-        res.clearCookie('succStaff', { })
-        res.cookie("succStaff",[`Thêm khách hàng ${sdt} thành công`])
+        res.cookie("succStaff",[`Thêm khách hàng ${sdt} thành công`],{
+            maxAge:1000
+        })
         res.redirect('/staff/work')
     })
     .catch(err => {
@@ -278,7 +280,9 @@ module.exports.addBill2 = function(req, res, next) {
     .then(result=>{
         console.log('inser thanh cong ')
         res.clearCookie('guestId', { })
-        res.cookie("succStaff",['Thêm hóa đơn thành công'])
+        res.cookie("succStaff",['Thêm hóa đơn thành công'],{
+            maxAge:1000
+        })
         res.redirect('/staff/work')
     })
     .catch(err => {
@@ -292,7 +296,8 @@ module.exports.addStaff=function(req, res, next){
     })
 }
 module.exports.addStaff2=function(req, res, next){
-    var{fullname,sdt,gender,email,cmnd,address}=req.body;
+    var{fullname,sdt,gender,email,cmnd,address,birth}=req.body;
+    console.log(req.body)
     var errors=[];
     var maxMa,maNext;
     sql.connect(config).then(() => {       //   validate sdt
@@ -316,13 +321,6 @@ module.exports.addStaff2=function(req, res, next){
             sql.connect(config).then(() => {       //   get id
                 return sql.query`select MA from nhanvien` 
             }).then(result => {
-                // if(result.recordset[0].ma){
-                //     maxMa=result.recordset[0].ma;
-                //     maNext =maxMa.slice(0,2) +(parseInt(maxMa.slice(2)) +1).toString().padStart(3,0);
-                // }else{
-                //     maNext='NV001'
-                // }
-                // return maNext
                 maxMa='01'
                 let names=fullname.split(' ')
                 let name=names[names.length-1]
@@ -337,12 +335,15 @@ module.exports.addStaff2=function(req, res, next){
             })       
             .then(maNext=>{                 //insert khach hang
         
-                return sql.query` INSERT INTO nhanvien VALUES(${maNext},${fullname},${sdt},${gender},${email},${cmnd},${address},1)`
+                return sql.query` INSERT INTO nhanvien VALUES(${maNext},${fullname},${sdt},${gender},${email},${cmnd},${birth},${address},1)`
                 
             })
             .then((result)=>{
                 console.log('inser thanh cong ')
-                res.cookie('succStaff',[`Thêm nhân viên thần công`])
+                res.clearCookie('errStaff', { })
+                res.cookie('succStaff',[`Thêm nhân viên thần công`],{
+                    maxAge:1000
+                })
                 res.redirect('/staff/work') 
             })
             .catch(err => {
@@ -356,6 +357,50 @@ module.exports.addStaff2=function(req, res, next){
     })
 
 }
+module.exports.deleteStaff=function(req, res, next){
+    console.log(req.query)
+    let staffId=req.query.id
+    sql.connect(config).then(() => {       //   validate sdt
+        return sql.query` update nhanvien set TRANGTHAI=0 where MA=${staffId}`  
+    })
+    .then(result => {
+        res.cookie('succStaff',[`Đã xóa nhân viên mã ${staffId}`],{
+            maxAge:1000
+        })
+        res.redirect('/staff/work')
+    })
+
+}
+module.exports.csnv2=function(req, res, next){
+    var{fullname,sdt,gender,email,cmnd,address,birth}=req.body;
+
+    console.log(req.body)
+    var errors=[],maxMa,maNext;
+    var mnv=req.cookies.idStaff
+    sql.connect(config).then(() => {       //   get id
+        return sql.query`select MA from nhanvien` 
+    }).then(result => {
+        let names=fullname.split(' ')
+        let name=names[names.length-1]
+        let t=mnv
+        t=(t.substring(t.length-2, t.length))
+        maNext=name+t
+        if(maxMa=='01') maNext=name+'01'
+        return sql.query`update nhanvien set MA=${maNext},TEN=${fullname}, GIOITINH=${gender},EMAIL=${email},CMND=${cmnd},DIACHI=${address},NGAYSINH=${birth} where MA=${mnv}`
+    })       
+    .then(result=>{
+        res.cookie('succStaff',[`Đã cập nhật thông tin nhân viên ma ${mnv}`],{
+            maxAge:1000
+        })
+        res.clearCookie('idStaff', { })
+        res.redirect('/staff/work')
+    })
+    .catch(err => {
+        console.log("err "+err)
+    })
+
+}
+
 
 
 
@@ -370,7 +415,9 @@ module.exports.thd = function(req, res, next) {
     var rePhone = /^\d{10}$/;
     let ma
     if(!value.match(rePhone)&&filter=='SDT'){
-        res.cookie("errStaff",['Số điện thoại không chính xác']) 
+        res.cookie("errStaff",['Số điện thoại không chính xác'],{
+            maxAge:1000
+        }) 
         res.redirect('/staff/work')
         return;
     }
@@ -383,7 +430,9 @@ module.exports.thd = function(req, res, next) {
         }      
     }).then(result => {
         if(result.recordset.length==0){// khachhang k co
-            res.cookie("errStaff",[`Không tồn tại khách hàng có ${filter} là ${value}`])
+            res.cookie("errStaff",[`Không tồn tại khách hàng có ${filter} là ${value}`],{
+                maxAge:1000
+            })
             res.redirect('/staff/work')
         }else{//khach hang da co
             ma=result.recordset[0].MA
@@ -403,7 +452,9 @@ module.exports.tkh = function(req, res, next) {
     let {sdt}=req.body,mkh
     var rePhone = /^\d{10}$/;
     if(!sdt.match(rePhone)){
-        res.cookie("errStaff",['Số điện thoại không chính xác'])
+        res.cookie("errStaff",[`Số điện thoại ${sdt} không chính xác`],{
+            maxAge:1000
+        })
             
         res.redirect('/staff/work')
         return
@@ -416,7 +467,9 @@ module.exports.tkh = function(req, res, next) {
             res.cookie("guestPN",sdt)
             res.redirect('/staff/work/addGuest')
         }else{//sdt da có
-            res.cookie('errStaff', ['Số điện thoại đã tồn tại'])
+            res.cookie('errStaff', [`Số điện thoại ${sdt} đã tồn tại`],{
+                maxAge:1000
+            })
             res.redirect('/staff/work')
         }
     }).catch(err => {
@@ -433,7 +486,9 @@ module.exports.tchd = function(req, res, next) {
     })
     .then(result => {
         if(result.recordset.length==0){// mhd sai
-            res.cookie("errStaff",[`Mã hóa đơn ${mhd} không tồn tại`])
+            res.cookie("errStaff",[`Mã hóa đơn ${mhd} không tồn tại`],{
+                maxAge:1000
+            })
             res.redirect('/staff/work')        
         }else{//mhd dung
             res.locals.hd=result.recordset
@@ -493,17 +548,18 @@ module.exports.tchd = function(req, res, next) {
     })
 }
 
-//tckh nên có tinh nag thay doi sdt              00000000000000000000000000000000000000000000000000000000000000000000000000000
 module.exports.tckh=function(req, res, next) {
     res.clearCookie('errStaff', { })
     res.clearCookie('succStaff', { })
-    let {value,filter}=req.body
-    console.log(req.body)
+    console.log(req.query)
+    let {value,filter}=req.query
 
     var rePhone = /^\d{10}$/;
     let kq=[],tam,ma
     if(!value.match(rePhone)&&filter=='SDT'){
-        res.cookie("errStaff",['Số điện thoại không chính xác']) 
+        res.cookie("errStaff",[`Số điện thoại ${value} không chính xác`],{
+            maxAge:1000
+        }) 
         res.redirect('/staff/work')
         return;
     }
@@ -516,7 +572,9 @@ module.exports.tckh=function(req, res, next) {
         }      
     }).then(result => {
         if(result.recordset.length==0){// khachhang k co
-            res.cookie("errStaff",[`Không tồn tại khách hàng có ${filter} là ${value}`])
+            res.cookie("errStaff",[`Không tồn tại khách hàng có ${filter} là ${value}`],{
+                maxAge:1000
+            })
             res.redirect('/staff/work')
         }else{//khach hang da co
             ma=result.recordset[0].MA
@@ -601,19 +659,159 @@ module.exports.tckh2=function(req, res, next) {
     console.log(req.body)
     var{fullname,sdt,gender}=req.body;
     var ma=req.cookies.guestId 
+    let kq=[]
     sql.connect(config).then(() => {      
-        return sql.query` UPDATE KHACHHANG  SET TEN=${fullname}, GIOITINH=${gender} WHERE MA=${ma}`  
+          return sql.query`select * from khachhang where MA!=${ma} and SDT=${sdt} `
     })
-    .then(()=>{
-        console.log("update thanh cong")
-        res.clearCookie('guestId', { })
-        res.clearCookie('errStaff', { })
-        res.cookie("succStaff",[`Lưu thay đổi thông tin khách hàng ${ma} thành công`])
-        res.redirect('/staff/work')
+    .then(result=>{
+        if(result.recordset.length==0){//sdt hop le
+            console.log('sdt hop le')
+            sql.connect(config).then(() => {      
+                return sql.query` UPDATE KHACHHANG  SET TEN=${fullname}, GIOITINH=${gender},SDT=${sdt} WHERE MA=${ma}`
+            })
+            .then(result=>{
+                console.log("update thanh cong")
+                sql.connect(config).then(() => {
+                    return sql.query`select * from khachhang where MA=${ma} `
+                })
+                .then(result=>{
+                    res.locals.user=result.recordset[0]
+                    return sql.query`select tk.TAIKHOAN  from taikhoan as tk ,khachhang as kh where kh.MA=${ma} and tk.MAKH=kh.MA `
+                })
+                .then(result=>{
+                    if(result.recordset.length==0){// kh k co tk
+                        res.locals.taiKhoan=''
+                    }else{//kh co tk
+                        res.locals.taiKhoan=result.recordset[0].TAIKHOAN
+                    }
+                    return sql.query` select lk.TENLOAI  from loaikhach as lk, khachhang as kh where kh.MA=${ma} and lk.MA=kh.MALK`
+                })
+                .then(result => {
+                    res.locals.loaiKhach=result.recordset[0].TENLOAI
+                    return sql.query`select * from hoadon where MAKHACH=${ma} ORDER BY MA DESC;` 
+                })
+                .then(result=>{
+                    res.locals.hd=result.recordset
+                    async function myDisplay(){
+                        for(let item of res.locals.hd){
+                            var t={}
+                            let myPromise = new Promise(function(myResolve, myReject) {
+                                sql.connect(config).then(() => {
+                                    return sql.query`select dv.TEN,dv.GIA,sd.MANV from sd_dichvu  sd,dichvu dv where sd.MAHD=${item.MA} and dv.MA=sd.MADV`
+                                }).then((result) => {
+                                    t.data=result.recordset
+                                    return sql.query`select SUM(GIA) as SUM from sd_dichvu where MAHD=${item.MA} `
+                                }).then(result=>{
+                                    t.sum=result.recordset[0].SUM
+                                    return sql.query`select TILE_GIAMGIA from hoadon where MA=${item.MA} `
+                                })
+                                .then(result=>{
+                                    t.tlgg=result.recordset[0].TILE_GIAMGIA
+                                    t.price=parseInt( t.sum*(100-t.tlgg)/100)
+                                    var x={
+                                        info:item,
+                                        value:t
+                                    }
+                                    kq.push(x)
+                                    myResolve()
+                                })
+                                .catch(err => {
+                                    console.log('error', err)
+                                }) 
+            
+                            });
+                            await myPromise;
+                        }
+                        res.render('staff/viewGuest',{
+                            success:[`Lưu thay đổi thông tin khách hàng ${ma} thành công`],
+                            kq:kq
+                        })
+                    }
+                    myDisplay()
+    
+                })
+
+                // res.redirect('/staff/work')
+            })
+        }else{//sdt k hop le
+            sql.connect(config).then(() => {
+                return sql.query`select * from khachhang where MA=${ma} `
+            })
+            .then(result=>{
+                res.locals.user=result.recordset[0]
+                return sql.query`select tk.TAIKHOAN  from taikhoan as tk ,khachhang as kh where kh.MA=${ma} and tk.MAKH=kh.MA `
+            })
+            .then(result=>{
+                if(result.recordset.length==0){// kh k co tk
+                    res.locals.taiKhoan=''
+                }else{//kh co tk
+                    res.locals.taiKhoan=result.recordset[0].TAIKHOAN
+                }
+                return sql.query` select lk.TENLOAI  from loaikhach as lk, khachhang as kh where kh.MA=${ma} and lk.MA=kh.MALK`
+            })
+            .then(result => {
+                res.locals.loaiKhach=result.recordset[0].TENLOAI
+                return sql.query`select * from hoadon where MAKHACH=${ma} ORDER BY MA DESC;` 
+            })
+            .then(result=>{
+                res.locals.hd=result.recordset
+                async function myDisplay(){
+                    for(let item of res.locals.hd){
+                        var t={}
+                        let myPromise = new Promise(function(myResolve, myReject) {
+                            sql.connect(config).then(() => {
+                                return sql.query`select dv.TEN,dv.GIA,sd.MANV from sd_dichvu  sd,dichvu dv where sd.MAHD=${item.MA} and dv.MA=sd.MADV`
+                            }).then((result) => {
+                                t.data=result.recordset
+                                return sql.query`select SUM(GIA) as SUM from sd_dichvu where MAHD=${item.MA} `
+                            }).then(result=>{
+                                t.sum=result.recordset[0].SUM
+                                return sql.query`select TILE_GIAMGIA from hoadon where MA=${item.MA} `
+                            })
+                            .then(result=>{
+                                t.tlgg=result.recordset[0].TILE_GIAMGIA
+                                t.price=parseInt( t.sum*(100-t.tlgg)/100)
+                                var x={
+                                    info:item,
+                                    value:t
+                                }
+                                kq.push(x)
+                                myResolve()
+                            })
+                            .catch(err => {
+                                console.log('error', err)
+                            }) 
+        
+                        });
+                        await myPromise;
+                    }
+                    console.log(kq)
+                    res.clearCookie('errStaff', { })
+                    res.clearCookie('succStaff', { })
+                    console.log({
+                        user:res.locals.user,
+                        loaiKhach:res.locals.loaiKhach,
+                        hd:res.locals.hd,
+                        taiKhoan:res.locals.taiKhoan,
+
+
+                    })
+
+                    res.render('staff/viewGuest',{
+                        errors:[`Số điện thoại ${sdt} đã tồn tại`],
+                        kq:kq
+                    })
+                }
+                myDisplay()
+
+            })
+
+
+
+        }
+        
     })
-    .catch(err => {
-        console.log("err "+err)
-    })
+
 
 }
 
@@ -745,6 +943,8 @@ module.exports.dt =function(req, res, next) {
             console.log(kqdh)
             console.log(kqht) 
             res.render('staff/guestOrderOnline',{
+                errors:req.cookies.errStaff,
+                success:req.cookies.succStaff,
                 kqdd,
                 kqdh,
                 kqht
@@ -765,9 +965,10 @@ module.exports.deleteOrder=function(req, res, next) {
         return sql.query`  UPDATE DATTRUOC SET TRANGTHAI=1 WHERE MA=${ma}`
 
     }).then(result => {
-        console.log(`Hủy đặt trước đơn hàng mã ${ma} thành công`)
+        res.cookie('succStaff',[`Hủy đặt trước đơn hàng mã ${ma} thành công`],{
+            maxAge:1000
+        })
         res.redirect('/staff/work/dt')
-        
     })        
     .catch(err => {
         console.log("err "+err)
@@ -833,6 +1034,7 @@ module.exports.completeOrder=function(req, res, next) {
                 await myPromise;
 
             }
+           
             res.render('staff/completeOrder',{
                 
             }) 
@@ -866,7 +1068,6 @@ module.exports.completeOrder2=function(req, res, next){
         }
         //          insert HOADON
         return  sql.query` INSERT INTO hoadon VALUES(${maNext},${mkh},${orderTime},${nvtn},${tlgg})`
-
     })       
     .then(result=>{   //                        insert sd_dv_dattruoc
         async function myPromiseAdd() {
@@ -1021,8 +1222,10 @@ module.exports.completeOrder2=function(req, res, next){
         console.log('inser thanh cong ')
         res.clearCookie('guestId', { })
         res.clearCookie('mhd', { })
-        res.cookie("succStaff",['Thêm hóa đơn thành công'])
-        res.redirect('/staff/work')
+        res.cookie("succStaff",[`Thêm hóa đơn thành công`],{
+            maxAge:1000
+        })
+        res.redirect('/staff/work/dt')
     })
     
 }
@@ -1030,18 +1233,20 @@ module.exports.completeOrder2=function(req, res, next){
 
 
 
-// xoa diem tich luy kh
 module.exports.xhd = function(req, res, next) {
     res.clearCookie('errStaff', { })
     res.clearCookie('succStaff', { })
 
     let {mhd,password}=req.body
+    let maKhach,diem,total=0
     sql.connect(config).then(() => {
         return sql.query`select * from password pass where MA=${md5(password)}`
     })
     .then(result=>{
         if(result.recordset.length==0){// mk sai
-            res.cookie("errStaff",['Mật khẩu không chính xác'])
+            res.cookie("errStaff",['Mật khẩu không chính xác'],{
+                maxAge:1000
+            })
             
             res.redirect('/staff/work')
             
@@ -1051,23 +1256,74 @@ module.exports.xhd = function(req, res, next) {
             })
             .then(result =>{
                 if(result.recordset.length==0){// mhd sai
-                    res.cookie("errStaff",[`Mã hóa đơn ${mhd} không tồn tại`])   
+                    res.cookie("errStaff",[`Mã hóa đơn ${mhd} không tồn tại`],{
+                        maxAge:1000
+                    })   
                     res.redirect('/staff/work')        
-                }else{//mhd dung        
+                }else{//mhd dung       
                     sql.connect(config).then(() => {
-                        return sql.query`delete from SD_DICHVU where MAHD=${mhd}`
+                        return sql.query`select MAKHACH from hoadon where MA=${mhd}`
                     })
-                    .then(result => {
-                        return sql.query`delete from hoadon where MA=${mhd}`
+                    .then(result =>{
+                        maKhach=result.recordset[0].MAKHACH
+                        return sql.query`select * from SD_DICHVU where MAHD=${mhd}`
                     })
-                    .then((result) => {
-                        res.cookie("succStaff",[`Hóa đơn ${mhd} đã xóa`])
-                        res.clearCookie('errStaff', { })
-                        res.redirect('/staff/work')
+                    .then(result =>{
+                        async function truDiem(){
+                            for(let item of result.recordset){
+                                let myPromise = new Promise(function(myResolve, myReject) {
+                                    sql.connect(config).then(() => {
+                                        return sql.query`select DIEMCONGTICHLUY from dichvu dv where dv.MA=${item.MADV} `
+                                    })
+                                    .then(result=>{
+                                        total+=result.recordset[0].DIEMCONGTICHLUY
+                                        myResolve()
+                                    })
+                                });
+                                await myPromise;
+                            }
+                            sql.connect(config).then(() => {
+                                return sql.query`select DIEMTICHLUY from khachhang where MA=${maKhach}`
+                            })
+                            .then(result =>{
+                                diem=result.recordset[0].DIEMTICHLUY
+                                console.log(total,diem)
+
+                                return sql.query`update   khachhang set DIEMTICHLUY=${diem-total} where MA=${maKhach}`
+                            })
+                            .then(result=>{
+                                let currScore=diem-total
+                                if(currScore>=200){
+                                    return sql.query`UPDATE khachhang SET DIEMTICHLUY = ${currScore},MALK='LK4'  where MA=${maKhach}`
+                                }else if(currScore>=150){
+                                        return sql.query`UPDATE khachhang SET DIEMTICHLUY = ${currScore},MALK='LK3'  where MA=${maKhach}`
+                                }else if(currScore>=70){
+                                    return sql.query`UPDATE khachhang SET DIEMTICHLUY = ${currScore},MALK='LK2'  where MA=${maKhach}`
+                                }else if(currScore>=0){
+                                    return sql.query`UPDATE khachhang SET DIEMTICHLUY = ${currScore},MALK='LK1'  where MA=${maKhach}`
+                                } 
+                            })
+                            .then(result=>{
+                                return sql.query`delete from SD_DICHVU where MAHD=${mhd}`
+                            })
+                            .then(result => {
+                                return sql.query`delete from hoadon where MA=${mhd}`
+                            })
+                            .then((result) => {
+                                res.cookie("succStaff",[`Hóa đơn ${mhd} đã xóa`],{
+                                    maxAge:1000
+                                })
+                                res.clearCookie('errStaff', { })
+                                res.redirect('/staff/work')
+                            })
+
+                        }
+                        truDiem()
+
+                        
+                        
                     })
-                    .catch(err => {
-                        console.log(err)
-                    })
+                    
                 }
             })
         }
@@ -1083,7 +1339,9 @@ module.exports.tnv = function(req, res, next) {
     }).then(result => {
         console.log(result)
         if(result.recordset.length==0){// mk sai
-            res.cookie("errStaff",['Mật khẩu không chính xác'])   
+            res.cookie("errStaff",['Mật khẩu không chính xác'],{
+                maxAge:1000
+            })   
             res.redirect('/staff/work')
         }else{//mk dung
             res.redirect('/staff/work/addStaff')
@@ -1096,37 +1354,394 @@ module.exports.tnv = function(req, res, next) {
 module.exports.csnv = function(req, res, next) {
     res.clearCookie('errStaff', { })
     res.clearCookie('succStaff', { })
-    let {value,filter}=req.body
-    console.log(req.body)
+
+    let {value,filter,password}=req.body
+    console.log(req.query)
 
     var rePhone = /^\d{10}$/;
     let kq=[],tam,ma
-    if(!value.match(rePhone)&&filter=='SDT'){
-        res.cookie("errStaff",['Số điện thoại không chính xác']) 
-        res.redirect('/staff/work')
-        return;
-    }
+
     sql.connect(config).then(() => {
-        if(filter=='SDT'){
-            return sql.query`select * from nhanvien  where SDT=${value}`
-        } 
-        else if(filter=='MNV'){
-            return sql.query`select * from nhanvien  where MA=${value}`
-        }   
-        else if(filter=='CMND'){
-            return sql.query`select * from nhanvien  where CMND=${value}`
-        }   
+        return sql.query`select * from password pass where MA=${md5(password)}`
     }).then(result => {
-        if(result.recordset.length==0){// nhan vien k co
-            res.cookie("errStaff",[`Không tồn tại nhân viên có ${filter} là ${value}`])
+        console.log(result)
+        if(result.recordset.length==0){// mk sai
+            res.cookie("errStaff",['Mật khẩu không chính xác'],{
+                maxAge:1000
+            })   
             res.redirect('/staff/work')
-        }else{//nhan vien da co
-           res.locals.staff=result.recordset[0]
-           res.render('staff/viewStaff')
+        }else{//mk dung
+            if(!value.match(rePhone)&&filter=='SDT'){
+                res.cookie("errStaff",['Số điện thoại không chính xác'],{
+                    maxAge:1000
+                }) 
+                res.redirect('/staff/work')
+                return;
+            }
+            sql.connect(config).then(() => {
+                if(filter=='SDT'){
+                    return sql.query`select * from nhanvien  where SDT=${value}`
+                } 
+                else if(filter=='MNV'){
+                    return sql.query`select * from nhanvien  where MA=${value}`
+                }     
+            }).then(result => {
+                if(result.recordset.length==0){// nhan vien k co
+                    res.cookie("errStaff",[`Không tồn tại nhân viên có ${filter} là ${value}`])
+                    res.redirect('/staff/work')
+                }else{//nhan vien da co
+                   res.locals.staff=result.recordset[0]
+                   res.cookie('idStaff',res.locals.staff.MA)
+                   console.log(res.locals.staff)
+                   res.render('staff/viewStaff')
+                }
+            })
         }
     })
-    .catch(err=>{
-
-    })  
+    
+    
    
+}
+module.exports.dmk = function(req, res, next) {
+    res.clearCookie('errStaff', { })
+    let {password,newPassword,confirm_newPassword}=req.body
+    sql.connect(config).then(() => {
+        return sql.query`select * from password pass where MA=${md5(password)}`
+    }).then(result => {
+        console.log(result)
+        if(result.recordset.length==0){// mk sai
+            res.cookie("errStaff",['Mật khẩu không chính xác'],{
+                maxAge:1000
+            })   
+            res.redirect('/staff/work')
+        }else{//mk dung
+            if(newPassword==confirm_newPassword){
+                sql.connect(config).then(() => {
+                    return sql.query`delete from password`
+                })
+                .then(result=>{
+                    return sql.query`insert into password values(${md5(newPassword)})`
+                })
+                .then(result=>{
+                    res.cookie('succStaff',[`Thay đổi mật khẩu admin thành công`],{
+                        maxAge:1000
+                    })
+                    res.redirect('/staff/work')
+                })
+                
+            }else{
+                res.cookie('errStaff',[`Mật khẩu và mật khẩu xác nhận không giống nhau`],{
+                    maxAge:1000
+                })
+                res.redirect('/staff/work/')
+            }
+            
+        }
+    }).catch(err => {
+        // ... error checks
+    })
+   
+}
+
+// Thống kê
+module.exports.tkNgay=function(req, res, next) {
+    console.log(req.query)
+    let{day}=req.query
+    var kq=[]
+    let tongTien=0,tongHD=0
+    let par=`%${day}%`
+    sql.connect(config).then(() => {       //   get id
+        return sql.query`select * from hoadon where THOIGIAN LIKE ${par} ORDER BY MA DESC;` 
+    })
+    .then(result => {
+        // console.log(result)
+        console.log(result.recordset)
+        res.locals.hd=result.recordset
+        tongHD=result.recordset.length
+        async function myDisplay(hd){
+            for(let item of hd){
+                var t={}
+                let myPromise = new Promise(function(myResolve, myReject) {
+                    sql.connect(config).then(() => {
+                        return sql.query`select * from khachhang where MA=${item.MAKHACH}`
+                        
+                    })
+                    .then(result=>{
+                        t.user=result.recordset[0]
+                        return sql.query`select dv.TEN,dv.GIA,sd.MANV from sd_dichvu  sd,dichvu dv where sd.MAHD=${item.MA} and dv.MA=sd.MADV`
+                    })
+                    .then((result) => {
+                        t.data=result.recordset
+                        return sql.query`select SUM(GIA) as SUM from sd_dichvu where MAHD=${item.MA} `
+                    }).then(result=>{
+                        t.sum=result.recordset[0].SUM
+                        return sql.query`select TILE_GIAMGIA from hoadon where MA=${item.MA} `
+                    })
+                    .then(result=>{
+                        t.tlgg=result.recordset[0].TILE_GIAMGIA
+                        t.price=parseInt( t.sum*(100-t.tlgg)/100)
+                        tongTien+=t.price
+                        var x={
+                            info:item,
+                            value:t
+                        }
+                        kq.push(x)
+                        myResolve()
+                    })
+                    .catch(err => {
+                        console.log('error', err)
+                    }) 
+
+                });
+                await myPromise;
+            }
+            res.render('staff/statistic',{
+                kq,
+                tongTien,
+                tongHD,
+                loai:{
+                    loai:'ngay',
+                    giaTri:func.convertTimeYMD(day)
+                    
+                }
+            })
+        }
+        myDisplay(res.locals.hd)
+    })
+    .catch((err)=>{
+        console.log(err)
+    })
+    
+
+}
+module.exports.tkThang=function(req, res, next) {
+    console.log(req.query)//{ month: '2021-04' }
+    let{month}=req.query//
+    var kq=[]
+    let tongTien=0,tongHD=0//2021-04-25T13:31
+    let par=`${month}-__T%`
+    sql.connect(config).then(() => {       //   get id
+        return sql.query`select * from hoadon where THOIGIAN LIKE ${par} ORDER BY MA DESC;` 
+    })
+    .then(result => {
+        // console.log(result)
+        console.log(result.recordset)
+        res.locals.hd=result.recordset
+        tongHD=result.recordset.length
+        async function myDisplay(hd){
+            for(let item of hd){
+                var t={}
+                let myPromise = new Promise(function(myResolve, myReject) {
+                    sql.connect(config).then(() => {
+                        return sql.query`select * from khachhang where MA=${item.MAKHACH}`
+                        
+                    })
+                    .then(result=>{
+                        t.user=result.recordset[0]
+                        return sql.query`select dv.TEN,dv.GIA,sd.MANV from sd_dichvu  sd,dichvu dv where sd.MAHD=${item.MA} and dv.MA=sd.MADV`
+                    })
+                    .then((result) => {
+                        t.data=result.recordset
+                        return sql.query`select SUM(GIA) as SUM from sd_dichvu where MAHD=${item.MA} `
+                    }).then(result=>{
+                        t.sum=result.recordset[0].SUM
+                        return sql.query`select TILE_GIAMGIA from hoadon where MA=${item.MA} `
+                    })
+                    .then(result=>{
+                        t.tlgg=result.recordset[0].TILE_GIAMGIA
+                        t.price=parseInt( t.sum*(100-t.tlgg)/100)
+                        tongTien+=t.price
+                        var x={
+                            info:item,
+                            value:t
+                        }
+                        kq.push(x)
+                        myResolve()
+                    })
+                    .catch(err => {
+                        console.log('error', err)
+                    }) 
+
+                });
+                await myPromise;
+            }
+            res.render('staff/statistic',{
+                kq,
+                tongTien,
+                tongHD,
+                loai:{
+                    loai:'thang',
+                    giaTri:func.convertTimeYM(month)
+                    
+                }
+            })
+        }
+        myDisplay(res.locals.hd)
+    })
+    .catch((err)=>{
+        console.log(err)
+    })
+}
+module.exports.tkNam=function(req, res, next) {
+    console.log(req.query)//{ month: '2021-04' }
+    let{year}=req.query//
+    var regex=/^\d{4}$/
+    if( regex.test(year)){
+
+    }else{
+        res.cookie('errStaff',[`Năm ${year} không đúng định dạng`],{
+            maxAge:1000
+        })
+        res.redirect('/staff/work')
+        return
+    }
+    var kq=[]
+    let tongTien=0,tongHD=0//2021-04-25T13:31
+    let par=`${year}-__-__T%`
+    sql.connect(config).then(() => {       //   get id
+        return sql.query`select * from hoadon where THOIGIAN LIKE ${par} ORDER BY MA DESC;` 
+    })
+    .then(result => {
+        // console.log(result)
+        console.log(result.recordset)
+        res.locals.hd=result.recordset
+        tongHD=result.recordset.length
+        async function myDisplay(hd){
+            for(let item of hd){
+                var t={}
+                let myPromise = new Promise(function(myResolve, myReject) {
+                    sql.connect(config).then(() => {
+                        return sql.query`select * from khachhang where MA=${item.MAKHACH}`
+                        
+                    })
+                    .then(result=>{
+                        t.user=result.recordset[0]
+                        return sql.query`select dv.TEN,dv.GIA,sd.MANV from sd_dichvu  sd,dichvu dv where sd.MAHD=${item.MA} and dv.MA=sd.MADV`
+                    })
+                    .then((result) => {
+                        t.data=result.recordset
+                        return sql.query`select SUM(GIA) as SUM from sd_dichvu where MAHD=${item.MA} `
+                    }).then(result=>{
+                        t.sum=result.recordset[0].SUM
+                        return sql.query`select TILE_GIAMGIA from hoadon where MA=${item.MA} `
+                    })
+                    .then(result=>{
+                        t.tlgg=result.recordset[0].TILE_GIAMGIA
+                        t.price=parseInt( t.sum*(100-t.tlgg)/100)
+                        tongTien+=t.price
+                        var x={
+                            info:item,
+                            value:t
+                        }
+                        kq.push(x)
+                        myResolve()
+                    })
+                    .catch(err => {
+                        console.log('error', err)
+                    }) 
+
+                });
+                await myPromise;
+            }
+            res.render('staff/statistic',{
+                kq,
+                tongTien,
+                tongHD,
+                loai:{
+                    loai:'nam',
+                    giaTri:year
+                    
+                }
+            })
+        }
+        myDisplay(res.locals.hd)
+    })
+    .catch((err)=>{
+        console.log(err)
+    })
+}
+module.exports.tkTuan=function(req, res, next) {
+    
+}
+module.exports.tkGiua=function(req, res, next) {
+    console.log(req.query)//{ month: '2021-04' }
+    let{day1,day2}=req.query//
+    let d1=func.convertCountTime(day1),d2=func.convertCountTime(day2)
+    if(d2>d1 ){
+
+    }else{
+        res.cookie('errStaff',[`Nhập thời gian không hợp lê`],{
+            maxAge:1000
+        })
+        res.redirect('/staff/work')
+        return
+    }
+    var kq=[]
+    let tongTien=0,tongHD=0//2021-04-25T13:31
+    sql.connect(config).then(() => {       //   get id
+        return sql.query`select * from hoadon  ORDER BY MA DESC` 
+    })
+    .then(result => {
+        // console.log(result)
+        console.log(result.recordset)
+        let hds=result.recordset
+        let hd=[]
+        for(let item of hds){
+            let time=item.THOIGIAN.substring(0,10)
+            if(d1<=func.convertCountTime(time)&&func.convertCountTime(time)<=d2) hd.push(item)
+        }
+        tongHD=hd.length
+        async function myDisplay(hd){
+            for(let item of hd){
+                var t={}
+                let myPromise = new Promise(function(myResolve, myReject) {
+                    sql.connect(config).then(() => {
+                        return sql.query`select * from khachhang where MA=${item.MAKHACH}`
+                        
+                    })
+                    .then(result=>{
+                        t.user=result.recordset[0]
+                        return sql.query`select dv.TEN,dv.GIA,sd.MANV from sd_dichvu  sd,dichvu dv where sd.MAHD=${item.MA} and dv.MA=sd.MADV`
+                    })
+                    .then((result) => {
+                        t.data=result.recordset
+                        return sql.query`select SUM(GIA) as SUM from sd_dichvu where MAHD=${item.MA} `
+                    }).then(result=>{
+                        t.sum=result.recordset[0].SUM
+                        return sql.query`select TILE_GIAMGIA from hoadon where MA=${item.MA} `
+                    })
+                    .then(result=>{
+                        t.tlgg=result.recordset[0].TILE_GIAMGIA
+                        t.price=parseInt( t.sum*(100-t.tlgg)/100)
+                        tongTien+=t.price
+                        var x={
+                            info:item,
+                            value:t
+                        }
+                        kq.push(x)
+                        myResolve()
+                    })
+                    .catch(err => {
+                        console.log('error', err)
+                    }) 
+
+                });
+                await myPromise;
+            }
+            res.render('staff/statistic',{
+                kq,
+                tongTien,
+                tongHD,
+                loai:{
+                    loai:'giua',
+                    giaTri:`${func.convertTimeYMD(day1)} đến ${func.convertTimeYMD(day2)}`
+                    
+                }
+            })
+        }
+        myDisplay(hd)
+    })
+    .catch((err)=>{
+        console.log(err)
+    })
 }

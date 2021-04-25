@@ -117,7 +117,7 @@ function Validator(formSelector,options={}){
         console.log(d+'--'+today)
         var x=(d.getTime()-today.getTime())
         console.log(x)
-        if(x>1000*60*60*24*3||x<1000*60*60) isValid=false;else isValid=true;   
+        if(x>=1000*60*60*24*3||x<=1000*60*60) isValid=false;else isValid=true;   
         if(isValid==false) errMess.innerText='Thời gian đặt trước tối thiểu 1 tiếng và tối đa 3 ngày'
     }
 

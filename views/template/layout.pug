@@ -54,16 +54,7 @@ html(lang='en')
                 button.bttn-unite.bttn-sm.bttn-primary(style='padding: 6px 18px') Đăng nhập
     div(style=' height: 66px;')
     .container
-      if errors   
-        .tb
-            each err in errors
-              .tbC
-                .alert.alert-danger= err
-      if success   
-          .tb
-            each succ in success
-              .tbC
-                .alert.alert-success= succ
+      
     .contact
       .phone
         i.fas.fa-phone-alt

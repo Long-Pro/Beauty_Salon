@@ -3,9 +3,15 @@ block css
   link(rel='stylesheet' href='/css/acc.css')
 block content 
   if errors   
-    each err in errors
-      .alert.alert-danger= err
-        
+    .tb
+      each err in errors
+        .tbC
+          .alert.alert-danger= err
+  else if success   
+    .tb
+      each succ in success
+        .tbC
+          .alert.alert-success= succ
   .main
     form#form-1.form(action='/user/createAcc' method='POST')
       h3.heading Thành viên đăng ký
@@ -17,12 +23,12 @@ block content
         span.form-message
       .form-group
         label.form-label(for='sdt') Số điện thoại
-        input#sdt.form-control(name='sdt' type='text' placeholder='VD: 0398.291.602' rules='required|phone' value=values?values.sdt:"" )
+        input#sdt.form-control(name='sdt' type='text' placeholder='VD: 0398.291.602' rules='required|phone' value=values?values.sdt:"" disabled )
         span.form-message
       .form-group
         label.form-label(for='gender') Giới tính:
         select#gender(name='gender')
-          option(value='Nam' ) Nam
+          option(value='Nam'  ) Nam
           option(value='Nữ') Nữ
           option(value='Khác') Khác
       .form-group
