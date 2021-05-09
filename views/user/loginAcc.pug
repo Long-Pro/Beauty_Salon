@@ -13,17 +13,17 @@ block content
         .tbC
           .alert.alert-success= succ
   .main
-    form#form-2.form(action='/user/loginAcc' method='POST')
+    form#form-1.form(action='/user/loginAcc' method='POST')
       h3.heading Đăng nhập
       p.desc BEAUTY SALON - Nơi vẻ đẹp bắt đầu
       .spacer
       .form-group
         label.form-label(for='account') Tài khoản
-        input#account.form-control(name='account' type='text' placeholder='VD: long123' value=values?values.account:"" rules='required|min:6|max:12')
+        input#account.form-control(name='account' type='text' placeholder='VD: long123' value=values?values.account:"" rules='required|min:6|max:12' inputNoSpace)
         span.form-message
       .form-group
         label.form-label(for='password') Mật khẩu
-        input#password.form-control(name='password' type='password' placeholder='Nhập mật khẩu' value=values?values.password:"" rules='required|min:6|max:12')
+        input#password.form-control(name='password' type='password' placeholder='Nhập mật khẩu' value=values?values.password:"" rules='required|min:6|max:12' inputNoSpace)
         span.form-message
       button.form-submit.btn.btn-primary(type='submit') Đăng nhập
       a(href='#' style='margin: 13px;display: block;text-decoration: none;font-size:13px;')  Quên mật khẩu ?
@@ -39,16 +39,15 @@ block content
           button.close(type='button' data-dismiss='modal') &times;
         // Modal body
         .modal-body
-          form(action='/user/createAcc' method='get')
+          form#form-2(action='/user/createAcc' method='get')
             .form-group
               label(for='sdt') Số điện thoại:
               input#sdt.form-control(type='text' name='sdt' rules='required|phone')
+              span.form-message
             button.btn.btn-primary.w-100(type='submit') Xác nhận
   script(src='/js/validator.js')
   script.
-    Validator('#form-2',{
-    onSubmit:function(data){
-    console.log('CALL API...')
-    console.log(data)
-    }
-    })
+    Validator('#form-1',{  }
+    )
+    Validator('#form-2',{}
+    )

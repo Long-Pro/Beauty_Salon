@@ -102,9 +102,16 @@ block content
                     button.btn.btn-primary.my-5(type='submit') Thêm hóa đơn
             
             .col-2 
-    script(src='/js/features.js') 
     script(src='/js/validatorNV.js')
     script.
+        let orderTime=document.querySelector('#orderTime')
+        var today = new Date();
+        //- console.log(typeof today.getFullYear())
+        var date = today.getFullYear()+'-'+(today.getMonth()+1).toString().padStart(2,0)+'-'+today.getDate().toString().padStart(2,0);
+        var time = today.getHours().toString().padStart(2,0) + ":" + today.getMinutes().toString().padStart(2,0) ;
+        var dateTime = date+'T'+time;
+        orderTime.value=dateTime
+        //- orderTime.value='2021-05-09T10:45'
         Validator('#form',{
         onSubmit:function(data){
         console.log('CALL API...')

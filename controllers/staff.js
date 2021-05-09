@@ -1666,8 +1666,8 @@ module.exports.tkTuan=function(req, res, next) {
 module.exports.tkGiua=function(req, res, next) {
     console.log(req.query)//{ month: '2021-04' }
     let{day1,day2}=req.query//
-    let d1=func.convertCountTime(day1),d2=func.convertCountTime(day2)
-    if(d2>d1 ){
+    // let d1=func.convertCountTime(day1),d2=func.convertCountTime(day2)
+    if(day2>day1 ){
 
     }else{
         res.cookie('errStaff',[`Nhập thời gian không hợp lê`],{
@@ -1688,7 +1688,7 @@ module.exports.tkGiua=function(req, res, next) {
         let hd=[]
         for(let item of hds){
             let time=item.THOIGIAN.substring(0,10)
-            if(d1<=func.convertCountTime(time)&&func.convertCountTime(time)<=d2) hd.push(item)
+            if(day1<=time&&time<=day2) hd.push(item)
         }
         tongHD=hd.length
         async function myDisplay(hd){

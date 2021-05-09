@@ -9,11 +9,11 @@ block content
       .spacer
       .form-group
         label.form-label(for='fullname') Tên đầy đủ
-        input#fullname.form-control(name='fullname' type='text' placeholder='VD: Long Nguyen' rules='required' value=values?values.fullname:'' )
+        input#fullname.form-control(name='fullname' type='text' placeholder='VD: Long Nguyen' rules='required|childMax:7|max:30' value=values?values.fullname:'' )
         span.form-message
       .form-group
         label.form-label(for='sdt') Số điện thoại
-        input#sdt.form-control(name='sdt' type='text' placeholder='VD: 0398.291.602' rules='required|phone|size:10' value=values?values.sdt:'' )
+        input#sdt.form-control(name='sdt' type='text' placeholder='VD: 0398.291.602' rules='required|phone' value=values?values.sdt:'' )
         span.form-message
       .form-group
         label.form-label(for='gender') Giới tính:
@@ -27,7 +27,7 @@ block content
         span.form-message
       .form-group
         label.form-label(for='cmnd') Chứng minh thư:
-        input#cmnd.form-control(name='cmnd' type='text' placeholder='VD: 197401456' rules='required|digits9' value=values?values.cmnd:''  )
+        input#cmnd.form-control(name='cmnd' type='text' placeholder='VD: 197401456' rules='required|digits:9' value=values?values.cmnd:''  )
         span.form-message
       .form-group
         label.form-label(for='birth') Ngày sinh:
@@ -41,8 +41,5 @@ block content
   script(src='/js/validator.js')
   script.
     Validator('#form-1',{
-    onSubmit:function(data){
-    console.log('CALL API...')
-    console.log(data)
-    }
+    
     })

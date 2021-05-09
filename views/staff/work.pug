@@ -92,7 +92,7 @@ block content
                 .col-3 
                     a.btn.btn-primary.my-3( href='/staff/work/dt' ) Khách đặt trước
                 .col-3 
-                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalTKDT2') Thống kê doanh thu
+                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalTKDT') Thống kê doanh thu
             .row.h3 Chức năng quản trị
             .row.my-5 
                 .col-3 
@@ -177,59 +177,6 @@ block content
             .modal-content
                 // Modal Header
                 .modal-header
-                    
-                    h4.modal-title THỐNG KÊ DOANH THU
-                    button.close(type='button' data-dismiss='modal') &times;
-                // Modal body
-                .modal-body
-                    .row 
-                        .col-6 
-                            form(action='/staff/work/tkNgay' method='get')
-                                .form-group
-                                    label.font-weight-bold(for='day')  Ngày 
-                                    input.w-100#day(type='date' name='day')
-                                button.btn.btn-primary(type='submit') Thống kê
-                        .col-6 
-                            form(action='/staff/work/tkThang' method='get')
-                                .form-group
-                                    label.font-weight-bold(for='month')  Tháng 
-                                    input#month.w-100(type='month' name='month')
-                                button.btn.btn-primary(type='submit') Thống kê
-                    hr
-                    .row
-                        .col-6 
-                            form(action='/staff/work/tkTuan' method='get')
-                                .form-group
-                                    label.font-weight-bold(for='week')  Tuần 
-                                    input#week.w-100(type='week' name='week')
-                                button.btn.btn-primary(type='submit') Thống kê
-                        .col-6 
-                            form(action='/staff/work/tkNam' method='get')
-                                .form-group
-                                    label.font-weight-bold(for='year')  Năm 
-                                    input#year.w-100(type='text' name='year')
-                                button.btn.btn-primary(type='submit') Thống kê
-                    hr
-                    .row  
-                        .col-12 
-                            
-                            p.text-center.font-weight-bold  Giữa hai ngày
-                            form(action='/staff/work/tkGiua' method='get')
-                                .row 
-                                    .col-6
-                                        .form-group
-                                            label.font-weight-bold(for='day') Từ ngày
-                                            input.w-100#day1(type='date' name='day')
-                                    .col-6
-                                        .form-group
-                                            label.font-weight-bold(for='day') Đến ngày
-                                            input.w-100#day2(type='date' name='day')
-                                button.btn.btn-primary(type='submit') Thống kê
-    #myModalTKDT2.modal
-        .modal-dialog.bg-light
-            .modal-content
-                // Modal Header
-                .modal-header
                     h4.modal-title(style='color:#C23564') THỐNG KÊ DOANH THU
                     button.close(type='button' data-dismiss='modal') &times;
                 // Modal body
@@ -238,10 +185,9 @@ block content
                         // Tab items
                         .tabs
                             .tab-item.active Ngày
-                            .tab-item Tuần
                             .tab-item Tháng
                             .tab-item Năm
-                            .tab-item Giữa
+                            .tab-item Giữa hai ngày
                             .line
                         // Tab content
                         .tab-content
@@ -251,24 +197,15 @@ block content
                                         input.w-100#day(type='date' name='day' required)
                                     button.btn.btn-primary(type='submit') Thống kê
                             .tab-pane
-                                form(action='/staff/work/tkTuan' method='get')
-                                    .form-group
-                                        
-                                        input#week.w-100(type='week' name='week' required)
-                                    button.btn.btn-primary(type='submit') Thống kê
-                            .tab-pane
                                 form(action='/staff/work/tkThang' method='get')
-                                    .form-group
-                                        
+                                    .form-group    
                                         input#month.w-100(type='month' name='month' required)
                                     button.btn.btn-primary(type='submit') Thống kê
                             .tab-pane
                                 form(action='/staff/work/tkNam' method='get' required)
-                                    .form-group
-                                        
+                                    .form-group    
                                         input#year.w-100(type='text' name='year' required)
                                     button.btn.btn-primary(type='submit') Thống kê
-
                             .tab-pane
                                 form(action='/staff/work/tkGiua' method='get')
                                     .row 
@@ -280,10 +217,7 @@ block content
                                             .form-group
                                                 label.font-weight-bold(for='day') Đến ngày
                                                 input.w-100#day2(type='date' name='day2' required)
-                                    button.btn.btn-primary(type='submit') Thống kê
-
-                                
-                           
+                                    button.btn.btn-primary(type='submit') Thống kê 
                         script(src='/js/app.js')
                    
   

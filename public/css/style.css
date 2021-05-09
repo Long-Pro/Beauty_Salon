@@ -32,8 +32,13 @@ header {
     box-shadow: 0 2px 5px #ccc;
     padding-left: 8px;
     display: none;
+    padding: 0;
     
-    
+  }
+  .userMenu a:hover{
+      text-decoration: none;
+      
+
   }
   .userMenu::before{
     content: "";
@@ -45,7 +50,13 @@ header {
     border-color: transparent transparent #fff transparent;
   }
   .userMenu__item{
-    padding: 3px;
+    padding: 5px;
+    padding-left: 10px;
+  
+  }
+  .userMenu__item a{
+    padding: 0px;
+    margin: 0;
   
   }
   .userMenu__item:hover{

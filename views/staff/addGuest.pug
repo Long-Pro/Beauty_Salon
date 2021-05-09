@@ -9,7 +9,7 @@ block content
       .spacer
       .form-group
         label.form-label(for='fullname') Tên đầy đủ
-        input#fullname.form-control(name='fullname' type='text' placeholder='VD: Long Nguyen' rules='required' )
+        input#fullname.form-control(name='fullname' type='text' placeholder='VD: Long Nguyen' rules='required|childMax:7|max:30' )
         span.form-message
       .form-group
         label.form-label(for='sdt') Số điện thoại

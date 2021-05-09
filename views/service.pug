@@ -1,0 +1,109 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(http-equiv='X-UA-Compatible' content='IE=edge')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    //- link(rel='stylesheet' href='./css/services.css')
+    title Document
+    style.
+      header .header {
+      width: 90rem;
+      margin-left: 5rem;
+      }
+      header .header__text-box {
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+      }
+      header .header__text-box .heading-primary {
+      text-transform: uppercase;
+      font-size: 2rem;
+      font-weight: bold;
+      }
+      header .header .row {
+      max-width: 114rem;
+      margin: 0 auto;
+      }
+      header .header .row::after {
+      content: "";
+      display: table;
+      clear: both;
+      }
+      header .header .row:not(:last-child) {
+      margin-bottom: 8rem;
+      }
+      header .header .row [class^="col-"] {
+      float: left;
+      }
+      header .header .row [class^="col-"]:not(:last-child) {
+      margin-right: 2rem;
+      }
+      header .header .row .col-1-of-2 {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      }
+      header .header .row .col-1-of-2 .mar-left {
+      margin-right: 4rem;
+      }
+      header .header .row .col-1-of-2 img {
+      margin-bottom: 2rem;
+      }
+      header .header .row .col-1-of-4 {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      }
+      header .header .row .col-1-of-4 img {
+      width: 20rem;
+      height: 20rem;
+      margin-right: 1rem;
+      }
+  body
+    header
+      .header
+        div(class='header__text-box')
+          span.heading-primary Combo
+        .row
+          .col-1-of-2
+            img.mar-left(src='/images/images/combo-cat-goi-vip.jpg' alt='')
+            img(src='/images/images/cat-xa-tao-kieu.jpg' alt='')
+          .col-1-of-2
+            img.mar-left(src='/images/images/kid-combo.jpg' alt='')
+            img(src='/images/images/goi-massage-duong-sinh-2.jpg' alt='')
+        div(class='header__text-box')
+          span.heading-primary Dịch vụ uốn
+        .row
+          .col-1-of-4
+            img.photo(src='/images/images/1-uon-cao-cap.jpg' alt='')
+            img.photo(src='/images/images/2-uon-tieu-chuan.jpg' alt='')
+            img.photo(src='/images/images/3-uon-con-sau.jpg' alt='')
+            img.photo(src='/images/images/4-uon-prem-lock.jpg' alt='')
+        div(class='header__text-box')
+          span.heading-primary Dịch vụ nhuộm
+        .row
+          .col-1-of-4
+            img.photo(src='/images/images/1-Elegant-black.jpg' alt='')
+            img.photo(src='/images/images/2-Modern-man.jpg' alt='')
+            img.photo(src='/images/images/3-Lady-Killer.jpg' alt='')
+            img.photo(src='/images/images/4-Fashionisto.jpg' alt='')
+        div(class='header__text-box')
+          span.heading-primary Dưỡng và phục hồi tóc
+        .row
+          .col-1-of-4
+            img.photo(src='/images/images/1-hap-duong.jpg' alt='')
+            img.photo(src='/images/images/2-phuc-hoi-nano.jpg' alt='')
+        div(class='header__text-box')
+          span.heading-primary Chăm sóc da
+        .row
+          .col-1-of-4
+            img(src='/images/images/1-30shine-tay-da-chet.jpg' alt='')
+            img(src='/images/images/2-30shine-dap-mat-na-lanh.jpg' alt='')
+            img(src='/images/images/3-30shine-lay-mun-mui.jpg' alt='')
+            img(src='/images/images/4-detox-da-dau.jpg' alt='')
+        div(class='header__text-box')
+          span.heading-primary Dịch vụ khác
+        .row
+          .col-1-of-4
+            img(src='/images/images/1-30shine-lay-ray-tai.jpg' alt='')
+            img(src='/images/images/2-giuong-massage.jpg' alt='')

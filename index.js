@@ -4,6 +4,7 @@ const userRoute = require('./routes/user')
 const staffRoute = require('./routes/staff')
 
 var cookieParser = require('cookie-parser')
+let fs=require('fs')
  
 const port = 3000
 
@@ -33,39 +34,21 @@ app.set('views', './views')
 
 app.use(express.static('public'))
 
+////////////////
+
 
 
 app.get('/test', (req, res) => {
     
-  // sql.connect(config).then(() => {       
-  //     return sql.query` select max(ma) as ma from hoadon`  
-  // }).then(result => {
-  //     res.send(result)
-  //     return
-  // })
-  sql.connect(config);     
-  var promise=new Promise(function(res,rej){
-    res(sql.query` select max(ma) as ma from hoadon`)
-  }).then((result=>{
-    console.log(result)
-  }))
-  .catch(function(err){
-    console.log(err)
+  sql.connect(config).then(() => {       
+      return sql.query` select * from khachhang`  
+  }).then(result => {
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.json(result.recordset)
+      res.status(500).json({ error: 'message' })
   })
-
-  promise=new Promise(function(res,rej){
-    res(sql.query` select ma as ma from khachhang`)
-  }).then((result=>{
-    console.log(result)
-  }))
-  .catch(function(err){
-    console.log(err)
-  })
-
-  res.send("aaaaaaa")
-   
   
-
+ 
 
 })
 app.get('/test2', (req, res) => {
@@ -95,6 +78,13 @@ app.get('/', (req, res) => {
     res.render('index',{
       userId:req.cookies.userId
     })
+})
+app.get('/dichvu', (req, res) => {
+  
+  // res.sendFile(__dirname + '/views/user/Service/services.html',{
+  //   dotfiles: 'allow',
+  // })
+  res.render('service',{})
 })
 
 app.use('/user', userRoute)

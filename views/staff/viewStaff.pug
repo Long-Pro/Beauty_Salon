@@ -27,12 +27,12 @@ block content
                 .col-6
                   .form-group
                     label.form-label(for='fullname') Tên đầy đủ:
-                    input#fullname.form-control(type='text' placeholder='VD: Nguyễn Văn Long  ' name='fullname' value=staff.TEN rules='required')
+                    input#fullname.form-control(type='text' placeholder='VD: Nguyễn Văn Long  ' name='fullname' value=staff.TEN rules='required|max:30|childMax:7')
                     span.form-message
                 .col-6 
                   .form-group
                     label.form-label(for='sdt') Số điện thoai:
-                    input#sdt.form-control(type='text' placeholder='VD: 0398291602' name='sdt'  rules='required|size:10' value=staff.SDT disabled)
+                    input#sdt.form-control(type='text' placeholder='VD: 0398291602' name='sdt'  rules='required|phone' value=staff.SDT disabled)
                     span.form-message
                 .col-6
                   .form-group
@@ -50,7 +50,7 @@ block content
                 .col-6
                     .form-group
                         label.form-label(for='cmnd') Chứng minh thư:
-                        input#cmnd.form-control(name='cmnd' type='text' placeholder='VD: 197401456' value=staff.CMND rules='required|digits9'   )
+                        input#cmnd.form-control(name='cmnd' type='text' placeholder='VD: 197401456' value=staff.CMND rules='required|digits:9'   )
                         span.form-message
                 .col-6
                     .form-group

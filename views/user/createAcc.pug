@@ -19,7 +19,7 @@ block content
       .spacer
       .form-group
         label.form-label(for='fullname') Tên đầy đủ
-        input#fullname.form-control(name='fullname' type='text' placeholder='VD: Long Nguyen' rules='required' value=values?values.fullname:"")
+        input#fullname.form-control(name='fullname' type='text' placeholder='VD: Long Nguyen' rules='required|childMax:7' value=values?values.fullname:"")
         span.form-message
       .form-group
         label.form-label(for='sdt') Số điện thoại
@@ -47,8 +47,5 @@ block content
   script(src='/js/validator.js')
   script.
     Validator('#form-1',{
-    onSubmit:function(data){
-    console.log('CALL API...')
-    console.log(data)
-    }
+    
     })

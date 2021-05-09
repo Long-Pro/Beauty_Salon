@@ -154,10 +154,11 @@ class User{
     }
     loginAcc2(req, res){
         var{account,password}=req.body;
+        console.log(account,password)
         var errors=[];
 
         sql.connect(config).then(() => {       //   validate tai khoan
-            return sql.query`  select tk.makh as ma from taikhoan as tk where tk.TAIKHOAN=${account}`
+            return sql.query`  select tk.makh as ma from taikhoan as tk where tk.TAIKHOAN=${account} COLLATE SQL_Latin1_General_CP1_CS_AS`
  
         }).then(result => {
             var makh;
@@ -178,7 +179,6 @@ class User{
         .then(({errors,makh}) => {
             if(makh){// neu co makh
                 var passConvert=md5(password)
-                
 
                 sql.connect(config).then(() => {       //   get pass
                     return sql.query`select tk.MATKHAU as mk from taikhoan as tk where tk.MATKHAU=${passConvert} and tk.makh=${makh}` 
