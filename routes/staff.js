@@ -33,6 +33,7 @@ router.post('/work/tckh',staffController.tckh2)
 
 router.get('/work/dt',staffController.dt)
 router.get('/work/deleteOrder',staffController.deleteOrder)
+router.get('/work/deleteAllOrder',staffController.deleteAllOrder)
 router.get('/work/completeOrder',staffController.completeOrder)
 router.post('/work/completeOrder',staffController.completeOrder2)
 
@@ -46,7 +47,6 @@ router.post('/work/dmk',staffController.dmk)
 router.get('/work/tkNgay',staffController.tkNgay)
 router.get('/work/tkThang',staffController.tkThang)
 router.get('/work/tkNam',staffController.tkNam)
-router.get('/work/tkTuan',staffController.tkTuan)
 router.get('/work/tkGiua',staffController.tkGiua)
 
 

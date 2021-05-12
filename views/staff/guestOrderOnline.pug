@@ -11,6 +11,7 @@ block content
                     option(value='dd' selected) Hóa đơn đặt trước đang đặt
                     option(value='dh') Hóa đơn đặt trước đã hủy
                     option(value='ht') Hóa đơn đặt trước hoàn thành
+                
             
         div(style='height:40px') 
         .userData
@@ -20,6 +21,11 @@ block content
                 .col-2
                 .col-8
                     #kqdd
+                        form#formHidden(action='/staff/work/deleteAllOrder' style='border:1px solid #ccc' class='mb-5 p-3')
+                            label(for='quantity') Hủy hóa đơn đặt trước quá hạn  
+                            input#quantity(type='number' name='quantity' min='0' max='99' value='1' class='mx-2')
+                            | giờ
+                            button.btn.btn-danger.mx-3 Hủy
                         each item in kqdd
                             .bill(style='margin-bottom:100px') 
                                 
@@ -119,7 +125,20 @@ block content
                                         span Tỉ lệ giảm giá: #{item.tlgg}%
                                     p#currPrice Tiền thanh toán: #{parseInt(item.sum*(100-item.tlgg)/100)}đ
                 .col-2
+        #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+            .modal-dialog
+                .modal-content
+                    .modal-header
+                        h5#exampleModalLabel.modal-title Modal title
+                        button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                    .modal-body
+                        | Xóa hóa đơn đặt trước quá hạn?
+                    .modal-footer
+                        button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Thoát
+                        button.btn.btn-primary(type='button') Xóa
     script.
+
+      let formHidden=document.querySelector('#formHidden')
       let filter=document.querySelector('#filter') 
       let kqdd=document.querySelector('#kqdd')
       let kqdh=document.querySelector('#kqdh')
