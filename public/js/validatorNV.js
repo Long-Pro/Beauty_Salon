@@ -71,14 +71,7 @@ for(let item of inputs){
             if(item2.checked) price+=priceEle
         }
         sumPrice.innerText='Tổng tiền: ' +price+'đ';
-        currPrice.innerText=`Tiền thah toán: ${Math.ceil(price*(100-tlgg)/100)}đ`
-
-
-        // let priceEle=parseInt(item.getAttribute('price'))
-        // if(item.checked) price+=priceEle;else price-=priceEle
-        // sumPrice.innerText='Tổng tiền: ' +price+'đ';
-        // currPrice.innerText=`Tiền thah toán: ${Math.ceil(price*(100-tlgg)/100)}đ`
-        // console.log( price)
+        currPrice.innerText=`Tiền thah toán: ${Math.ceil(price*(100-tlgg)/100)}đ`  
     }
 }
 

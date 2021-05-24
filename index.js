@@ -8,7 +8,10 @@ let fs=require('fs')
  
 const port = 3000
 
-app.use(cookieParser())
+app.use(cookieParser('LongPro'))
+
+app.use(express.json()) // for parsing application/json
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 app.use(express.urlencoded({
     extended: true
@@ -51,13 +54,23 @@ app.get('/test', (req, res) => {
  
 
 })
+app.post('/test2', (req, res) => {
+
+  console.log('req',req.body)
+
+  res.send('123')
+
+})
 app.get('/test2', (req, res) => {
-   res.render('test/index',{ 
-     x:"123456"
-   })
 
- 
+  console.log('req',req.body)
 
+  res.send('123')
+
+})
+app.get('/test?', (req, res) => {
+  console.log('22222222',test)
+  res.json('111')
 
 })
 app.get('/cookie', (req, res)=>{

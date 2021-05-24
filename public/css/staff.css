@@ -1,0 +1,209 @@
+.dialog{
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content:center;
+  visibility: hidden;
+  opacity: 0;
+  transition:all ease 0.3s;
+}
+.overlay{
+  background-color: rgba(0,0,0,0.2);
+}
+.overlay-close{
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  cursor:default;
+
+}
+.dialog-close{
+  position: absolute;
+  top: -5px;
+  right: 8px;
+  font-size:24px;
+  color:#333;
+  text-decoration: none;
+}
+.dialog_body{
+  background-color: #fff;
+  padding: 16px;
+  max-width: 600px;
+  z-index: 11;
+  border-radius: 3px;
+  position: relative;
+
+}
+#datalistOptions{
+  
+}
+.dialog:target {
+  visibility: visible;
+  opacity: 1;
+}
+
+
+/* -----------    TABS     ------------------------------------------------ */
+.tabs {
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  position: relative;
+  
+}
+
+.tab-item {
+  opacity: 0.6;
+  cursor: pointer;
+  transition: all 0.5s ease;
+}
+.tab-item:hover {
+  opacity: 1;
+  
+}
+.tab-item.active {
+  opacity: 1;
+}
+.tab-content {
+  
+}
+.tab-pane {
+  color: #333;
+  display: none;
+}
+.tab-pane.active {
+  display: block;
+}
+
+
+/* ----------   TOASTCus   ------------------------------------------------- */
+
+#toastCus {
+  position: fixed;
+  top: 32px;
+  right: 32px;
+  z-index: 999999;
+}
+
+.toastCus {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 2px;
+  padding: 20px 0;
+  min-width: 400px;
+  max-width: 450px;
+  border-left: 4px solid;
+  box-shadow: 0 5px 8px rgba(0, 0, 0, 0.08);
+  transition: all linear 0.3s;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(calc(100% + 32px));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+.toastCus--success {
+  border-color: #47d864;
+}
+
+.toastCus--success .toastCus__icon {
+  color: #47d864;
+}
+
+.toastCus--info {
+  border-color: #2f86eb;
+}
+
+.toastCus--info .toastCus__icon {
+  color: #2f86eb;
+}
+
+.toastCus--warning {
+  border-color: #ffc021;
+}
+
+.toastCus--warning .toastCus__icon {
+  color: #ffc021;
+}
+
+.toastCus--error {
+  border-color: #ff623d;
+}
+
+.toastCus--error .toastCus__icon {
+  color: #ff623d;
+}
+
+.toastCus + .toastCus {
+  margin-top: 24px;
+}
+
+.toastCus__icon {
+  font-size: 24px;
+}
+
+.toastCus__icon,
+.toastCus__close {
+  padding: 0 16px;
+}
+
+.toastCus__body {
+  flex-grow: 1;
+}
+
+.toastCus__title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.toastCus__msg {
+  font-size: 14px;
+  color: #888;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+.toastCus__close {
+  font-size: 20px;
+  color: rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+/* form dang ki */
+.form-group.invalid .form-control {
+  border-color: #f33a58;
+}
+
+.form-group.invalid .form-message {
+  color: #f33a58;
+}
+.form-label {
+  font-weight: 500;
+  padding-bottom: 6px;
+  line-height: 18px;
+  font-size: 14px;
+}
+.form-message {
+  font-size: 12px;
+  line-height: 16px;
+  padding: 4px 0 0;
+}

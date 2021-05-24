@@ -1,309 +1,352 @@
-extends ../template/layoutStaffOrigin.pug
+extends ../template/layoutStaff.pug
 block css 
     link(rel='stylesheet' href='/css/staff.css')
-    style.
-        .btn{
-            width: 100%;
-        }
-        .tabs {
-            font-family: "Poppins", sans-serif;
-            display: flex;
-            position: relative;
-            
-        }
-        .tabs .line {
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 0;
-            height: 6px;
-            border-radius: 15px;
-            background-color: #c23564;
-            transition: all 0.2s ease;
-        }
-        .tab-item {
-            min-width: 80px;
-            padding: 16px 20px 11px 20px;
-            font-size: 20px;
-            text-align: center;
-            color: #c23564;
-            background-color: #fff;
-            border-top-left-radius: 5px;
-            border-top-right-radius: 5px;
-            border-bottom: 5px solid transparent;
-            opacity: 0.6;
-            cursor: pointer;
-            transition: all 0.5s ease;
-        }
-        .tab-icon {
-            font-size: 24px;
-            width: 32px;
-            position: relative;
-            top: 2px;
-        }
-        .tab-item:hover {
-            opacity: 1;
-            background-color: rgba(194, 53, 100, 0.05);
-            border-color: rgba(194, 53, 100, 0.1);
-        }
-        .tab-item.active {
-            opacity: 1;
-        }
-        .tab-content {
-            padding: 28px 0;
-        }
-        .tab-pane {
-            color: #333;
-            display: none;
-        }
-        .tab-pane.active {
-            display: block;
-        }
-        .tab-pane h2 {
-            font-size: 24px;
-            margin-bottom: 8px;
-        }
+    
       
 block content 
-    .container 
-        if errors   
-            .tb
-                each err in errors
-                    .tbC
-                        .alert.alert-danger= err
-        if success   
-            .tb
-                each succ in success
-                    .tbC
-                        .alert.alert-success= succ
-    
     .container
-        .content.my-5
-            .row.h3 Chức năng chung
-            .row.my-5 
-                .col-3 
-                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalTHD') Thêm hóa đơn
-                .col-3 
-                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalTKH') Thêm khách hàng
-                .col-3 
-                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalTCHD') Tra cứu thông tin hóa đơn
-                .col-3 
-                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalTCKH') Tra cứu thông tin khách hàng
-                .col-3 
-                    a.btn.btn-primary.my-3( href='/staff/work/dt' ) Khách đặt trước
-                .col-3 
-                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalTKDT') Thống kê doanh thu
-            .row.h3 Chức năng quản trị
-            .row.my-5 
-                .col-3 
-                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalXHD') Xóa hóa đơn
-                .col-3 
-                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalTNV') Thêm nhân viên
-                .col-3 
-                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalCSNV') Chỉnh sửa nhân viên
-                .col-3 
-                    a.btn.btn-primary.my-3(type='button' data-toggle='modal' data-target='#myModalDMK') Đổi mật khẩu admin
+        .row.mt-5
+            
+            .col-2 
+                a.w-100.btn.btn-primary.my-3(type='button' href='#dialogTHD' style='margin-top:0 !important' purpose='dialog') Thêm hóa đơn
+            
+                a.w-100.btn.btn-primary.my-3(type='button' href='#dialogTKH' purpose='dialog' ) Thêm khách hàng
+            
+                a.w-100.btn.btn-primary.my-3(type='button' href='#dialogTCHD' purpose='dialog') Tra cứu hóa đơn
+            
+                a.w-100.btn.btn-primary.my-3(type='button' href='#dialogTCKH' purpose='dialog') Tra cứu  khách hàng
+            
+                a.w-100.btn.btn-primary.my-3(type='button' id='btnDT' ) Hóa đơn đặt trước
+            
+                a.w-100.btn.btn-primary.my-3(type='button' href='#dialogTKDT' purpose='dialog') Thống kê doanh thu
+
+                if typeOfStaff=='admin'
+                    a.w-100.btn.btn-primary.my-3(type='button' href='#dialogXHD' purpose='dialog') Xóa hóa đơn
+
+                    a.w-100.btn.btn-primary.my-3(type='button' href='#dialogTNV' purpose='dialog') Thêm nhân viên   
+
+                    a.w-100.btn.btn-primary.my-3(type='button' href='#dialogTCNV' purpose='dialog') Tra cứu nhân viên    
+            
+                a.w-100.btn.btn-primary.my-3(type='button' href='#dialogDX' purpose='dialog') Đăng xuất
+            .col-8   
+                .thd.base
+                    .content
+
+                .tkh.base
+                    .content
+                .tchd.base
+                    .content
+                .tckh.base
+                    .content
+                .hddt.base
+                    .content
+                .tkhd.base
+                    .content
+            .col-2
                 
-                
-    // The Modal 
-    #myModalTHD.modal
-        .modal-dialog.bg-light
-            .modal-content
-                // Modal Header
-                .modal-header
-                    h4.modal-title Thêm hóa đơn cho khách hàng:
-                    button.close(type='button' data-dismiss='modal') &times;
-                // Modal body
-                .modal-body
-                    form(action='/staff/work/thd' method='POST')
-                        .form-group
-                            label(for='value') Thông tin khách hàng:
-                            input#value.form-control(name='value' type='text' placeholder='' rules='required') 
-                        .form-group
-                            label.form-label(for='filter') Tìm kiếm theo :
-                            select#filter.form-control(name='filter')
-                                option(value='MKH' selected) MKH
-                                option(value='SDT' ) SDT   
-                        button.btn.btn-primary(type='submit') Xác nhận
-    #myModalTKH.modal
-        .modal-dialog.bg-light
-            .modal-content
-                // Modal Header
-                .modal-header
-                    h4.modal-title Nhập số điện thoại khách:
-                    button.close(type='button' data-dismiss='modal') &times;
-                // Modal body
-                .modal-body
-                    form(action='/staff/work/tkh' method='POST')
-                        .form-group
-                            label(for='sdt') Số điện thoại:
-                            input#sdt.form-control(type='text' name='sdt')
-                        button.btn.btn-primary(type='submit') Xác nhận
-    #myModalTCHD.modal
-        .modal-dialog.bg-light
-            .modal-content
-                // Modal Header
-                .modal-header
-                    h4.modal-title Nhập mã hóa đơn cần tra cứu
-                    button.close(type='button' data-dismiss='modal') &times;
-                // Modal body
-                .modal-body
-                    form(action='/staff/work/tchd' method='post')
-                        .form-group
-                            label(for='mhd') Mã hóa đơn:
-                            input#mhd.form-control(type='text' name='mhd')
-                        button.btn.btn-primary(type='submit') Xác nhận
-    #myModalTCKH.modal
-        .modal-dialog.bg-light
-            .modal-content
-                // Modal Header
-                .modal-header
-                    h4.modal-title Nhập thông tin khách hàng cần tra cứu:
-                    button.close(type='button' data-dismiss='modal') &times;
-                // Modal body
-                .modal-body
-                    form(action='/staff/work/tckh' method='get')
-                        .form-group
-                            label(for='value') Thông tin khách hàng:
-                            input#value.form-control(name='value' type='text' placeholder='' rules='required') 
-                        .form-group
-                            label.form-label(for='filter') Tìm kiếm theo :
-                            select#filter.form-control(name='filter')
-                                option(value='MKH' selected) MKH
-                                option(value='SDT' ) SDT   
-                        button.btn.btn-primary(type='submit') Xác nhận
-    #myModalTKDT.modal
-        .modal-dialog.bg-light
-            .modal-content
-                // Modal Header
-                .modal-header
-                    h4.modal-title(style='color:#C23564') THỐNG KÊ DOANH THU
-                    button.close(type='button' data-dismiss='modal') &times;
-                // Modal body
-                .modal-body
-                    div
-                        // Tab items
-                        .tabs
-                            .tab-item.active Ngày
-                            .tab-item Tháng
-                            .tab-item Năm
-                            .tab-item Giữa hai ngày
-                            .line
-                        // Tab content
-                        .tab-content
-                            .tab-pane.active
-                                form(action='/staff/work/tkNgay' method='get')
-                                    .form-group
-                                        input.w-100#day(type='date' name='day' required)
-                                    button.btn.btn-primary(type='submit') Thống kê
-                            .tab-pane
-                                form(action='/staff/work/tkThang' method='get')
-                                    .form-group    
-                                        input#month.w-100(type='month' name='month' required)
-                                    button.btn.btn-primary(type='submit') Thống kê
-                            .tab-pane
-                                form(action='/staff/work/tkNam' method='get' required)
-                                    .form-group    
-                                        input#year.w-100(type='text' name='year' required)
-                                    button.btn.btn-primary(type='submit') Thống kê
-                            .tab-pane
-                                form(action='/staff/work/tkGiua' method='get')
-                                    .row 
-                                        .col-6
-                                            .form-group
-                                                label.font-weight-bold(for='day') Từ ngày
-                                                input.w-100#day1(type='date' name='day1' required)
-                                        .col-6
-                                            .form-group
-                                                label.font-weight-bold(for='day') Đến ngày
-                                                input.w-100#day2(type='date' name='day2' required)
-                                    button.btn.btn-primary(type='submit') Thống kê 
-                        script(src='/js/app.js')
-                   
-  
-    // The Modal addmin
-    // The Modal addmin
-    #myModalXHD.modal
-        .modal-dialog.bg-light
-            .modal-content
-                // Modal Header
-                .modal-header
-                    h4.modal-title Nhập mã hóa đơn cần xóa
-                    button.close(type='button' data-dismiss='modal') &times;
-                // Modal body
-                .modal-body
-                    form(action='/staff/work/xhd' method='post')
-                        .form-group
-                            label(for='mhd') Mã hóa đơn:
-                            input#mhd.form-control(type='text' name='mhd')
-                        .form-group
-                            label(for='password') Mật khẩu:
-                            input#password.form-control(type='password' name='password')
-                        button.btn.btn-primary(type='submit') Xác nhận
-    #myModalTNV.modal
-        .modal-dialog.bg-light
-            .modal-content
-                // Modal Header
-                .modal-header
-                    h4.modal-title Nhập mật khẩu
-                    button.close(type='button' data-dismiss='modal') &times;
-                // Modal body
-                .modal-body
-                    form(action='/staff/work/tnv' method='post')
-                        .form-group
-                            label(for='password') Mật khẩu:
-                            input#password.form-control(type='password' name='password')
-                        button.btn.btn-primary(type='submit') Xác nhận
-    #myModalCSNV.modal
-        .modal-dialog.bg-light
-            .modal-content
-                // Modal Header
-                .modal-header
-                    h4.modal-title Nhập thông tin nhân viên cần chỉnh sửa
-                    button.close(type='button' data-dismiss='modal') &times;
-                // Modal body
-                .modal-body
-                    form(action='/staff/work/csnv' method='post')
-                        .form-group
-                            label(for='value') Thông tin nhân viên:
-                            input#value.form-control(name='value' type='text' placeholder='' rules='required') 
-                        .form-group
-                            label.form-label(for='filter') Tìm kiếm theo :
-                            select#filter.form-control(name='filter')
-                                option(value='MNV' selected) MNV
-                                option(value='SDT' ) SDT   
-                        .form-group
-                            label(for='password') Mật khẩu:
-                            input#password.form-control(type='password' name='password')
-                        button.btn.btn-primary(type='submit') Xác nhận
-    #myModalDMK.modal
-        .modal-dialog.bg-light
-            .modal-content
-                // Modal Header
-                .modal-header
-                    h4.modal-title Đổi mật khẩu Admin
-                    button.close(type='button' data-dismiss='modal') &times;
-                // Modal body
-                .modal-body
-                    form#dmk(action='/staff/work/dmk' method='post')
-                        .form-group
-                            label(for='newPassword') Mật khẩu mới:
-                            input#newPassword.form-control(type='password' name='newPassword')
-                        .form-group
-                            label(for='confirm_newPassword') Nhập lại mật khẩu mới:
-                            input#confirm_newPassword.form-control(type='password' name='confirm_newPassword')
-                        .form-group
-                            label(for='password') Mật khẩu:
-                            input#password.form-control(type='password' name='password')
-                        button.btn.btn-primary(type='submit') Xác nhận     
+                div#toastCus
+
+            
+                    
+    #dialogTHD.dialog.overlay 
+        a.overlay-close(href='#') 
+        .dialog_body 
+            a.dialog-close(href='#') &times;
+            h4.mb-3.modal-title Thêm hóa đơn cho khách hàng
+            .form( autocomplete="off")
+                .mb-3
+                    label(for='value') Thông tin khách hàng:
+                    input#value.form-control(list='datalistOptionsTHD' rules='required' name='value' autocomplete="off")
+                    datalist#datalistOptionsTHD        
+                .mb-3
+                    label.form-label(for='filter') Tìm kiếm theo :
+                    select#filter.form-control(name='filter')
+                        option(value='MA' selected) MKH
+                        option(value='SDT' ) SDT 
+                .d-flex.justify-content-between  
+                    a#dialogTHD_XN.btn.btn-primary( href='#') Xác nhận
+                    a#dialogTHD_NP.btn.btn-warning.text-decoration-line-through( href='#')  SDT
+                    a#dialogTHD_Huy.btn.btn-danger( href='#')  Huy
+    #dialogDX.dialog.overlay 
+        a.overlay-close(href='#') 
+        .dialog_body 
+            a.dialog-close(href='#') &times;
+            h4.mb-3.modal-title Bạn muốn đăng xuất?
+            .d-flex.justify-content-between  
+                a#dialogDX_XN.btn.btn-primary( href='/staff/login') Xác nhận
+                a#dialogDX_Huy.btn.btn-danger( href='#')  Hủy
+    #dialogTCKH.dialog.overlay 
+        a.overlay-close(href='#') 
+        .dialog_body 
+            a.dialog-close(href='#') &times;
+            h4.mb-3.modal-title Tra cứu thông tin khách hàng
+            .form.d-flex( autocomplete="off")
+                .mb-3
+                    label(for='value') Thông tin khách hàng
+                    input#value.form-control(list='datalistOptionsTCKH' rules='required' name='value' autocomplete="off")
+                    datalist#datalistOptionsTCKH       
+                .mb-3.mx-5
+                    label(for='filter') Tìm kiếm theo 
+                    select#filter.form-control(name='filter')
+                        option(value='MA' selected) MKH
+                        option(value='SDT' ) SDT 
+                #dialogTCKH_XN.btn.btn-primary(href='#' style='height:38px;margin-top:23px;margin-right:20px') Xác nhận
+                a#dialogTCKH_Huy.btn.btn-danger(href='#' style='height:38px;margin-top:23px')  Hủy
+            hr
+            #data
+    #dialogTCNV.dialog.overlay 
+        a.overlay-close(href='#') 
+        .dialog_body 
+            a.dialog-close(href='#') &times;
+            h4.my-1.modal-title Tra cứu thông tin nhân viên
+            .formFilter.d-flex( autocomplete="off")
+                .mb-1
+                    label(for='value') Thông tin nhân viên
+                    input#value.form-control(list='datalistOptionsTCNV' rules='required' name='value' autocomplete="off")
+                    datalist#datalistOptionsTCNV     
+                .mb-1.mx-5
+                    label(for='filter') Tìm kiếm theo 
+                    select#filter.form-control(name='filter')
+                        option(value='MA' selected) MNV
+                        option(value='SDT' ) SDT 
+                button#dialogTCNV_XN.btn.btn-primary(href='#' style='height:38px;margin-top:23px;margin-right:20px') Xác nhận
+                a#dialogTCNV_Huy.btn.btn-danger(href='#' style='height:38px;margin-top:23px')  Hủy
+            hr.my-0
+            form#formTCNV.form(action='/staff/work/addStaff' method='post' style='display:none')
+                .row
+                    .col-6 
+                        .mb-3.form-group
+                            label.form-label(for='id') Mã nhân viên
+                            input#id.form-control(name='id' type='text' placeholder='VD: LongPro123' rules='required|childMaxLength:7|maxLength:30' disabled )
+                            span.form-message
+                    .col-6 
+                        .mb-3.form-group
+                            label.form-label(for='fullname') Tên đầy đủ
+                            input#fullname.form-control(name='fullname' type='text' placeholder='VD: Long Nguyen' rules='required|childMaxLength:7|maxLength:30' )
+                            span.form-message
+                    .col-6 
+                        .mb-3.form-group
+                            label.form-label(for='account') Tài khoản
+                            input#account.form-control(name='account' type='text' placeholder='VD: Long Nguyen' rules='required|minLength:6|maxLength:12' disabled )
+                            span.form-message
+                    .col-6 
+                        .mb-3.form-group
+                            label.form-label(for='phone') Số điện thoại
+                            input#phone.form-control(name='phone' type='text' placeholder='VD: 0398.291.602' rules='required|phone'  )
+                            span.form-message
+                    .col-6 
+                        .mb-3.form-group
+                            label.form-label(for='gender' class='w-100') Giới tính
+                            select#gender(name='gender' class='w-100 p-1' )
+                                option(value='Nam' ) Nam
+                                option(value='Nữ') Nữ
+                                option(value='Khác') Khác
+                    .col-6 
+                        .mb-3.form-group
+                            label.form-label(for='email') Email:
+                            input#email.form-control(name='email' type='text' placeholder='VD: Long@gmail.com' rules='required|email' )
+                            span.form-message
+                    .col-6 
+                        .mb-3.form-group
+                            label.form-label(for='identityCard') Chứng minh thư:
+                            input#identityCard.form-control(name='identityCard' type='text' placeholder='VD: 197401456' rules='required|digits:9'  )
+                            span.form-message
+                    .col-6 
+                        .mb-3.form-group
+                            label.form-label(for='birth') Ngày sinh:
+                            input#birth.form-control(name='birth' type='date' placeholder='' rules='required'  )
+                            span.form-message
+                    .col-6 
+                        .mb-3.form-group
+                            label.form-label(for='type' class='w-100') Loại nhân viên
+                            select#type(name='type' class='w-100 p-1' )
+                                option(value='nv' ) Nhân viên 
+                                option(value='admin') Nhân viên Admin  
+                    .col-6 
+                        .mb-1.form-group
+                            label.form-label(for='isWork') Trạng thái:
+                            input#isWork.form-control(name='isWork' type='text'  rules='required'  disabled value='Đang làm việc' ) 
+                            span.form-message                
+                    .col-6
+                        .mb-3.form-group
+                            label.form-label(for='address') Địa chỉ:
+                            input#address.form-control(name='address' type='text' placeholder='VD: 97 Man thiện' rules='required|maxLength:50'  )
+                            span.form-message
+                div.d-flex.justify-content-between
+                    button#btnEdit.btn.btn-primary( permitSub='false' type='submit'  ) chỉnh sửa
+                    button#btnDel.btn.btn-danger() Xóa
+    #dialogXHD.dialog.overlay 
+        a.overlay-close(href='#') 
+        .dialog_body 
+            a.dialog-close(href='#') &times;
+            h4.mb-3.modal-title Xóa hóa đơn
+            .form.d-flex( autocomplete="off")
+                .mb-3
+                    label(for='value') Mã hóa đơn
+                    input#value.form-control(list='datalistOptionsXHD' rules='required' name='value' autocomplete="off")
+                    datalist#datalistOptionsXHD       
+                #dialogXHD_XN.btn.btn-primary(href='#' style='height:38px;margin-top:23px;margin-right:20px;margin-left:20px') Xác nhận
+                a#dialogXHD_Huy.btn.btn-danger(href='#' style='height:38px;margin-top:23px')  Hủy
+            hr
+            #data
+    #dialogTKH.dialog.overlay 
+        a.overlay-close(href='#') 
+        .dialog_body 
+            a.dialog-close(href='#') &times;
+            h4.mb-3.modal-title Thêm khách hàng mới
+            form#formTKH.form(action='/staff/work/addGuest' method='post')
+                .mb-3.form-group
+                    label.form-label(for='fullname') Tên đầy đủ
+                    input#fullname.form-control(name='fullname' type='text' placeholder='VD: Long Nguyen' rules='required|childMaxLength:7|maxLength:30' )
+                    span.form-message
+                .mb-3.form-group
+                    label.form-label(for='phone') Số điện thoại
+                    input#phone.form-control(name='phone' type='text' placeholder='VD: 0398.291.602' rules='required|phone'  )
+                    span.form-message
+                .mb-3.form-group
+                    label.form-label(for='gender' class='w-100') Giới tính
+                    select#gender(name='gender' class='w-100 p-1' )
+                        option(value='Nam' ) Nam
+                        option(value='Nữ') Nữ
+                        option(value='Khác') Khác
+                div.d-flex.justify-content-between
+                    button.btn.btn-primary( permitSub='false' type='submit'  ) Đăng kí
+            a#btnHuy.btn.btn-danger(style='position:absolute;bottom:16px;right:16px' href='#'  ) Hủy
+    #dialogTHDT.dialog.overlay 
+        a.overlay-close(href='#') 
+        .dialog_body 
+            a.dialog-close(href='#') &times;
+            h4.mb-3.modal-title Thực hiện hóa đơn đặt trước
+            #formTHDT.form(action='/staff/work/addGuest' method='post')
+                #orderBill
+                div.d-flex.justify-content-between
+                    button#btnTHD.btn.btn-primary( permitSub='false' type='submit' disabled ) Thêm 
+                    a#btnHuy.btn.btn-danger(href='#'  ) Hủy
+
+    #dialogTCHD.dialog.overlay 
+        a.overlay-close(href='#') 
+        .dialog_body 
+            a.dialog-close(href='#') &times;
+            h4.mb-3.modal-title Tra cứu hóa đơn
+            .form( autocomplete="off")
+                .mb-3
+                    label(for='value') Thông tin hóa đơn
+                    input#value.form-control(list='datalistOptionsTCHD' rules='required' name='value' autocomplete="off")
+                    datalist#datalistOptionsTCHD
+                .d-flex.justify-content-between  
+                    a#dialogTHD_XN.btn.btn-primary( href='#') Xác nhận
+                    a#dialogTHD_Huy.btn.btn-danger( href='#')  Hủy
+    #dialogTKDT.dialog.overlay 
+        a.overlay-close(href='#') 
+        .dialog_body 
+            a.dialog-close(href='#') &times;
+            h4.mb-3.modal-title Thống kê doanh thu
+            div 
+                // Tab items
+                .tabs
+                    .tab-item.active 
+                        button.btn.btn-outline-success.me-3 Ngày
+                    .tab-item 
+                        button.btn.btn-outline-success.me-3 tháng
+                    .tab-item 
+                        button.btn.btn-outline-success.me-3 Năm
+                    .tab-item 
+                        button.btn.btn-outline-success Giữa 
+                    
+                // Tab content
+                .tab-content.mt-4
+                    .tab-pane.active
+                        input.w-100#day(type='date' name='day' required)
+                        
+                    .tab-pane
+                        input#month.w-100(type='month' name='month' required)
+                        
+                    .tab-pane
+                        input#year.w-100(type='text' name='year' required)
+                        
+                    .tab-pane
+                        .row(style='width:323px')
+                            .col-6
+                                label.font-weight-bold(for='day') Từ ngày
+                                input.w-100#day1(type='date' name='day1' required)
+                            .col-6
+                                label.font-weight-bold(for='day') Đến ngày
+                                input.w-100#day2(type='date' name='day2' required)
+                .d-flex.justify-content-between.mt-3
+                    a#dialogTKDT_XN.btn.btn-primary( href='#') Xác nhận
+                    a#dialogTKHT_Huy.btn.btn-danger( href='#')  Hủy    
+    #dialogTNV.dialog.overlay 
+        a.overlay-close(href='#') 
+        .dialog_body(style='width:500px') 
+            a.dialog-close(href='#') &times;
+            h4.mb-3.modal-title Thêm nhân viên mới
+            form#formTNV.form(action='/staff/work/addStaff' method='post')
+                .row
+                    .col-6 
+                        .mb-1.form-group
+                            label.form-label(for='fullname') Tên đầy đủ
+                            input#fullname.form-control(name='fullname' type='text' placeholder='VD: Long Nguyen' rules='required|childMaxLength:7|maxLength:30' )
+                            span.form-message
+                    .col-6 
+                        .mb-1.form-group
+                            label.form-label(for='account') Tài khoản
+                            input#account.form-control(name='account' type='text' placeholder='VD: Long Nguyen' rules='required|minLength:6|maxLength:12' )
+                            span.form-message
+                    .col-6 
+                        .mb-1.form-group
+                            label.form-label(for='password') Mật khẩu
+                            input#password.form-control(name='password' type='password' rules='required|minLength:6|maxLength:12' )
+                            span.form-message
+                    .col-6 
+                        .mb-1.form-group
+                            label.form-label(for='rePassword') Nhập lại mật khẩu
+                            input#rePassword.form-control(name='rePassword' type='password'  rules='required|minLength:6|maxLength:12|equal:#password' )
+                            span.form-message
+                    .col-6 
+                        .mb-1.form-group
+                            label.form-label(for='phone') Số điện thoại
+                            input#phone.form-control(name='phone' type='text' placeholder='VD: 0398.291.602' rules='required|phone'  )
+                            span.form-message
+                    .col-6 
+                        .mb-1.form-group
+                            label.form-label(for='gender' class='w-100') Giới tính
+                            select#gender(name='gender' class='w-100 p-1' )
+                                option(value='Nam' ) Nam
+                                option(value='Nữ') Nữ
+                                option(value='Khác') Khác
+                    .col-6 
+                        .mb-1.form-group
+                            label.form-label(for='email') Email:
+                            input#email.form-control(name='email' type='text' placeholder='VD: Long@gmail.com' rules='required|email' )
+                            span.form-message
+                    .col-6 
+                        .mb-1.form-group
+                            label.form-label(for='identityCard') Chứng minh thư:
+                            input#identityCard.form-control(name='identityCard' type='text' placeholder='VD: 197401456' rules='required|digits:9'  )
+                            span.form-message
+                    .col-6 
+                        .mb-1.form-group
+                            label.form-label(for='birth') Ngày sinh:
+                            input#birth.form-control(name='birth' type='date' placeholder='' rules='required'  )
+                            span.form-message
+                    .col-6 
+                        .mb-1.form-group
+                            label.form-label(for='type' class='w-100') Loại nhân viên
+                            select#type(name='type' class='w-100 p-1' )
+                                option(value='nv' ) Nhân viên 
+                                option(value='admin') Nhân viên Admin  
+                    .col-12
+                        .mb-1.form-group
+                            label.form-label(for='address') Địa chỉ:
+                            input#address.form-control(name='address' type='text' placeholder='VD: 97 Man thiện' rules='required|maxLength:50'  )
+                            span.form-message
+                div.d-flex.justify-content-between
+                    button.btn.btn-primary( permitSub='false' type='submit'  ) Đăng kí
+            a#btnHuy.btn.btn-danger(style='position:absolute;bottom:16px;right:16px' href='#'  ) Hủy    
+    script(src='/js/app.js')
+
     
 
-    script.
-      let toast=document.querySelector(".tb");
-      let toastChild=document.querySelector(".tbC");
-      setTimeout(function() {
-      toast.removeChild(toastChild)
-      },3000);
                 
     
 
