@@ -477,6 +477,26 @@ module.exports.removeOnlineBill  = async (req, res, next)=> {
 
   
 };
+module.exports.removeOnlineDelayBill  = async (req, res, next)=> {
+	console.log(req.body);
+	let { data} = req.body;
+  var d = new Date().getTime();
+  d -= parseInt(data, 10) * 60 * 60;
+  let kq = 0;
+  await sql.connect(config)
+  let result=await sql.query`  select * from dattruoc where TRANGTHAI=0`;
+  let dt = result.recordset;
+  for (let item of dt) {
+    let t = new Date(item.THOIGIAN + ":00Z");
+    if (t.getTime() <= d) {
+      kq++;
+      await sql.query`UPDATE DATTRUOC SET TRANGTHAI=1 WHERE MA=${item.MA}`; 
+    }
+  }
+
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.json({res:kq});
+};
 module.exports.completeOnlineBill  = async (req, res, next)=> {
 	
 	console.log(req.body);

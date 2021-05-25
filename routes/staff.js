@@ -39,6 +39,7 @@ router.post('/api/removeStaff', staffController.removeStaff)
 
 router.post('/api/removeOnlineBill', staffController.removeOnlineBill)
 router.post('/api/findOnlineBill',auth.requireAuthStaff, staffController.findOnlineBill)
+router.post('/api/removeOnlineDelayBill',auth.requireAuthStaff, staffController.removeOnlineDelayBill)
 router.post('/api/completeOnlineBill',auth.requireAuthStaff, staffController.completeOnlineBill)
 
 

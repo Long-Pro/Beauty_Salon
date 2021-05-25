@@ -29,6 +29,7 @@ let apiPostRemoveStaff='http://localhost:3000/staff/api/removeStaff'            
 let apiPostDate='http://localhost:3000/staff/api/statistic'                            // post {}
 
 let apiPostRemoveOnlineBill='http://localhost:3000/staff/api/removeOnlineBill'         // {}
+let apiPostRemoveOnlineDelayBill='http://localhost:3000/staff/api/removeOnlineDelayBill'    // {}
 let apiPostCompleteOnlineBill='http://localhost:3000/staff/api/completeOnlineBill'     // {}
 let apiPostFindOnlineBill='http://localhost:3000/staff/api/findOnlineBill'             // {}
 
@@ -583,8 +584,8 @@ btnDT.addEventListener('click',async (e)=>{
     resetBase()
     let content=document.querySelector('.hddt .content')
     let kq=`
-        <div class='d-flex '>
-            <div class='mx-auto' style='width:260px'>
+        <div class='d-flex justify-content-between' >
+            <div class='' style='width:260px'>
                 <div class='bg-info' style='line-height: 38px;font-size: 20px;'>
                     Lọc hóa đơn đặt trước theo
                 </div>
@@ -593,6 +594,12 @@ btnDT.addEventListener('click',async (e)=>{
                     <option value='dh' >Hóa đơn đặt trước đã hủy</option>
                     <option value='ht' >Hóa đơn đặt trước hoàn thành</option>
                 </select>
+            </div>
+            <div class='d-flex flex-column p-1' style='border:1px red solid'>
+                <div >
+                    <label for='hourDelay'>Xóa hóa đơn đặt trước quá hạn </label> <input  style='width:50px'type="number" id="quantity" name="quantity" value='3'> giờ
+                </div>
+                <div id='btnRemoveDelay' class='btn btn-danger mx-auto'>Xóa</div>
             </div>
         </div>
         <div id='listBill' class='mt-5'></div>
@@ -772,13 +779,19 @@ btnDT.addEventListener('click',async (e)=>{
         listBill.innerHTML=kq2
 
 
+        
+        if(filter=='dd'){
+            XNDT()
+            HuyDT()
+            RemoveDelay()
+        }
+        
+        
+    }
+    async function XNDT(){
         let btnXNDTs=listBill.querySelectorAll('#btnXNDT')
-        let btnHuyDTs=listBill.querySelectorAll('#btnHuyDT')
-        console.log(btnXNDTs)
-        console.log(btnHuyDTs)
-
         if(btnXNDTs){
-            for(let item of btnXNDTs) item.addEventListener('click',async ()=>{
+            for(let item of btnXNDTs) item.onclick=async ()=>{
                 let id=item.dataset.id
                 let dialogTHDT=document.querySelector('#dialogTHDT')
                 let orderBill=dialogTHDT.querySelector('#orderBill')
@@ -875,7 +888,7 @@ btnDT.addEventListener('click',async (e)=>{
                         btnTHD.removeAttribute('disabled')
                     }
                 })
-                btnTHD.addEventListener('click',async (e)=>{
+                btnTHD.onclick=async (e)=>{
                     let data={}
                     data.doServices=[]
                     data.time=orderTime.value
@@ -885,10 +898,6 @@ btnDT.addEventListener('click',async (e)=>{
                     data.plusMark=parseInt(billInfo.DIEMTICHLUY)
                     let select=dialogTHDT.querySelectorAll('td select')
                     select=Array.from(select)
-                    for(let item of select){
-                        let t=getParent(item,'.item')
-                        console.log(t.dataset)
-                    }
                     for(let item of select){
                         console.log(item)
                         let t={}
@@ -910,13 +919,9 @@ btnDT.addEventListener('click',async (e)=>{
                         }
                     })
                     res=await res.text()
-                    toastCus({
-                        title: "Thành công!",
-                        message: `${res}`,
-                        type: "success",
-                        duration: 3000
-                      });
+                    showSuccessToast(`${res}`)
                     console.log(res)
+                    
                     let completeBill=await fetch(apiPostCompleteOnlineBill,{
                         method: 'POST', 
                         body: JSON.stringify({data:id}), 
@@ -926,16 +931,16 @@ btnDT.addEventListener('click',async (e)=>{
                     })
                     completeBill=await completeBill.json()
                     btnTHD.setAttribute('disabled','true')
+                    let hdHuy=listBill.querySelector(`#${id}`)
+                    console.log('9999999999999999999',hdHuy)
+                    if(hdHuy) hdHuy.remove()
                                 
-                })
-                
-
-
-
-
-
-            })
+                }
+            }
         }
+    }
+    async function HuyDT(){
+        let btnHuyDTs=listBill.querySelectorAll('#btnHuyDT')
         if(btnHuyDTs){
             for(let item of btnHuyDTs) item.addEventListener('click',async ()=>{
                 let id=item.dataset.id
@@ -955,7 +960,31 @@ btnDT.addEventListener('click',async (e)=>{
 
             })
         }
+
     }
+    async function RemoveDelay(){
+        
+        btnRemoveDelay.onclick=async(e)=>{
+            let btnRemoveDelay=content.querySelector('#btnRemoveDelay')
+            let data=content.querySelector('#quantity').value
+            console.log(data)
+            let res=await fetch(apiPostRemoveOnlineDelayBill,{
+                method: 'POST', 
+                body: JSON.stringify({data}), 
+                headers:{
+                    'Content-Type': 'application/json'
+                }
+            })
+            res=await res.json()
+            if(res.res==0){
+                showErrorToast(`Không có hóa đơn đặt trước nào quá hạn ${data} giờ`)
+                return
+            }
+            showSuccessToast(`Đã xóa ${res.res} hóa đơn đặt trước quá hạn`)
+        }
+    }
+    
+
 
     let select=content.querySelector('select')
     let filter=select.value
