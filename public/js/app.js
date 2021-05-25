@@ -1200,7 +1200,7 @@ dialogTCNV_btn.addEventListener('click',async (e)=>{
     }else{
         btnDel.removeAttribute('disabled')
     }
-    btnDel.addEventListener('click',async(e)=>{
+    btnDel.onclick=async(e)=>{
         console.log('123')
         e.preventDefault()
         
@@ -1219,7 +1219,7 @@ dialogTCNV_btn.addEventListener('click',async (e)=>{
             isWork.value='Đã nghĩ việc'
             
         }
-    })
+    }
 
     validator('#formTCNV',{
         run:async ()=>{
