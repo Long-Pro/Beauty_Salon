@@ -6,6 +6,7 @@ const auth=require('../middleWare/auth')
 
 router.get('/login', staffController.login)
 router.post('/login', staffController.login2)
+router.get('/work',auth.requireAuthStaff, staffController.work)
 
 ///////////////////////////////////////////////////////////////////
 router.get('/api/getServices', staffController.getServices)
@@ -50,68 +51,6 @@ router.post('/api/completeOnlineBill',auth.requireAuthStaff, staffController.com
 
 
 ///////////////////////////////////////////////////////////////
-
-
-router.get('/work',auth.requireAuthStaff, staffController.work)
-
-
-
-// router.get('/work/addBill',auth.requireAuthStaff, staffController.addBill)
-// router.post('/work/addBill',auth.requireAuthStaff, staffController.addBill2)
-
-router.get('/work/addStaff',auth.requireAuthStaff, staffController.addStaff)
-router.post('/work/addStaff',auth.requireAuthStaff, staffController.addStaff2)
-
-router.get('/work/deleteStaff',auth.requireAuthStaff,staffController.deleteStaff)
-
-
-
-
-
-
-
-router.post('/work/thd',staffController.thd)
-router.post('/work/tkh',staffController.tkh)
-router.post('/work/tchd',staffController.tchd)
-
-router.get('/work/tckh',staffController.tckh)
-router.post('/work/tckh',staffController.tckh2)
-
-router.get('/work/dt',staffController.dt)
-router.get('/work/deleteOrder',staffController.deleteOrder)
-router.get('/work/deleteAllOrder',staffController.deleteAllOrder)
-router.get('/work/completeOrder',staffController.completeOrder)
-router.post('/work/completeOrder',staffController.completeOrder2)
-
-
-router.post('/work/xhd',staffController.xhd)
-router.post('/work/tnv',staffController.tnv)
-router.post('/work/csnv',staffController.csnv)
-router.post('/work/csnv2',staffController.csnv2)
-router.post('/work/dmk',staffController.dmk)
-
-router.get('/work/tkNgay',staffController.tkNgay)
-router.get('/work/tkThang',staffController.tkThang)
-router.get('/work/tkNam',staffController.tkNam)
-router.get('/work/tkGiua',staffController.tkGiua)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
