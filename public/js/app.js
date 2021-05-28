@@ -1136,7 +1136,7 @@ dialogTCKH_btn.addEventListener('click',async (e)=>{
 })
 //                                     dialog tra cứu nhân vien                 --------------------------------------------------
 let btnDialogTCNV=document.querySelector('a[href="#dialogTCNV"][purpose="dialog"]')
-btnDialogTCNV.onclick= ()=>{
+if(btnDialogTCNV)    btnDialogTCNV.onclick= ()=>{
     createDatalisttUserMainInfo(`#dialogTCNV #datalistOptionsTCNV`,apiGetStaffMainInfo)
 }
 let dialogTCNV=document.getElementById('dialogTCNV')
@@ -1538,7 +1538,7 @@ dialogTCHD_btn.addEventListener('click',async (e)=>{
 })
 //                                      dialog xoa hoa don            -----------------------------------------
 let btnDialogXHD=document.querySelector('a[href="#dialogXHD"][purpose="dialog"]')
-btnDialogXHD.onclick= ()=>{
+if(btnDialogXHD)    btnDialogXHD.onclick= ()=>{
     createDatalisttUserMainInfo(`#dialogXHD #datalistOptionsXHD`,apiGetBillMainInfo)
 }
 let dialogXHD=document.getElementById('dialogXHD')
