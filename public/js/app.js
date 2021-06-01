@@ -1441,7 +1441,7 @@ if(btnDialogTNV)    btnDialogTNV.addEventListener('click',async()=>{
             res=await res.json()
             console.log(res)
             if(res.res){
-                showSuccessToast(`Thêm khách hàng ${phone.value} thành công`)
+                showSuccessToast(`Thêm nhân viên ${phone.value} thành công`)
                 resetInput(...inputs)
                 
             }
