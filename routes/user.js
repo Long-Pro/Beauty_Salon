@@ -13,6 +13,8 @@ router.post('/loginAcc', userController.loginAcc2)
 
 router.get('/userDetail',auth.requireAuth, userController.userDetail)
 router.post('/userDetail',auth.requireAuth, userController.userDetail2)
+router.get('/userChangePass', userController.userChangePass)
+
 
 
 router.get('/userOrder',auth.requireAuth, userController.userOrder)

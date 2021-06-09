@@ -19,11 +19,11 @@ block content
       .spacer
       .form-group
         label.form-label(for='account') Tài khoản
-        input#account.form-control(name='account' type='text' placeholder='VD: long123' value=values?values.account:"" rules='required|min:6|max:12' inputNoSpace)
+        input#account.form-control(name='account' type='text' placeholder='VD: long123' value=values?values.account:"" rules='required|minLength:6|maxLength:12' inputNoSpace)
         span.form-message
       .form-group
         label.form-label(for='password') Mật khẩu
-        input#password.form-control(name='password' type='password' placeholder='Nhập mật khẩu' value=values?values.password:"" rules='required|min:6|max:12' inputNoSpace)
+        input#password.form-control(name='password' type='password' placeholder='Nhập mật khẩu' value=values?values.password:"" rules='required|minLength:6|maxLength:12' inputNoSpace)
         span.form-message
       button.form-submit.btn.btn-primary(type='submit') Đăng nhập
       a(href='#' style='margin: 13px;display: block;text-decoration: none;font-size:13px;')  Quên mật khẩu ?
@@ -47,7 +47,7 @@ block content
             button.btn.btn-primary.w-100(type='submit') Xác nhận
   script(src='/js/validator.js')
   script.
-    Validator('#form-1',{  }
+    validator('#form-1',{}
     )
-    Validator('#form-2',{}
+    validator('#form-2',{}
     )

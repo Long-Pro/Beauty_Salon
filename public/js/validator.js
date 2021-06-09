@@ -194,15 +194,30 @@ function validator(formSelector,options={}){
             if(kt==false)  isValid=false  
             
         }
+        console.log(isValid)
         // Khi khong co loi thi submit form
         if(isValid){
             if(isObjhas(options,'submit')){
                 console.log('submit fetch')
                 options.submit()
             }else{
-                console.log('submit form')
+                if(options.valiCode){
+                    var txt;
+                    var txt = prompt("Nhập mã xác thực đươc gửi về SDT:", "");
+                    if(txt=='123456'){
+                        console.log('submit form')
+                        formElement.submit();
+                    }else{
+                        alert("MÃ xác thực không đúng");
+                        return
+                    }
 
-                formElement.submit();
+                }else{
+                    console.log('submit form')
+                    formElement.submit();
+                }
+
+                
             }
 
         }

@@ -29,15 +29,20 @@ block content
             h2 THÔNG TIN CÁ NHÂN
             form#form-1(action='/user/userDetail' method='post')
               .row
+                .col-6 
+                  .form-group
+                    label.form-label(for='id') MÃ:
+                    input#id.form-control(type='text' placeholder='VD: 0398291602' name='id'   value=user.MA disabled )
+                    span.form-message
                 .col-6
                   .form-group
                     label.form-label(for='fullname') Tên đầy đủ:
-                    input#fullname.form-control(type='text' placeholder='VD: Nguyễn Văn Long  ' name='fullname' value=user.TEN rules='required')
+                    input#fullname.form-control(type='text' placeholder='VD: Nguyễn Văn Long  ' name='fullname' value=user.TEN rules='required|childMaxLength:7')
                     span.form-message
                 .col-6 
                   .form-group
                     label.form-label(for='sdt') Số điện thoai:
-                    input#sdt.form-control(type='text' placeholder='VD: 0398291602' name='sdt'  rules='required|phone' value=user.SDT  )
+                    input#sdt.form-control(type='text' placeholder='VD: 0398291602' name='sdt'   value=user.SDT disabled )
                     span.form-message
                 .col-6
                   .form-group
@@ -50,29 +55,42 @@ block content
                 .col-6
                   .form-group
                     label.form-label(for='account') Tài khoản:
-                    input#account.form-control(type='text' placeholder='VD: LongProNo1' name='account' rules='required|min:6|max:12' disabled value=taiKhoan)
+                    input#account.form-control(type='text' placeholder='VD: LongProNo1' name='account' disabled value=taiKhoan)
                     span.form-message
                 .col-6
-                  .form-group
-                    label.form-label(for='password') Mật khẩu
-                    input#password.form-control(type='password' placeholder='VD: ******' name='password' rules='required|min:6|max:12' VALUE="")
-                    span.form-message
                 .col-6
-                  .form-group
-                    label.form-label(for='password_confirmation') Nhập lại mật khẩu
-                    input.form-control(type='password' id='password_confirmation' placeholder='VD: ******' name='password_confirmation' rules='required|min:6|max:12|equal:#password' VALUE="")
-                    span.form-message
+                  div.btn.btn-warning(type='button' data-toggle='modal' data-target='#myModalDMK'  ) Đổi mật khẩu
                 .col-6
                   button.btn.btn-primary(type='submit') Lưu thay đổi
-      
+  #myModalDMK.modal
+    .modal-dialog.bg-light
+      .modal-content
+        // Modal Header
+        .modal-header
+          h4.modal-title Đổi mật khẩu
+          button.close(type='button' data-dismiss='modal') &times;
+        // Modal body
+        .modal-body
+          form#form-2(action='/user/userChangePass' method='get')
+            .form-group
+              label.form-label(for='passwordCurr') Mật khẩu hiện tại
+              input#passwordCurr.form-control(name='passwordCurr' type='password' placeholder='Nhập mật khẩu hiện tại' rules='required|minLength:6|maxLength:12' inputNoSpace value=values?values.password:"")
+              span.form-message
+            .form-group
+              label.form-label(for='password') Mật khẩu mới
+              input#password.form-control(name='password' type='password' placeholder='Nhập mật khẩu mới' rules='required|minLength:6|maxLength:12' inputNoSpace value=values?values.password:"")
+              span.form-message
+            .form-group
+              label.form-label(for='password_confirmation') Nhập lại mật khẩu
+              input.form-control(id='password_confirmation' name='password_confirmation' placeholder='Nhập lại mật khẩu' type='password' rules='required|minLength:6|maxLength:12|equal:#password' inputNoSpace value=values?values.password_confirmation:"")
+              span.form-message
+            button.btn.btn-primary.w-100(type='submit') Xác nhận   
   script(src='/js/validator.js')
   script.
-    Validator('#form-1',{
-    onSubmit:function(data){
-    console.log('CALL API...')
-    console.log(data)
-    }
-    })
+    validator('#form-1',{}
+    )
+    validator('#form-2',{}
+    )
 
 
 

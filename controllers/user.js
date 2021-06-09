@@ -19,7 +19,18 @@ const config = {
 class User{
     createAcc(req, res){
         res.clearCookie('sdtDK', { })
+        res.clearCookie('idDK', { })
+
         let sdt=req.query.sdt
+        if(sdt=='0398291600'){
+            res.cookie('sdtDK',sdt,
+                {
+                    maxAge:1000
+                }
+            )
+            res.redirect('/user/loginAcc')
+            return
+        }
         console.log(req.query.sdt)
         sql.connect(config).then(() => {       //   validate sdt
             return sql.query` select * from khachhang as kh where kh.SDT=${sdt}`  
@@ -36,9 +47,6 @@ class User{
                 })
             }else{//sdt da ton tai
                 let user=result.recordset[0]
-                
-                res.locals.values={}
-                res.locals.values.ma=user.MA
                 res.locals.values={}
                 res.locals.values.fullname=user.TEN
                 res.locals.values.sdt=user.SDT
@@ -77,12 +85,13 @@ class User{
         let mkh=req.cookies.idDK
         var errors=[];
         var maxMa,maNext;
-        if(mkh){//co sdt,k tk
-            sql.connect(config).then(() => {       //   validate sdt
-                return sql.query` select * from taikhoan where TAIKHOAN=${account}`  
-            })
-            .then(result=>{
-                if(result.recordset.length==0){//tk hop le
+        
+        sql.connect(config).then(() => {       //   validate sdt
+            return sql.query` select * from taikhoan where TAIKHOAN=${account} `  
+        })
+        .then(result=>{
+            if(result.recordset.length==0){//tk hop le
+                if(mkh){//co sdt,k tk
                     sql.connect(config).then(() => {       //   validate sdt
                         let newPass=md5(password)
                         sql.query` INSERT INTO taikhoan VALUES(${mkh},${account},${newPass})` 
@@ -98,56 +107,55 @@ class User{
                         console.log('inser thanh cong ')
                         res.redirect('/')
                     })
-                    
-                }else{//tk k hop le
-                    errors.push(`Tài khoản ${account} đã tồn tại`)
-                    let values=req.body
-                    values.sdt=sdt 
-                    res.render('user/createAcc',{ 
-                        errors:errors,
-                        values,
-                        userId:req.cookies.userId
+
+                }else{//k co sdt,k co tk
+                    let maxMa,maNext
+                    sql.connect(config).then(() => {       //   get id
+                        return sql.query`select max(ma) as ma from khachhang` 
+                    }).then(result => {
+                        if(result.recordset[0].ma){
+                            maxMa=result.recordset[0].ma;
+                            maNext =maxMa.slice(0,2) +(parseInt(maxMa.slice(2)) +1).toString().padStart(8,0);
+                        }else{
+                            maNext='KH00000001'
+                        }
+                        return sql.query` INSERT INTO KHACHHANG VALUES(${maNext},${fullname},${sdt},${gender},'LK1',0)`
+                    })       
+                    .then(result=>{                 //insert tai khoan
+                        let newPassword=md5(password)
+                        return sql.query` INSERT INTO taikhoan VALUES(${maNext},${account},${newPassword})`
+                    })
+                    .then((result)=>{
+                        res.cookie("userId",maNext)
+                        res.clearCookie('sdtDK', { })
+                        res.clearCookie('idDK', { })
+
+                        console.log('inser thanh cong ')
+                        res.redirect('/')
+                        
                     })
                 }
-            })
-
-        }else{//k co sdt,k co tk
-            let maxMa,maNext
-            sql.connect(config).then(() => {       //   get id
-                return sql.query`select max(ma) as ma from khachhang` 
-            }).then(result => {
-                if(result.recordset[0].ma){
-                    maxMa=result.recordset[0].ma;
-                    maNext =maxMa.slice(0,2) +(parseInt(maxMa.slice(2)) +1).toString().padStart(8,0);
-                }else{
-                    maNext='KH00000001'
-                }
-                return sql.query` INSERT INTO KHACHHANG VALUES(${maNext},${fullname},${sdt},${gender},'LK1',0)`
-            })       
-            .then(result=>{                 //insert tai khoan
-                let newPassword=md5(password)
-                return sql.query` INSERT INTO taikhoan VALUES(${maNext},${account},${newPassword})`
-            })
-            .then((result)=>{
-                res.cookie("userId",maNext)
-                res.clearCookie('sdtDK', { })
-                res.clearCookie('idDK', { })
-
-                console.log('inser thanh cong ')
-                res.redirect('/')
                 
-            })
-        }
-
+            }else{//tk k hop le
+                errors.push(`Tài khoản ${account} đã tồn tại`)
+                let values=req.body
+                values.sdt=sdt 
+                res.render('user/createAcc',{ 
+                    errors:errors,
+                    values,
+                    userId:req.cookies.userId
+                })
+            }
+        })
 
         
-
-  
     }
 
     loginAcc(req, res) {
         let errors=[]
         if(req.cookies.sdtDK) errors.push(`Số điện thoại ${req.cookies.sdtDK} thuộc khách hàng khác` )
+        res.clearCookie('sdtDK', { })
+        res.clearCookie('idDK', { })
         res.render('user/loginAcc',{
             errors
           })
@@ -243,64 +251,61 @@ class User{
         console.log(req.body)
         var{fullname,sdt,gender,account,password}=req.body;
         var errors=[];
-
         sql.connect(config).then(() => {      
-            return sql.query` select SDT from khachhang WHERE MA!=${req.cookies.userId} and SDT=${sdt}`
+            return sql.query` UPDATE KHACHHANG  SET TEN=${fullname}, GIOITINH=${gender} WHERE MA=${req.cookies.userId}`
         })
-        .then(result=>{
-            if(result.recordset.length==0){// sdt moi hợp lệ
-                sql.connect(config).then(() => {      
-                    return sql.query` UPDATE KHACHHANG  SET TEN=${fullname}, GIOITINH=${gender},SDT=${sdt} WHERE MA=${req.cookies.userId}`
-                })
-                .then(result => {                           
-                    return sql.query`  UPDATE TAIKHOAN  SET MATKHAU=${md5(password)} WHERE MAKH=${req.cookies.userId}`
-                }) 
-                .then((result)=>{
-                    console.log("update thanh cong")
-                    return sql.query` select *  from khachhang as kh where kh.MA=${req.cookies.userId}`
-                })
-                .then((result) => {
-                    res.locals.user=result.recordset[0]
-                    return sql.query` select lk.TENLOAI  from loaikhach as lk, khachhang as kh where kh.MA=${req.cookies.userId} and lk.MA=kh.MALK` 
-                })
-                .then((result) => {
-                    res.locals.loaiKhach=result.recordset[0].TENLOAI
-                    return sql.query`select tk.TAIKHOAN  from taikhoan as tk ,khachhang as kh where kh.MA=${req.cookies.userId} and tk.MAKH=kh.MA ` 
-                })
-                .then((result)=>{
-                    res.locals.taiKhoan=result.recordset[0].TAIKHOAN
-                    res.render('user/userDetail',{
-                            userId:req.cookies.userId, 
-                            success:[`Chỉnh sửa thông tin thành công`]
-                    })
-                })
-            }else{// sdt mới k hợp lệ
-                sql.connect(config).then(() => {       //   validate sdt
-                    return sql.query` select *  from khachhang as kh where kh.MA=${req.cookies.userId}`  
-                })
-                .then((result) => {
-                    res.locals.user=result.recordset[0]
-                    res.locals.user.SDT=sdt
-                    return sql.query` select lk.TENLOAI  from loaikhach as lk, khachhang as kh where kh.MA=${req.cookies.userId} and lk.MA=kh.MALK` 
-                })
-                .then((result) => {
-                    res.locals.loaiKhach=result.recordset[0].TENLOAI
-                    return sql.query`select tk.TAIKHOAN  from taikhoan as tk ,khachhang as kh where kh.MA=${req.cookies.userId} and tk.MAKH=kh.MA ` 
-                })
-                .then((result)=>{
-                    res.locals.taiKhoan=result.recordset[0].TAIKHOAN
-                    res.render('user/userDetail',{
-                            userId:req.cookies.userId,
-                            errors:[`Số điện thoại ${sdt} đã tồn tại`]
-                    })
-                })
-
-            }
-            
+        .then((result)=>{
+            console.log("update thanh cong")
+            return sql.query` select *  from khachhang as kh where kh.MA=${req.cookies.userId}`
         })
-        
-       
+        .then((result) => {
+            res.locals.user=result.recordset[0]
+            return sql.query` select lk.TENLOAI  from loaikhach as lk, khachhang as kh where kh.MA=${req.cookies.userId} and lk.MA=kh.MALK` 
+        })
+        .then((result) => {
+            res.locals.loaiKhach=result.recordset[0].TENLOAI
+            return sql.query`select tk.TAIKHOAN  from taikhoan as tk ,khachhang as kh where kh.MA=${req.cookies.userId} and tk.MAKH=kh.MA ` 
+        })
+        .then((result)=>{
+            res.locals.taiKhoan=result.recordset[0].TAIKHOAN
+            res.render('user/userDetail',{
+                    userId:req.cookies.userId, 
+                    success:[`Chỉnh sửa thông tin thành công`]
+            })
+        })  
     }
+    async userChangePass(req, res){
+        let {passwordCurr,password}=req.query,result,success,errors
+        console.log(req.query)
+        await sql.connect(config)
+        result=await sql.query`select * from taikhoan  where MAKH=${req.cookies.userId} ` 
+        result=result.recordset[0]
+
+        if(result.MATKHAU==md5(passwordCurr)){
+            await sql.query`  UPDATE TAIKHOAN  SET MATKHAU=${md5(password)} WHERE MAKH=${req.cookies.userId}`
+            success=[`Thay đổi mật khẩu thành công`]
+
+        }else{
+            errors=[`Nhập mật khẩu không đúng`]
+        }   
+        
+        result= await sql.query` select *  from khachhang as kh where kh.MA=${req.cookies.userId}` 
+        res.locals.user=result.recordset[0]
+        result= await sql.query` select lk.TENLOAI  from loaikhach as lk, khachhang as kh where kh.MA=${req.cookies.userId} and lk.MA=kh.MALK` 
+    
+        result=res.locals.loaiKhach=result.recordset[0].TENLOAI
+        result=await sql.query`select tk.TAIKHOAN  from taikhoan as tk ,khachhang as kh where kh.MA=${req.cookies.userId} and tk.MAKH=kh.MA ` 
+    
+        res.locals.taiKhoan=result.recordset[0].TAIKHOAN
+        res.render('user/userDetail',{
+                userId:req.cookies.userId, 
+                success,
+                errors
+        })
+          
+        
+    }
+
     userOrder(req,res){
         sql.connect(config).then(() => {       
             return sql.query` select *  from DICHVU  as dv where dv.MALDV='LD001'`  

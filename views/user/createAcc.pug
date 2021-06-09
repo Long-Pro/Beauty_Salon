@@ -19,7 +19,7 @@ block content
       .spacer
       .form-group
         label.form-label(for='fullname') Tên đầy đủ
-        input#fullname.form-control(name='fullname' type='text' placeholder='VD: Long Nguyen' rules='required|childMax:7' value=values?values.fullname:"")
+        input#fullname.form-control(name='fullname' type='text' placeholder='VD: Long Nguyen' rules='required|childMaxLength:7' inputNo2Space value=values?values.fullname:"")
         span.form-message
       .form-group
         label.form-label(for='sdt') Số điện thoại
@@ -33,19 +33,21 @@ block content
           option(value='Khác') Khác
       .form-group
         label.form-label(for='account') Tài khoản
-        input#account.form-control(name='account' type='text' placeholder='VD: LongProNo1' rules='required|min:6|max:12' value=values?values.account:"" )
+        input#account.form-control(name='account' type='text' placeholder='VD: LongProNo1' rules='required|minLength:6|maxLength:12' inputNoSpace value=values?values.account:"" )
         span.form-message
       .form-group
         label.form-label(for='password') Mật khẩu
-        input#password.form-control(name='password' type='password' placeholder='Nhập mật khẩu' rules='required|min:6|max:12' value=values?values.password:"")
+        input#password.form-control(name='password' type='password' placeholder='Nhập mật khẩu mới' rules='required|minLength:6|maxLength:12' inputNoSpace value=values?values.password:"")
         span.form-message
       .form-group
         label.form-label(for='password_confirmation') Nhập lại mật khẩu
-        input.form-control(id='password_confirmation' name='password_confirmation' placeholder='Nhập lại mật khẩu' type='password' rules='required|min:6|max:12|equal:#password' value=values?values.password_confirmation:"")
+        input.form-control(id='password_confirmation' name='password_confirmation' placeholder='Nhập lại mật khẩu' type='password' rules='required|minLength:6|maxLength:12|equal:#password' inputNoSpace value=values?values.password_confirmation:"")
         span.form-message
+      
       button.form-submit.btn.btn-primary(type='submit') Đăng ký
+  
   script(src='/js/validator.js')
   script.
-    Validator('#form-1',{
-    
-    })
+    validator('#form-1',{valiCode:1}
+    )
+  
