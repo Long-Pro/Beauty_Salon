@@ -542,8 +542,11 @@ module.exports.addBill=async (req, res,next)=>{
     await sql.query`insert into SD_DICHVU values(${mhd},${item.MNV},${item.MDV},${item.GIA})`
   })
   if(MKH=='KH00000001'){
+    // res.setHeader("Access-Control-Allow-Origin", "*");
+    // res.send('Thêm hóa đơn thành công')
+
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.send('Thêm hóa đơn thành công')
+    res.json({mhd});
     return
   }
   let diemCong=plusMark;
@@ -560,7 +563,7 @@ module.exports.addBill=async (req, res,next)=>{
     await sql.query`UPDATE khachhang SET DIEMTICHLUY = ${diemCong},MALK='LK1'  where MA=${MKH}`
   } 
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.send('Thêm hóa đơn thành công')
+  res.json({mhd});
 
 
   

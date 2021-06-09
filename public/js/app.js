@@ -44,7 +44,10 @@ let apiPostFindOnlineBill='http://localhost:3000/staff/api/findOnlineBill'      
 //    chạy dau tien
 resetBase()
 //      func            ---------------------------------------------------------------------------------
-
+function openNewTab(mhd) {
+    window.open(
+      `http://localhost:3000/test2?mhd=${mhd}`, "_blank");
+}
 function createDatalisttUserMainInfo(querySelector,api){
     fetch(api)
         .then((response) =>{
@@ -329,15 +332,18 @@ dialogTHDNP_btn.onclick=async()=>{
                   'Content-Type': 'application/json'
                 }
             })
-            res=await res.text()
+            res=await res.json()
+            res=res.mhd
+            console.log(res)
             toastCus({
                 title: "Thành công!",
-                message: `${res}`,
+                message: `Thêm hóa đơn thành công`,
                 type: "success",
                 duration: 3000
               });
-            console.log(res)
             document.querySelector('.thd').innerHTML=`<div class='content'></div>`
+            setTimeout(function() {openNewTab(res)},1000)
+            
 
         }else{
             errMess.textContent='Chọn ít nhất một dịch vụ'
@@ -558,15 +564,18 @@ dialogTHD_btn.onclick=async()=>{
                   'Content-Type': 'application/json'
                 }
             })
-            res=await res.text()
+            res=await res.json()
+            res=res.mhd
+            console.log(res)
             toastCus({
                 title: "Thành công!",
-                message: `${res}`,
+                message: `Thêm hóa đơn thành công`,
                 type: "success",
                 duration: 3000
               });
-            console.log(res)
-            document.querySelector('.thd').innerHTML='<div class="content"></div>'
+            document.querySelector('.thd').innerHTML=`<div class='content'></div>`
+            setTimeout(function() {openNewTab(res)},1000)
+            
 
         }else{
             errMess.textContent='Chọn ít nhất một dịch vụ'
