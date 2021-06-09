@@ -927,10 +927,25 @@ btnDT.addEventListener('click',async (e)=>{
                           'Content-Type': 'application/json'
                         }
                     })
-                    res=await res.text()
-                    showSuccessToast(`${res}`)
-                    console.log(res)
+                    // res=await res.text()
+                    // showSuccessToast(`${res}`)
+                    // console.log(res)
                     
+                    res=await res.json()
+                    res=res.mhd
+                    console.log(res)
+                    toastCus({
+                        title: "Thành công!",
+                        message: `Thêm hóa đơn thành công`,
+                        type: "success",
+                        duration: 3000
+                      });
+                    // document.querySelector('.thd').innerHTML=`<div class='content'></div>`
+                    setTimeout(function() {openNewTab(res)},1000)                   
+
+
+
+
                     let completeBill=await fetch(apiPostCompleteOnlineBill,{
                         method: 'POST', 
                         body: JSON.stringify({data:id}), 

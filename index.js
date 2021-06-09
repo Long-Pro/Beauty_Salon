@@ -43,7 +43,7 @@ app.use(express.static('public'))
 var fs = require('fs');
 var path = require('path');
 var pdf = require('html-pdf');
-var options = { format: 'Letter' };
+
 app.get('/test',async  (req, res) => {
   // var html = fs.readFileSync('./test/businesscard.html', 'utf8');
   let html2=`
@@ -87,10 +87,7 @@ app.get('/test2',async(req, res)=>{
     item.TEN=t.recordset[0].TEN
     billData.push(item) 
   }
-  // res.setHeader("Access-Control-Allow-Origin", "*");
-  // res.json({res:{
-  //   billInfo,billData
-  // }});
+
 
   let tlgg=billInfo.TILE_GIAMGIA
   let price=0;
@@ -108,13 +105,13 @@ app.get('/test2',async(req, res)=>{
   table=table.join('')
   let kq=`
     <div class='d-flex justify-content-between'>
-        <strong>Tên: ${billInfo.TEN}</strong>
-        <strong>MKH: ${billInfo.MAKHACH}</strong>
-        <strong>SDT: ${billInfo.SDT}</strong>
+        <div>Tên: ${billInfo.TEN}</div>
+        <div>MKH: ${billInfo.MAKHACH}</div>
+        <div>SDT: ${billInfo.SDT}</div>
     </div>
     <div class='d-flex justify-content-between'>
-        <strong>MHD: ${billInfo.MA}</strong>
-        <strong>Nhân viên thu ngân: ${billInfo.MANV}</strong>   
+        <div>MHD: ${billInfo.MA}</div>
+        <div>Nhân viên thu ngân: ${billInfo.MANV}</div>   
     </div>
     <table class="table">
         <thead>
@@ -151,23 +148,26 @@ app.get('/test2',async(req, res)=>{
     </body>
     </html>
   `
+  var options = { format: 'Letter' };
   await pdf.create(html, options).toFile('./bill.pdf', function(err, res) {
     if (err) return console.log(err);
     console.log(res); // { filename: '/app/businesscard.pdf' }
   });
-
-  var filePath = path.join(__dirname, 'bill.pdf');
+  setTimeout(function() {
+    var filePath = path.join(__dirname, 'bill.pdf');
     var stat = fs.statSync(filePath);
-
+  
     res.writeHead(200, {
         'Content-Type': 'application/pdf',
         'Content-Length': stat.size
     });
-
+  
     var readStream = fs.createReadStream(filePath);
     // We replaced all the event handlers with a simple call to readStream.pipe()
     readStream.pipe(res);
-  // res.send('123')
+
+  },2000)
+
 })
 
 app.get('/', (req, res) => {
