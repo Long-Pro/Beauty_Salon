@@ -455,12 +455,34 @@ module.exports.removeBill  = async (req, res, next)=> {
 	console.log(req.body);
 	let { data} = req.body;
   await sql.connect(config)
-	
-    await sql.query` DELETE FROM SD_DICHVU WHERE  MAHD=${data}`
-    await sql.query` DELETE FROM hoadon WHERE  MA=${data}`
-
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.json({res:true});
+  let maKhach,result,total=0
+    
+        
+  maKhach=await sql.query`select MAKHACH from hoadon where MA=${data}`
+  maKhach=maKhach.recordset[0].MAKHACH
+  result=await sql.query`select * from SD_DICHVU where MAHD=${data}`
+  for(let item of result.recordset){   
+    let t=  await sql.query`select DIEMCONGTICHLUY from dichvu dv where dv.MA=${item.MADV} `
+    total+=t.recordset[0].DIEMCONGTICHLUY  
+  }
+  let diem=await sql.query`select DIEMTICHLUY from khachhang where MA=${maKhach}`
+  diem=diem.recordset[0].DIEMTICHLUY
+  await sql.query`update   khachhang set DIEMTICHLUY=${diem-total} where MA=${maKhach}`  
+  let currScore=diem-total
+  if(currScore>=200){
+    await sql.query`UPDATE khachhang SET DIEMTICHLUY = ${currScore},MALK='LK4'  where MA=${maKhach}`
+  }else if(currScore>=150){
+    await sql.query`UPDATE khachhang SET DIEMTICHLUY = ${currScore},MALK='LK3'  where MA=${maKhach}`
+  }else if(currScore>=70){
+    await sql.query`UPDATE khachhang SET DIEMTICHLUY = ${currScore},MALK='LK2'  where MA=${maKhach}`
+  }else if(currScore>=0){
+    await sql.query`UPDATE khachhang SET DIEMTICHLUY = ${currScore},MALK='LK1'  where MA=${maKhach}`
+  }     
+  await sql.query` DELETE FROM SD_DICHVU WHERE  MAHD=${data}`
+  await sql.query` DELETE FROM hoadon WHERE  MA=${data}`
+  console.log(123)
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.json({res:true});
 
   
 };

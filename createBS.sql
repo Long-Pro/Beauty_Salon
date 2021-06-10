@@ -73,10 +73,10 @@ CREATE TABLE NHANVIEN
 
 
 INSERT INTO NHANVIEN VALUES(N'Hiếu01',N'Nguyễn Trung Hiếu','0398291605',N'Nam',N'hieu@gmail.com','197401001',N'2021-04-24',N'97 Man Thiện, quận 9, HCM',1,N'Hieu123','670b14728ad9902aecba32e22fa4f6bd','admin')
-INSERT INTO NHANVIEN VALUES(N'Hy02',N'Nguyễn Tá Hy','0398291606',N'Nam',N'hy@gmail.com','197401002',N'2000-04-24',N'98 Man Thiện, quận 9, HCM',1,N'Hy1234','670b14728ad9902aecba32e22fa4f6bd','admin')
-INSERT INTO NHANVIEN VALUES(N'Hoa03',N'Nguyễn Thị Hoa','0398291607',N'Nữ',N'hoa@gmail.com','197401003',N'1999-04-24',N'99 Man Thiện, quận 9, HCM',1,N'Hoa123','670b14728ad9902aecba32e22fa4f6bd','nv')
-INSERT INTO NHANVIEN VALUES(N'Tom04',N'Huỳnh Thanh Tom','0398291608',N'Nam',N'tom@gmail.com','197401004',N'2021-04-24',N'99 Man Thiện, quận 9, HCM',1,N'Tom123','670b14728ad9902aecba32e22fa4f6bd','nv')
-INSERT INTO NHANVIEN VALUES(N'Hải05',N'Huỳnh Minh Hải','0398291609',N'Nam',N'hai@gmail.com','197401005',N'1998-04-24',N'99 Man Thiện, quận 9, HCM',0,'Nam123','670b14728ad9902aecba32e22fa4f6bd','nv')
+INSERT INTO NHANVIEN VALUES(N'Hy0002',N'Nguyễn Tá Hy','0398291606',N'Nam',N'hy@gmail.com','197401002',N'2000-04-24',N'98 Man Thiện, quận 9, HCM',1,N'Hy1234','670b14728ad9902aecba32e22fa4f6bd','admin')
+INSERT INTO NHANVIEN VALUES(N'Hoa003',N'Nguyễn Thị Hoa','0398291607',N'Nữ',N'hoa@gmail.com','197401003',N'1999-04-24',N'99 Man Thiện, quận 9, HCM',1,N'Hoa123','670b14728ad9902aecba32e22fa4f6bd','nv')
+INSERT INTO NHANVIEN VALUES(N'Tom004',N'Huỳnh Thanh Tom','0398291608',N'Nam',N'tom@gmail.com','197401004',N'2021-04-24',N'99 Man Thiện, quận 9, HCM',1,N'Tom123','670b14728ad9902aecba32e22fa4f6bd','nv')
+INSERT INTO NHANVIEN VALUES(N'Hải005',N'Huỳnh Minh Hải','0398291609',N'Nam',N'hai@gmail.com','197401005',N'1998-04-24',N'99 Man Thiện, quận 9, HCM',0,'Nam123','670b14728ad9902aecba32e22fa4f6bd','nv')
 
 
 

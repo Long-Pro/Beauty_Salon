@@ -1005,6 +1005,8 @@ btnDT.addEventListener('click',async (e)=>{
                 return
             }
             showSuccessToast(`Đã xóa ${res.res} hóa đơn đặt trước quá hạn`)
+            renderBill('dd')
+            // renderBill('dh')
         }
     }
     
