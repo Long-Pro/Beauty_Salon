@@ -308,7 +308,7 @@ module.exports.statistic = async (req, res, next)=>{
   console.log(req.body)
   let {data}=req.body
   var kq=[]
-  let tongTien=0,tongHD=0,hd
+  let tongTien=0,tongHD=0,hd=[]
   
   await sql.connect(config)
   if(data[0].day){
@@ -332,7 +332,7 @@ module.exports.statistic = async (req, res, next)=>{
   if(data[0].day1){
     let par1=`${data[0].day1}T00:00%`
     let par2=`${data[1].day2}T00:00%`
-    let result=await sql.query`select * from hoadon where THOIGIAN LIKE ${par} ORDER BY MA DESC;` 
+    let result=await sql.query`select * from hoadon ORDER BY MA DESC;` 
     let t=result.recordset
     t.forEach((item,index)=>{
       if(par1<=item.THOIGIAN&&item.THOIGIAN<=par2)

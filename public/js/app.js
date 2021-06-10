@@ -44,9 +44,9 @@ let apiPostFindOnlineBill='http://localhost:3000/staff/api/findOnlineBill'      
 //    chạy dau tien
 resetBase()
 //      func            ---------------------------------------------------------------------------------
-function openNewTab(mhd) {
+function openNewTab(url) {
     window.open(
-      `http://localhost:3000/test2?mhd=${mhd}`, "_blank");
+      `${url}`, "_blank");
 }
 function createDatalisttUserMainInfo(querySelector,api){
     fetch(api)
@@ -342,7 +342,7 @@ dialogTHDNP_btn.onclick=async()=>{
                 duration: 3000
               });
             document.querySelector('.thd').innerHTML=`<div class='content'></div>`
-            setTimeout(function() {openNewTab(res)},1000)
+            setTimeout(function() {openNewTab(`http://localhost:3000/test2?mhd=${res}`)},1000)
             
 
         }else{
@@ -574,7 +574,7 @@ dialogTHD_btn.onclick=async()=>{
                 duration: 3000
               });
             document.querySelector('.thd').innerHTML=`<div class='content'></div>`
-            setTimeout(function() {openNewTab(res)},1000)
+            setTimeout(function() {openNewTab(`http://localhost:3000/test2?mhd=${res}`)},1000)
             
 
         }else{
@@ -941,7 +941,7 @@ btnDT.addEventListener('click',async (e)=>{
                         duration: 3000
                       });
                     // document.querySelector('.thd').innerHTML=`<div class='content'></div>`
-                    setTimeout(function() {openNewTab(res)},1000)                   
+                    setTimeout(function() {openNewTab(`http://localhost:3000/test2?mhd=${res}`)},1000)       
 
 
 
@@ -956,7 +956,7 @@ btnDT.addEventListener('click',async (e)=>{
                     completeBill=await completeBill.json()
                     btnTHD.setAttribute('disabled','true')
                     let hdHuy=listBill.querySelector(`#${id}`)
-                    console.log('9999999999999999999',hdHuy)
+
                     if(hdHuy) hdHuy.remove()
                                 
                 }
@@ -1698,7 +1698,7 @@ btnDialogTKDT.addEventListener('click',async()=>{
 
         let timeString=''
         input.forEach(item=>{
-             timeString+=(item.value+'    ')
+             timeString+=(item.value+' ')
         })
         let res=await fetch(apiPostDate,{
             method: 'POST', 
@@ -1777,12 +1777,17 @@ btnDialogTKDT.addEventListener('click',async()=>{
                 <h3 class='text-center'>Thống kê doanh thu ${timeString}</h3>
                 <div class='d-flex justify-content-between'>
                     <span>Tổng số hóa đơn: ${tongHD}</span>
+                    <button id='longPro' class='btn btn-warning pb-0'  )>Xuất file pdf</button>
                     <span>Tổng doanh thu: ${tongTien}đ</span>
 
                 </div>
             </div>`+kq
         content.innerHTML=kq
-        
+        let btnOpenNewTab=content.querySelector('#longPro')//
+        btnOpenNewTab.onclick=()=>{
+            openNewTab(`http://localhost:3000/test3?time=${timeString}`)
+            
+        }
 
     })
 })
