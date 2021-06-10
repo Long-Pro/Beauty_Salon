@@ -20,7 +20,7 @@ block content
                     each item in kq 
                         .bill.my-5 
                             if item.info.TRANGTHAI==0
-                                a.btn.btn-danger(type='button' href=`/user/deleteOrder?ma=${item.info.MA}`) Hủy đặt trước
+                                div.btnHuyDT.btn.btn-danger(type='button' href=`/user/deleteOrder?ma=${item.info.MA}`) Hủy đặt trước
                             .billHeader.d-flex.justify-content-between.my-3
                                 .idBill 
                                     span.valueIdBill MAHD: #{item.info.MA}
@@ -48,4 +48,16 @@ block content
                                 p#currPrice Tiền thanh toán: #{parseInt(item.sum*(100-item.tlgg))}đ
                             
                 .col-2
-                        
+    script.
+        let content =document.querySelector(".userData")
+        let btn=content.querySelectorAll('div.btnHuyDT')
+        btn.forEach(item=>{
+            item.onclick=()=>{
+                if (confirm("Hủy đặt trước?")) {
+                    let url='http://localhost:3000'+item.getAttribute('href')
+                    window.open(url,'_self');
+                }
+            }
+        })
+        
+
